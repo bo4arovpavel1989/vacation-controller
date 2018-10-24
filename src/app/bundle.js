@@ -8,13 +8,25 @@ module.exports.getPage = function() {
 }
 
 },{}],2:[function(require,module,exports){
+'use strict'
+
+module.exports = class EmployeManagment {
+  constructor(){
+
+  }
+
+
+
+}
+
+},{}],3:[function(require,module,exports){
 'use strict';
 
 const {getPage} = require('./config');
 const ObjectManagment = require('./objectManagment');
-const VacationManagment = require('./objectManagment');
-const Infotable = require('./objectManagment');
-const EmployeManagment = require('./objectManagment');
+const VacationManagment = require('./vacationManagment');
+const Infotable = require('./infotable');
+const EmployeManagment = require('./employeManagment');
 let pageScript;
 
 switch(getPage()) {
@@ -34,17 +46,73 @@ switch(getPage()) {
     pageScript = null;
 }
 
-},{"./config":1,"./objectManagment":3}],3:[function(require,module,exports){
+},{"./config":1,"./employeManagment":2,"./infotable":4,"./objectManagment":5,"./vacationManagment":6}],4:[function(require,module,exports){
+'use strict'
+
+module.exports = class Infotable {
+  constructor(){
+
+  }
+
+}
+
+},{}],5:[function(require,module,exports){
 'use strict'
 
 module.exports = class ObjectManagent {
   constructor(){
-    this.iAmAlive()
+    this.isPopup = false;
+    this.listeners();
   }
 
-  iAmAlive(){
-    alert(111)
+  listeners(){
+    document
+      .getElementById('addShift')
+      .addEventListener('click', (e)=>this.addShiftForm(e));
+    document
+      .getElementById('container')
+      .addEventListener('click', (e)=>this.closePopup(e));
+    document
+      .getElementById('shiftAddForm')
+      .addEventListener('submit', (e)=>this.shiftFormhandler(e));
   }
+
+  addShiftForm(e){
+    e.stopPropagation();
+    let el = document.getElementById('shiftAddFormArea');
+
+    this.isPopup = true;
+    el.classList.add('popedUp');
+  }
+
+  closePopup(e){
+    e.stopPropagation();
+    if(this.isPopup) {
+      let popups = document.querySelectorAll('.popup');
+
+      this.isPopup = false;
+      popups.forEach(p=>{
+        p.classList.remove('popedUp');
+      })
+    }
+  }
+
+  shiftFormhandler(e){
+    e.preventDefault();
+
+    
+  }
+
 }
 
-},{}]},{},[2]);
+},{}],6:[function(require,module,exports){
+'use strict'
+
+module.exports = class VacationManagment {
+  constructor(){
+
+  }
+
+}
+
+},{}]},{},[3]);

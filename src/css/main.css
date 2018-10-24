@@ -13,3 +13,16 @@
 body {
   font: 100% Helvetica, sans-serif;
   color: #333; }
+
+.container {
+  height: 100%;
+  width: 100%; }
+
+.popup {
+  display: none; }
+
+.popedUp {
+  display: block;
+  position: absolute;
+  top: 40%;
+  left: 20%; }
