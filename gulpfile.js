@@ -9,7 +9,9 @@ const gulp = require('gulp'),
       imagemin = require('gulp-imagemin'),
       pngquant = require('imagemin-pngquant'),
       cache = require('gulp-cache'),
-      autoprefixer = require('gulp-autoprefixer');
+      autoprefixer = require('gulp-autoprefixer'),
+      htmlmin = require('gulp-htmlmin'),
+      babel = require('gulp-babel');
 
 gulp.task('sass', function(){
   return gulp.src('src/sass/**/*.sass')
@@ -42,7 +44,17 @@ gulp.task('css-libs', ['sass'], function() {
   .pipe(gulp.dest('src/css'));
 });
 
-gulp.task('watch', ['browser-sync', 'css-libs', 'jslibs'], function(){
+gulp.task('cleanjs', () => {
+  return del('src/app');
+});
+
+gulp.task('scripts', ['cleanjs'], function(){
+  return gulp.src('src/js/**/*.js')
+  .pipe(babel())
+  .pipe(gulp.dest('src/app'))
+});
+
+gulp.task('watch', ['browser-sync', 'css-libs', 'jslibs', 'scripts'], function(){
   gulp.watch('src/sass/**/*.sass', ['sass']);
   gulp.watch('src/*.html', browserSync.reload);
   gulp.watch('src/js/**/*.js', browserSync.reload);
@@ -71,13 +83,15 @@ gulp.task('build', ['clean', 'img', 'sass', 'jslibs'], function() {
   ])
   .pipe(gulp.dest('dist/css'))
 
-  const buildFonts = gulp.src('src/fonts/**/*') // Переносим шрифты в продакшен
+  const buildFonts = gulp.src('src/fonts/**/*')
   .pipe(gulp.dest('dist/fonts'))
 
-  const buildJs = gulp.src('src/js/**/*') // Переносим скрипты в продакшен
+  const buildJs = gulp.src('src/js/**/*')
+  .pipe(uglify())
   .pipe(gulp.dest('dist/js'))
 
-  const buildHtml = gulp.src('src/*.html') // Переносим HTML в продакшен
+  const buildHtml = gulp.src('src/*.html')
+  .pipe(htmlmin({ collapseWhitespace: true }))
   .pipe(gulp.dest('dist'));
 
 });
