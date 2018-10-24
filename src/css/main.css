@@ -1,3 +1,15 @@
+.main {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; }
+
+.controlArea {
+  width: 40%; }
+
+.objectInfo {
+  width: 40%; }
+
 body {
   font: 100% Helvetica, sans-serif;
   color: #333; }

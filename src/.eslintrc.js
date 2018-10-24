@@ -1,7 +1,8 @@
 module.exports = {
     "env": {
         "browser": true,
-        "es6": true
+        "es6": true,
+        "commonjs":true 
     },
     "extends": "eslint:recommended",
     "parserOptions": {
@@ -9,7 +10,7 @@ module.exports = {
             "jsx": false
         },
         "ecmaVersion": 2018,
-        "sourceType": "module"
+        "sourceType": "script"
     },
     "plugins": [  ],
     "rules": {
