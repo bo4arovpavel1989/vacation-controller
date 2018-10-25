@@ -83,8 +83,8 @@ module.exports.FormsHandler = class FormsHandler {
 
   /**
     * Create listener.
-    * @param {sting} buttonSelector - selector of button to call popup form.
-    * @param {string} formsSelector - selector of form to call submit.
+    * @param {String} buttonSelector - selector of button to call popup form.
+    * @param {String} formsSelector - selector of form to call submit.
     */
   constructor(buttonSelector, formsSelector){
     this.buttonSelector = buttonSelector;
@@ -112,7 +112,7 @@ module.exports.FormsHandler = class FormsHandler {
 
     document
       .getElementById('container')
-      .addEventListener('click', this.closePopup);
+      .addEventListener('click', ()=>this.closePopup());
 
   }
 
@@ -121,7 +121,6 @@ module.exports.FormsHandler = class FormsHandler {
   * @returns {void}
   */
   closePopup(){
-    alert(this.isPopup);
     if(this.isPopup) {
       const popups = document.querySelectorAll('.popup');
 
@@ -134,19 +133,22 @@ module.exports.FormsHandler = class FormsHandler {
 
   /**
   * Handles click on button and popups its form
+  * @param {Object} e - event Object
+  * @param {String} id - id of button
   * @returns {void}
   */
   buttonClickHandler(e, id){
     e.stopPropagation();
+    this.closePopup();
     const el = document.getElementById(`${id}FormArea`);
 
     this.isPopup = true;
-      alert(this.isPopup);
     el.classList.add('popedUp');
   }
 
   /**
   * Submits form
+  * @param {Object} e - event object
   * @returns {void}
   */
   formHandler(e){
