@@ -2,6 +2,7 @@
 
 const {API_URL} = require('./config');
 const EventEmitter = require('./libs/events.min');
+const Handlebars = require('./libs/h.min');
 
 const handleResponse = response=>response.json().then(json=>response.ok ? json : Promise.reject(json));
 
@@ -111,10 +112,11 @@ module.exports.FormsHandler = class FormsHandler {
     * @param {String} buttonSelector - selector of button to call popup form.
     * @param {String} formsSelector - selector of form to call submit.
     */
-  constructor(buttonSelector, formsSelector, deleteSelector){
+  constructor(buttonSelector, formsSelector, deleteSelector, editSelector){
     this.buttonSelector = buttonSelector;
     this.formsSelector = formsSelector;
     this.deleteSelector = deleteSelector;
+    this.editSelector = editSelector;
     this.isPopup = false;
     this.ee = new EventEmitter();
     this.addListeners();
@@ -129,6 +131,7 @@ module.exports.FormsHandler = class FormsHandler {
     const addButtons = document.querySelectorAll(this.buttonSelector);
     const addForms = document.querySelectorAll(this.formsSelector);
     const deleteLinks = document.querySelectorAll(this.deleteSelector);
+    const editLinks = document.querySelectorAll(this.editSelector);
 
     addButtons.forEach(button=>{
       if(!button.dataset.hasListener) {
@@ -147,6 +150,13 @@ module.exports.FormsHandler = class FormsHandler {
     deleteLinks.forEach(link=>{
       if(!link.dataset.hasListener) {
         link.addEventListener('click', e=>this.deleteHandler(e))
+        link.dataset.hasListener = true;
+      }
+    });
+
+    editLinks.forEach(link=>{
+      if(!link.dataset.hasListener) {
+        link.addEventListener('click', e=>this.editLinkHandler(e));
         link.dataset.hasListener = true;
       }
     });
@@ -212,12 +222,43 @@ module.exports.FormsHandler = class FormsHandler {
       .catch(err=>console.log(err))
   }
 
+  /**
+  * Send delete request and then emits that object deleted to refresh state
+  * @param {String} e - url for delete request
+  * @returns {void}
+  */
   deleteHandler(e){
-    deleteData(e.target.dataset.url)
-      .then(()=>{
-        this.emit('objectDeleted');
-      })
-      .catch(err=>console.log(err))
+    if(confirm('Вы уверены?'))
+      deleteData(e.target.dataset.url)
+        .then(()=>{
+          this.emit('objectDeleted');
+        })
+        .catch(err=>console.log(err))
+  }
+
+  /**
+  * Send delete request and then emits that object deleted to refresh state
+  * @param {Object} e - event object
+  * @returns {void}
+  */
+  editLinkHandler(e){
+    const obj = {
+      id: e.target.dataset.id,
+      object: e.target.dataset.object
+    };
+
+    getData(`getobject/${obj.object}/${obj.id}`)
+      .then(rep=>this.renderEditForm(rep[0]))
+      .catch(err=>console.log(err));
+  }
+
+  renderEditForm(obj){
+
+  }
+
+  transformObjectForRender(obj){
+    let renderObject = {object:'', input:[]};
+    //TODO tramsform object for render in handlebars
   }
 
   emit(message){

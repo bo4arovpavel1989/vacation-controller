@@ -8,6 +8,9 @@
     {{#each arr}}
       <div class='shiftname'>
         {{this.shift}}
+        <span class='editObject' data-object='Shift' data-id='{{this._id}}'>
+          &nbsp; &#9998; &nbsp;
+        </span>
         <span class='deleteObject' data-url='deleteobject/Shift/{{this._id}}'>
           &#128465;
         </span>
@@ -18,11 +21,22 @@
     {{#each arr}}
       <div class='positionname'>
         {{this.position}}
+        <span class='editObject' data-object='Position' data-id='{{this._id}}'>
+          &nbsp; &#9998; &nbsp;
+        </span>
         <span class='deleteObject' data-url='deleteobject/Position/{{this._id}}'>
           &#128465;
         </span>
       </div>
     {{/each}}
+  </script>
+  <script id='editform' type="text/x-handlebars-template">
+    <form class='editForm' data-url='editobject/{{object}}'>
+    {{#each input}}
+      <input name='{{this.name}}' type='{{this.type}}' value={{this.value}}>
+    {{/each}}
+    <input type='submit' value='сохранить'>
+    </form>
   </script>
 </head>
 <body>

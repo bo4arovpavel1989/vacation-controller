@@ -8,11 +8,11 @@ module.exports = class ObjectManagment {
     this.getObjectData();
     this.shifts=[];
     this.positions=[];
-    this.formsHandler = new FormsHandler('.addButton', '.addForm', '.deleteObject');
-    this.setFormHandlersListeners();
+    this.formsHandler = new FormsHandler('.addButton', '.addForm', '.deleteObject', '.editObject');
+    this.setListeners();
   }
 
-  setFormHandlersListeners(){
+  setListeners(){
     this.formsHandler.ee.on('formHandled', ()=>this.getObjectData())
     this.formsHandler.ee.on('objectDeleted', ()=>this.getObjectData())
   }

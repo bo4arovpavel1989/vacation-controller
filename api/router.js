@@ -5,7 +5,12 @@ const {noMiddleware} = require('./middlewarefunctions.js');
 
 const getRequests = [
 	{
-		url:'/getobject/:id',
+		url:'/getobject/:type/:id',
+		middleware:noMiddleware,
+		callback:getRequestsHandlers.getObject
+	},
+	{
+		url:'/getobject/:type',
 		middleware:noMiddleware,
 		callback:getRequestsHandlers.getObject
 	}
