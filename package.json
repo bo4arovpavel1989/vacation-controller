@@ -38,5 +38,9 @@
     "gulp-uglifyjs": "^0.6.2",
     "imagemin-pngquant": "^6.0.0",
     "vinyl-source-stream": "^2.0.0"
+  },
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongoose": "^5.3.6"
   }
 }

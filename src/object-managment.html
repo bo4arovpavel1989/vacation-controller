@@ -11,8 +11,8 @@
       <div class='header'><h1>Управление объектом</h1></div>
       <div class='main'>
         <div class='controlArea'>
-          <div class='control'><button id='addShift'>Добавить смену</button></div>
-          <div class='control'><button id='addPosition'>Добавить должность</button></div>
+          <div class='control'><button class='addButton' id='addShift'>Добавить смену</button></div>
+          <div class='control'><button class='addButton' id='addPosition'>Добавить должность</button></div>
         </div>
         <div class='objectInfo'>
           <div><h3>Смены</h3></div>
@@ -27,12 +27,25 @@
       </div>
   </div>
   <div class='popupArea'>
-    <div id='shiftAddFormArea' class='popup'>
-      <form id='shiftAddForm'>
+    <div id='addShiftFormArea' class='popup'>
+      <form class='addForm' id='shiftAddForm' data-url='addobject/Shift'>
         Номер смены
-        <input type='text' name='shift'>
+        <input name='shift' type='text' required>
         Режим работы
-        <input name='duty' type='number'> через <input name='off' type='number'>
+        <input name='duty' type='number'> через <input name='off' type='number' required>
+        Рабочая смена
+        <input name='dutyDate' type='date' required>
+        <input type='submit' value='сохранить'>
+      </form>
+    </div>
+    <div id='addPositionFormArea' class='popup'>
+      <form class='addForm' id='positionAddForm' data-url='addobject/Position'>
+        Должность
+        <input name='position' type='text' required>
+        Минимальное количество в смене
+        <input name='shiftQuantity' type='number' required>
+        Минимальное общее количество
+        <input name='totalQuantity' type='number' required>
         <input type='submit' value='сохранить'>
       </form>
     </div>
