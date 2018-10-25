@@ -20,6 +20,58 @@ module.exports = class EmployeManagment {
 }
 
 },{}],3:[function(require,module,exports){
+'use strict'
+
+const {API_URL} = require('./config');
+
+const handleResponse = response=>response.json().then(json=>response.ok ? json : Promise.reject(json));
+
+/**
+ * Function gets form object from html and returns body object
+ * for fetching to API
+ * @param {object} formObj - form object got from HTML
+ * @returns {object} - body object for fetching
+*/
+
+module.exports.getForm = function getForm (formObj) {
+  const fields = Object.keys(formObj);
+  let formBody = {};
+
+  fields.forEach(field=>{
+    const input = formObj[field];
+
+    if(input.type !== 'submit')
+      formBody[input.name] = input.value;
+  })
+
+  return formBody;
+}
+
+/**
+* Function get body object and url and fetch data to API
+* @param {string} url - url of API
+* @param {object} data - body data object for fetching
+* @returns {Promise} - response from API
+*/
+
+module.exports.postData = function postData(url, data) {
+  return new Promise((resolve, reject)=>{
+    fetch(`${API_URL}/${url}`, {
+      method:'POST',
+      mode:'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body:data
+    })
+    .then(handleResponse)
+    .then(rep=>resolve(rep))
+    .catch(err=>reject(err))
+  });
+};
+
+},{"./config":1}],4:[function(require,module,exports){
 'use strict';
 
 const {getPage} = require('./config');
@@ -46,7 +98,7 @@ switch(getPage()) {
     pageScript = null;
 }
 
-},{"./config":1,"./employeManagment":2,"./infotable":4,"./objectManagment":5,"./vacationManagment":6}],4:[function(require,module,exports){
+},{"./config":1,"./employeManagment":2,"./infotable":5,"./objectManagment":6,"./vacationManagment":7}],5:[function(require,module,exports){
 'use strict'
 
 module.exports = class Infotable {
@@ -56,8 +108,9 @@ module.exports = class Infotable {
 
 }
 
-},{}],5:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 'use strict'
+const {getForm, postData} = require('./helpers');
 
 module.exports = class ObjectManagent {
   constructor(){
@@ -79,7 +132,7 @@ module.exports = class ObjectManagent {
 
   addShiftForm(e){
     e.stopPropagation();
-    let el = document.getElementById('shiftAddFormArea');
+    const el = document.getElementById('shiftAddFormArea');
 
     this.isPopup = true;
     el.classList.add('popedUp');
@@ -88,7 +141,7 @@ module.exports = class ObjectManagent {
   closePopup(e){
     e.stopPropagation();
     if(this.isPopup) {
-      let popups = document.querySelectorAll('.popup');
+      const popups = document.querySelectorAll('.popup');
 
       this.isPopup = false;
       popups.forEach(p=>{
@@ -100,12 +153,14 @@ module.exports = class ObjectManagent {
   shiftFormhandler(e){
     e.preventDefault();
 
-    
+    postData('addshift', getForm(e.target))
+      .then(()=>this.closePopup())
+      .catch(err=>console.log(err))
   }
 
 }
 
-},{}],6:[function(require,module,exports){
+},{"./helpers":3}],7:[function(require,module,exports){
 'use strict'
 
 module.exports = class VacationManagment {
@@ -115,4 +170,4 @@ module.exports = class VacationManagment {
 
 }
 
-},{}]},{},[3]);
+},{}]},{},[4]);

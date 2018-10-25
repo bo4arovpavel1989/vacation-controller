@@ -1,4 +1,5 @@
 'use strict'
+const {getForm, postData} = require('./helpers');
 
 module.exports = class ObjectManagent {
   constructor(){
@@ -20,7 +21,7 @@ module.exports = class ObjectManagent {
 
   addShiftForm(e){
     e.stopPropagation();
-    let el = document.getElementById('shiftAddFormArea');
+    const el = document.getElementById('shiftAddFormArea');
 
     this.isPopup = true;
     el.classList.add('popedUp');
@@ -29,7 +30,7 @@ module.exports = class ObjectManagent {
   closePopup(e){
     e.stopPropagation();
     if(this.isPopup) {
-      let popups = document.querySelectorAll('.popup');
+      const popups = document.querySelectorAll('.popup');
 
       this.isPopup = false;
       popups.forEach(p=>{
@@ -41,7 +42,9 @@ module.exports = class ObjectManagent {
   shiftFormhandler(e){
     e.preventDefault();
 
-    
+    postData('addshift', getForm(e.target))
+      .then(()=>this.closePopup())
+      .catch(err=>console.log(err))
   }
 
 }
