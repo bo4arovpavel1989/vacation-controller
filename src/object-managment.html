@@ -32,9 +32,10 @@
   </script>
   <script id='editform' type="text/x-handlebars-template">
     <form class='editForm' data-url='editobject/{{object}}'>
-    {{#each input}}
-      <input name='{{this.name}}' type='{{this.type}}' value={{this.value}}>
-    {{/each}}
+      <input name='_id' type='text' value={{id}}>
+      {{#each input}}
+        <input name='{{this.name}}' type='{{this.type}}' value={{this.value}}>
+      {{/each}}
     <input type='submit' value='сохранить'>
     </form>
   </script>
@@ -69,6 +70,7 @@
         <input name='duty' type='number'> через <input name='off' type='number' required>
         Рабочая смена
         <input name='dutyDate' type='date' required>
+        <input name='type' type='hidden' value='Shift'>
         <input type='submit' value='сохранить'>
       </form>
     </div>
@@ -80,6 +82,7 @@
         <input name='shiftQuantity' type='number' required>
         Минимальное общее количество
         <input name='totalQuantity' type='number' required>
+        <input name='type' type='hidden' value='Position'>
         <input type='submit' value='сохранить'>
       </form>
     </div>

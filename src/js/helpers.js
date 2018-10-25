@@ -253,12 +253,34 @@ module.exports.FormsHandler = class FormsHandler {
   }
 
   renderEditForm(obj){
-
+    console.log(this.transformObjectForRender(obj))
   }
 
   transformObjectForRender(obj){
-    let renderObject = {object:'', input:[]};
-    //TODO tramsform object for render in handlebars
+    let renderObject = {object:obj.type, id:obj._id, input:[]};
+    const typesMap = {
+      string: 'text',
+      number: 'number',
+      date: 'date'
+    }
+
+    for (let i in obj) {
+      if(i !== 'type' && i !== '_id') {
+        const input = {name:i, value:obj[i]};
+
+        if(typeof input.value !== 'string'){
+          input.type = typesMap[typeof obj[i]];
+        } else if (isNaN(Date.parse(input.value))) {
+          input.type = 'text';
+        } else {
+          input.type='date';
+        }
+
+        renderObject.input.push(input);
+      }
+    }
+
+    return renderObject;
   }
 
   emit(message){

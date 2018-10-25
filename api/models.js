@@ -6,14 +6,16 @@ mongoose.Promise = global.Promise;
 const models = {};
 
 models.Shift = new mongoose.Schema({
-	shift: {type: String, required: true},
+	type:{type:String},
+	shift: {type: String},
 	duty:{type:Number},
 	off:{type:Number},
 	dutyDate:{type:Date}
 });
 
 models.Position = new mongoose.Schema({
-	position: {type: String, required: true},
+	type:{type:String},
+	position: {type: String},
 	shiftQuantity:{type:Number},
 	totalQuantity:{type:Number}
 });
