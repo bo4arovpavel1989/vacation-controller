@@ -4,6 +4,26 @@
   <meta charset="UTF-8">
   <title>Vacation-controller</title>
   <link rel="stylesheet" href="css/main.css">
+  <script id='shifts' type="text/x-handlebars-template">
+    {{#each arr}}
+      <div class='shiftname'>
+        {{this.shift}}
+        <span class='deleteObject' data-url='deleteobject/Shift/{{this._id}}'>
+          &#128465;
+        </span>
+      </div>
+    {{/each}}
+  </script>
+  <script id='positions' type="text/x-handlebars-template">
+    {{#each arr}}
+      <div class='positionname'>
+        {{this.position}}
+        <span class='deleteObject' data-url='deleteobject/Position/{{this._id}}'>
+          &#128465;
+        </span>
+      </div>
+    {{/each}}
+  </script>
 </head>
 <body>
   <div id='pageId' data-id='objectManagment'></div>
@@ -16,11 +36,11 @@
         </div>
         <div class='objectInfo'>
           <div><h3>Смены</h3></div>
-          <div class='shiftArea'>
+          <div id='shiftsArea'>
 
           </div>
           <div><h3>Должности</h3></div>
-          <div class='positionArea'>
+          <div id='positionsArea'>
 
           </div>
         </div>

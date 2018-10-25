@@ -4,7 +4,11 @@ const deleteRequestsHandlers=require('./deleterequests.js');
 const {noMiddleware} = require('./middlewarefunctions.js');
 
 const getRequests = [
-
+	{
+		url:'/getobject/:id',
+		middleware:noMiddleware,
+		callback:getRequestsHandlers.getObject
+	}
 ];
 
 const postRequests = [
@@ -16,7 +20,11 @@ const postRequests = [
 ];
 
 const deleteRequests = [
-
+		{
+			url: '/deleteobject/:type/:id',
+			middleware:noMiddleware,
+			callback:deleteRequestsHandlers.deleteObject
+		}
 ];
 
 const router = function (app) {

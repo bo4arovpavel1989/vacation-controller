@@ -1,6 +1,7 @@
 'use strict'
 
 const {API_URL} = require('./config');
+const EventEmitter = require('./libs/events.min');
 
 const handleResponse = response=>response.json().then(json=>response.ok ? json : Promise.reject(json));
 
@@ -52,6 +53,52 @@ module.exports.getForm = getForm;
 module.exports.postData = postData;
 
 /**
+* Fuction makes get request to API
+* @param {String} url - url to request to
+* @returns {Promise} - response object
+*/
+const getData = function (url) {
+ return new Promise((resolve, reject)=>{
+   fetch(`${API_URL}/${url}`, {
+     method:'GET',
+     mode:'cors',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json'
+     }
+   })
+   .then(handleResponse)
+   .then(rep=>resolve(rep))
+   .catch(err=>reject(err))
+ });
+}
+
+module.exports.getData = getData;
+
+/**
+* Fuction makes delete request to API
+* @param {String} url - url to request to
+* @returns {Promise} - response object
+*/
+const deleteData = function (url) {
+ return new Promise((resolve, reject)=>{
+   fetch(`${API_URL}/${url}`, {
+     method:'DELETE',
+     mode:'cors',
+     headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json'
+     }
+   })
+   .then(handleResponse)
+   .then(rep=>resolve(rep))
+   .catch(err=>reject(err))
+ });
+}
+
+module.exports.deleteData = deleteData;
+
+/**
 * Class made to handle all button calling popup forms and handle submits
 * Form must be wrapped in div with class 'popup' and id made by concat of
 * the calling button id plus 'FormArea'
@@ -64,34 +111,59 @@ module.exports.FormsHandler = class FormsHandler {
     * @param {String} buttonSelector - selector of button to call popup form.
     * @param {String} formsSelector - selector of form to call submit.
     */
-  constructor(buttonSelector, formsSelector){
+  constructor(buttonSelector, formsSelector, deleteSelector){
     this.buttonSelector = buttonSelector;
     this.formsSelector = formsSelector;
+    this.deleteSelector = deleteSelector;
     this.isPopup = false;
-    this.listeners();
+    this.ee = new EventEmitter();
+    this.addListeners();
   }
 
   /**
   * Adds listeners for clicking and submitting
   * @returns {void}
   */
-  listeners(){
+  addListeners(){
     this.isPopup = false;
     const addButtons = document.querySelectorAll(this.buttonSelector);
     const addForms = document.querySelectorAll(this.formsSelector);
+    const deleteLinks = document.querySelectorAll(this.deleteSelector);
 
     addButtons.forEach(button=>{
-      button.addEventListener('click', e=>this.buttonClickHandler(e, button.id))
+      if(!button.dataset.hasListener) {
+        button.addEventListener('click', e=>this.buttonClickHandler(e, button.id));
+        button.dataset.hasListener = true;
+      }
     });
 
     addForms.forEach(form=>{
-      form.addEventListener('submit', e=>this.formHandler(e))
+      if(!form.dataset.hasListener) {
+        form.addEventListener('submit', e=>this.formHandler(e))
+        form.dataset.hasListener = true;
+      }
+    });
+
+    deleteLinks.forEach(link=>{
+      if(!link.dataset.hasListener) {
+        link.addEventListener('click', e=>this.deleteHandler(e))
+        link.dataset.hasListener = true;
+      }
     });
 
     document
       .getElementById('container')
       .addEventListener('click', ()=>this.closePopup());
 
+  }
+
+
+  /**
+  * Adds all listeners if not any
+  * @returns {void}
+  */
+  refreshListeners(){
+    this.addListeners();
   }
 
   /**
@@ -133,8 +205,23 @@ module.exports.FormsHandler = class FormsHandler {
     e.preventDefault();
 
     postData(e.target.dataset.url, getForm(e.target))
-      .then(()=>this.closePopup())
+      .then(()=>{
+        this.closePopup();
+        this.emit('formHandled');
+      })
       .catch(err=>console.log(err))
+  }
+
+  deleteHandler(e){
+    deleteData(e.target.dataset.url)
+      .then(()=>{
+        this.emit('objectDeleted');
+      })
+      .catch(err=>console.log(err))
+  }
+
+  emit(message){
+    this.ee.emit(message);
   }
 
 }

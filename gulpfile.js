@@ -35,8 +35,10 @@ gulp.task('browser-sync', function() {
 });
 
 gulp.task('jslibs', function() {
-  return gulp.src([  ])
-  .pipe(concat('libs.min.js'))
+  return gulp.src([ 
+	'src/libs/events.js'
+  ])
+  .pipe(concat('events.min.js'))
   .pipe(uglify())
   .pipe(gulp.dest('src/js'));
 });

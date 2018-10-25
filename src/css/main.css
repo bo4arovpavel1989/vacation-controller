@@ -10,6 +10,9 @@
 .objectInfo {
   width: 40%; }
 
+.deleteObject {
+  cursor: pointer; }
+
 body {
   font: 100% Helvetica, sans-serif;
   color: #333; }
