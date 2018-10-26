@@ -324,18 +324,18 @@ module.exports.FormsHandler = class FormsHandler {
     }
 
     for (let i in obj) {
-      if(i !== 'type' && i !== '_id') {
+      if(i !== 'type' && i !== '_id' && i !== 'workDays') {
         const input = {name:i};
 
-        if(typeof input.value !== 'string'){
+        if(typeof obj[i] !== 'string'){
           input.type = typesMap[typeof obj[i]];
           input.value = obj[i];
-        } else if (isNaN(Date.parse(input.value))) {
+        } else if (isNaN(Date.parse(obj[i].split('T')[0]))) {
           input.type = 'text';
           input.value = obj[i];
         } else {
           input.type='date';
-          input.value = Date.parse(obj[i]);
+          [input.value] = obj[i].split('T');
         }
 
         renderObject.input.push(input);

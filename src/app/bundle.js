@@ -398,18 +398,18 @@ module.exports.FormsHandler = class FormsHandler {
     }
 
     for (let i in obj) {
-      if(i !== 'type' && i !== '_id') {
+      if(i !== 'type' && i !== '_id' && i !== 'workDays') {
         const input = {name:i};
 
-        if(typeof input.value !== 'string'){
+        if(typeof obj[i] !== 'string'){
           input.type = typesMap[typeof obj[i]];
           input.value = obj[i];
-        } else if (isNaN(Date.parse(input.value))) {
+        } else if (isNaN(Date.parse(obj[i].split('T')[0]))) {
           input.type = 'text';
           input.value = obj[i];
         } else {
           input.type='date';
-          input.value = Date.parse(obj[i]);
+          [input.value] = obj[i].split('T');
         }
 
         renderObject.input.push(input);
@@ -522,11 +522,57 @@ module.exports = class ObjectManagment {
 },{"./helpers":3,"./libs/h.min":7}],9:[function(require,module,exports){
 'use strict'
 
-module.exports = class VacationManagment {
+const {FormsHandler, getData, compare} = require('./helpers');
+const Handlebars = require('./libs/h.min');
+
+module.exports = class EmployeManagment {
   constructor(){
+    this.persons=[];
+    this.vacations=[];
+    this.getEmployeData();
+    this.getVacationData();
+    this.formsHandler = new FormsHandler({
+      popupButtonSelector: '.popupButton',
+      formsSelector: '.vacationManagmentForm',
+      deleteSelector: '.deleteObject',
+      editSelector: '.editObject',
+      editFormSelector: '#editForm'
+    });
+    this.setListeners();
+  }
+
+  setListeners(){
+    this.formsHandler.ee.on('refreshRender', ()=>this.getVacationData());
+  }
+
+  getEmployeData(){
+    getData('getobject/Person')
+    .then(rep=>{
+      this.persons=rep.sort(compare('person', 1));
+      this.render('persons');
+    })
+    .catch(err=>console.log(err));
 
   }
 
+  getVacationData(){
+    getData('getobject/Vacation')
+    .then(rep=>{
+      this.vacations=rep.sort(compare('person', 1));
+      this.render('vacations');
+    })
+      .catch(err=>console.log(err));
+    }
+
+  render(data){
+    const source = document.getElementById(data).innerHTML;
+    const template = Handlebars.compile(source);
+    const context = {arr: this[data]};
+    const html = template(context);
+
+    document.getElementById(`${data}Select`).innerHTML = html;
+    this.formsHandler.refreshListeners();
+    }
 }
 
-},{}]},{},[4]);
+},{"./helpers":3,"./libs/h.min":7}]},{},[4]);
