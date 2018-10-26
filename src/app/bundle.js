@@ -122,10 +122,30 @@ const deleteData = function (url) {
 module.exports.deleteData = deleteData;
 
 /**
+* Helper function for sorting array of objects by prop value
+* @param {String} property - property name to sort by
+* @param {Number} sortOrder - '1' or '-1' to set ascending or descendong order
+* @returns {Function} sort function Array.sort()
+*/
+const compare = function (property, sortOrder){
+  return function (a,b) {
+      const result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+
+      return result * sortOrder;
+  }
+}
+
+
+module.exports.compare = compare;
+
+
+/**
 * Class made to handle all button calling popup forms and handle submits
 * Form must be wrapped in div with class 'popup' and id made by concat of
-* the calling button id plus 'FormArea'
+* the calling button data-form plus 'FormArea'
+* the callong buttons must have data-form attr
 * Class 'popedUp' must be defined in css for showing popups
+* Class container must be in html to trigger closepopup on click
 */
 module.exports.FormsHandler = class FormsHandler {
 
@@ -179,7 +199,7 @@ module.exports.FormsHandler = class FormsHandler {
 
     editLinks.forEach(link=>{
       if(!link.dataset.hasEditListener) {
-        link.addEventListener('click', e=>this.editLinkHandler(e));
+        link.addEventListener('click', e=>this.editLinkHandler(e, link.dataset.form));
         link.dataset.hasEditListener = true;
       }
     });
@@ -277,14 +297,14 @@ module.exports.FormsHandler = class FormsHandler {
   * @param {Object} e - event object
   * @returns {void}
   */
-  editLinkHandler(e){
+  editLinkHandler(e, form){
     const obj = {
       id: e.target.dataset.id,
       object: e.target.dataset.object
     };
 
     getData(`getobject/${obj.object}/${obj.id}`)
-      .then(rep=>this.renderEditForm(rep[0]))
+      .then(rep=>this.renderEditForm(rep[0], form))
       .catch(err=>console.log(err));
   }
 
@@ -293,14 +313,14 @@ module.exports.FormsHandler = class FormsHandler {
   * @param {Object} obj - API response object
   * @returns {void}
   */
-  renderEditForm(obj){
+  renderEditForm(obj, form){
     const renderData = this.transformObjectForRender(obj);
     const source = document.querySelector(this.editFormSelector).innerHTML;
     const template = Handlebars.compile(source);
     const context = renderData;
     const html = template(context);
 
-    document.querySelector(`${this.editFormSelector}Area`).innerHTML = html;
+    document.getElementById(`${form}FormArea`).innerHTML = html;
     this.refreshListeners();
   }
 
@@ -395,7 +415,7 @@ module.exports = class Infotable {
 },{}],8:[function(require,module,exports){
 'use strict'
 
-const {FormsHandler, getData} = require('./helpers');
+const {FormsHandler, getData, compare} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
 module.exports = class ObjectManagment {
@@ -420,14 +440,14 @@ module.exports = class ObjectManagment {
   getObjectData(){
     getData('getobject/Shift')
     .then(rep=>{
-      this.shifts=rep;
+      this.shifts=rep.sort(compare('shift', 1));
       this.render('shifts');
     })
     .catch(err=>console.log(err));
 
     getData('getobject/Position')
     .then(rep=>{
-      this.positions = rep;
+      this.positions = rep.sort(compare('position', 1));
       this.render('positions');
     })
     .catch(err=>console.log(err));

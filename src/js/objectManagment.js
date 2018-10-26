@@ -1,6 +1,6 @@
 'use strict'
 
-const {FormsHandler, getData} = require('./helpers');
+const {FormsHandler, getData, compare} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
 module.exports = class ObjectManagment {
@@ -25,14 +25,14 @@ module.exports = class ObjectManagment {
   getObjectData(){
     getData('getobject/Shift')
     .then(rep=>{
-      this.shifts=rep;
+      this.shifts=rep.sort(compare('shift', 1));
       this.render('shifts');
     })
     .catch(err=>console.log(err));
 
     getData('getobject/Position')
     .then(rep=>{
-      this.positions = rep;
+      this.positions = rep.sort(compare('position', 1));
       this.render('positions');
     })
     .catch(err=>console.log(err));
