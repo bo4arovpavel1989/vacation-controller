@@ -8,13 +8,18 @@ module.exports = class ObjectManagment {
     this.getObjectData();
     this.shifts=[];
     this.positions=[];
-    this.formsHandler = new FormsHandler('.addButton', '.addForm', '.deleteObject', '.editObject');
+    this.formsHandler = new FormsHandler({
+      popupButtonSelector: '.popupButton',
+      formsSelector: '.objectManagmentForm',
+      deleteSelector: '.deleteObject',
+      editSelector: '.editObject',
+      editFormSelector: '#editForm'
+    });
     this.setListeners();
   }
 
   setListeners(){
-    this.formsHandler.ee.on('formHandled', ()=>this.getObjectData())
-    this.formsHandler.ee.on('objectDeleted', ()=>this.getObjectData())
+    this.formsHandler.ee.on('refreshRender', ()=>this.getObjectData());
   }
 
   getObjectData(){

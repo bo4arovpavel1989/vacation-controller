@@ -21,6 +21,11 @@ const postRequests = [
 		url: '/addobject/:id',
 		middleware:noMiddleware,
 		callback:postRequestsHandlers.addObject
+	},
+	{
+		url: '/editobject/:type',
+		middleware:noMiddleware,
+		callback:postRequestsHandlers.editObject
 	}
 ];
 

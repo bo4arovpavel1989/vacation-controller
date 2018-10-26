@@ -8,7 +8,7 @@
     {{#each arr}}
       <div class='shiftname'>
         {{this.shift}}
-        <span class='editObject' data-object='Shift' data-id='{{this._id}}'>
+        <span class='editObject popupButton' data-form='edit' data-object='Shift' data-id='{{this._id}}'>
           &nbsp; &#9998; &nbsp;
         </span>
         <span class='deleteObject' data-url='deleteobject/Shift/{{this._id}}'>
@@ -21,7 +21,7 @@
     {{#each arr}}
       <div class='positionname'>
         {{this.position}}
-        <span class='editObject' data-object='Position' data-id='{{this._id}}'>
+        <span class='editObject popupButton' data-form='edit' data-object='Position' data-id='{{this._id}}'>
           &nbsp; &#9998; &nbsp;
         </span>
         <span class='deleteObject' data-url='deleteobject/Position/{{this._id}}'>
@@ -30,11 +30,11 @@
       </div>
     {{/each}}
   </script>
-  <script id='editform' type="text/x-handlebars-template">
-    <form class='editForm' data-url='editobject/{{object}}'>
-      <input name='_id' type='text' value={{id}}>
+  <script id='editForm' type="text/x-handlebars-template">
+    <form class='editForm {{className}}' data-url='editobject/{{object}}'>
+      <input name='_id' type='text' value={{id}} hidden>
       {{#each input}}
-        <input name='{{this.name}}' type='{{this.type}}' value={{this.value}}>
+        <input name='{{this.name}}' type='{{this.type}}' value='{{{this.value}}}'>
       {{/each}}
     <input type='submit' value='сохранить'>
     </form>
@@ -46,8 +46,8 @@
       <div class='header'><h1>Управление объектом</h1></div>
       <div class='main'>
         <div class='controlArea'>
-          <div class='control'><button class='addButton' id='addShift'>Добавить смену</button></div>
-          <div class='control'><button class='addButton' id='addPosition'>Добавить должность</button></div>
+          <div class='control'><button class='popupButton' data-form='addShift' id='addShift'>Добавить смену</button></div>
+          <div class='control'><button class='popupButton' data-form='addPosition' id='addPosition'>Добавить должность</button></div>
         </div>
         <div class='objectInfo'>
           <div><h3>Смены</h3></div>
@@ -63,7 +63,7 @@
   </div>
   <div class='popupArea'>
     <div id='addShiftFormArea' class='popup'>
-      <form class='addForm' id='shiftAddForm' data-url='addobject/Shift'>
+      <form class='objectManagmentForm' id='shiftAddForm' data-url='addobject/Shift'>
         Номер смены
         <input name='shift' type='text' required>
         Режим работы
@@ -75,7 +75,7 @@
       </form>
     </div>
     <div id='addPositionFormArea' class='popup'>
-      <form class='addForm' id='positionAddForm' data-url='addobject/Position'>
+      <form class='objectManagmentForm' id='positionAddForm' data-url='addobject/Position'>
         Должность
         <input name='position' type='text' required>
         Минимальное количество в смене
@@ -86,7 +86,9 @@
         <input type='submit' value='сохранить'>
       </form>
     </div>
-  </div>
+    <div id='editFormArea' class='popup'>
+    </div>
+</div>
 </body>
 <script src='app/bundle.js'></script>
 </html>

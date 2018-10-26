@@ -103,7 +103,7 @@ module.exports.deleteData = deleteData;
 * Class made to handle all button calling popup forms and handle submits
 * Form must be wrapped in div with class 'popup' and id made by concat of
 * the calling button id plus 'FormArea'
-* Class popedup must be defined in css for showing popups
+* Class 'popedUp' must be defined in css for showing popups
 */
 module.exports.FormsHandler = class FormsHandler {
 
@@ -112,11 +112,13 @@ module.exports.FormsHandler = class FormsHandler {
     * @param {String} buttonSelector - selector of button to call popup form.
     * @param {String} formsSelector - selector of form to call submit.
     */
-  constructor(buttonSelector, formsSelector, deleteSelector, editSelector){
-    this.buttonSelector = buttonSelector;
-    this.formsSelector = formsSelector;
-    this.deleteSelector = deleteSelector;
-    this.editSelector = editSelector;
+  constructor(selectors){
+    this.popupButtonSelector = selectors.popupButtonSelector || '';
+    // Must be ClassName!!!
+    this.formsSelector = selectors.formsSelector || '';
+    this.deleteSelector = selectors.deleteSelector || '';
+    this.editSelector = selectors.editSelector || '';
+    this.editFormSelector = selectors.editFormSelector || '';
     this.isPopup = false;
     this.ee = new EventEmitter();
     this.addListeners();
@@ -127,43 +129,45 @@ module.exports.FormsHandler = class FormsHandler {
   * @returns {void}
   */
   addListeners(){
-    this.isPopup = false;
-    const addButtons = document.querySelectorAll(this.buttonSelector);
+    const popupButtons = document.querySelectorAll(this.popupButtonSelector);
     const addForms = document.querySelectorAll(this.formsSelector);
     const deleteLinks = document.querySelectorAll(this.deleteSelector);
     const editLinks = document.querySelectorAll(this.editSelector);
 
-    addButtons.forEach(button=>{
-      if(!button.dataset.hasListener) {
-        button.addEventListener('click', e=>this.buttonClickHandler(e, button.id));
-        button.dataset.hasListener = true;
+    popupButtons.forEach(button=>{
+      if(!button.dataset.hasPopupListener) {
+        button.addEventListener('click', e=>this.popupButtonClickHandler(e, button.dataset.form))
+        button.dataset.hasPopupListener = true;
       }
     });
 
     addForms.forEach(form=>{
-      if(!form.dataset.hasListener) {
+      if(!form.dataset.hasSubmitListener) {
         form.addEventListener('submit', e=>this.formHandler(e))
-        form.dataset.hasListener = true;
+        form.dataset.hasSubmitListener = true;
       }
     });
 
     deleteLinks.forEach(link=>{
-      if(!link.dataset.hasListener) {
+      if(!link.dataset.hasDeleteListener) {
         link.addEventListener('click', e=>this.deleteHandler(e))
-        link.dataset.hasListener = true;
+        link.dataset.hasDeleteListener = true;
       }
     });
 
     editLinks.forEach(link=>{
-      if(!link.dataset.hasListener) {
+      if(!link.dataset.hasEditListener) {
         link.addEventListener('click', e=>this.editLinkHandler(e));
-        link.dataset.hasListener = true;
+        link.dataset.hasEditListener = true;
       }
     });
 
-    document
-      .getElementById('container')
-      .addEventListener('click', ()=>this.closePopup());
+    const container = document.getElementById('container');
+
+    if(!container.dataset.hasClickListener){
+      container.addEventListener('click', ()=>this.closePopup());
+      container.dataset.hasClickListener = true;
+    }
 
   }
 
@@ -181,7 +185,7 @@ module.exports.FormsHandler = class FormsHandler {
   * @returns {void}
   */
   closePopup(){
-    if(this.isPopup) {
+    if(this.isPopup){
       const popups = document.querySelectorAll('.popup');
 
       this.isPopup = false;
@@ -192,18 +196,28 @@ module.exports.FormsHandler = class FormsHandler {
   }
 
   /**
-  * Handles click on button and popups its form
-  * @param {Object} e - event Object
-  * @param {String} id - id of button
+  * Adds class 'popedUp' to certain FormArea
+  * @param {string} form - data-form attr of popup button
   * @returns {void}
   */
-  buttonClickHandler(e, id){
-    e.stopPropagation();
-    this.closePopup();
-    const el = document.getElementById(`${id}FormArea`);
+  openPopup(form){
+    const el = document.getElementById(`${form}FormArea`);
 
     this.isPopup = true;
     el.classList.add('popedUp');
+  }
+
+  /**
+  * Handles click on button and popups its form
+  * Closes all previous popups if any
+  * @param {Object} e - event Object
+  * @param {String} form - selector of its form to open
+  * @returns {void}
+  */
+  popupButtonClickHandler(e, form){
+    e.stopPropagation();
+    this.closePopup();
+    this.openPopup(form);
   }
 
   /**
@@ -217,7 +231,7 @@ module.exports.FormsHandler = class FormsHandler {
     postData(e.target.dataset.url, getForm(e.target))
       .then(()=>{
         this.closePopup();
-        this.emit('formHandled');
+        this.emit('refreshRender');
       })
       .catch(err=>console.log(err))
   }
@@ -231,7 +245,7 @@ module.exports.FormsHandler = class FormsHandler {
     if(confirm('Вы уверены?'))
       deleteData(e.target.dataset.url)
         .then(()=>{
-          this.emit('objectDeleted');
+          this.emit('refreshRender');
         })
         .catch(err=>console.log(err))
   }
@@ -252,12 +266,35 @@ module.exports.FormsHandler = class FormsHandler {
       .catch(err=>console.log(err));
   }
 
+  /**
+  * Get API response object, transfirm it amd render in Handlebars
+  * @param {Object} obj - API response object
+  * @returns {void}
+  */
   renderEditForm(obj){
-    console.log(this.transformObjectForRender(obj))
+    const renderData = this.transformObjectForRender(obj);
+    const source = document.querySelector(this.editFormSelector).innerHTML;
+    const template = Handlebars.compile(source);
+    const context = renderData;
+    const html = template(context);
+
+    document.querySelector(`${this.editFormSelector}Area`).innerHTML = html;
+    this.refreshListeners();
   }
 
+  /**
+  * Gets response object from API and transform it to object for render in forms
+  * @param {Object} obj - respoinse object from API
+  * @returns {Object} - object for render in form
+  */
   transformObjectForRender(obj){
-    let renderObject = {object:obj.type, id:obj._id, input:[]};
+    const renderObject = {
+      object:obj.type,
+      id:obj._id,
+      // Slice(1) - to eliminate '.' symbol of class selector
+      className: this.formsSelector.slice(1),
+      input:[]
+     };
     const typesMap = {
       string: 'text',
       number: 'number',
@@ -266,14 +303,17 @@ module.exports.FormsHandler = class FormsHandler {
 
     for (let i in obj) {
       if(i !== 'type' && i !== '_id') {
-        const input = {name:i, value:obj[i]};
+        const input = {name:i};
 
         if(typeof input.value !== 'string'){
           input.type = typesMap[typeof obj[i]];
+          input.value = obj[i];
         } else if (isNaN(Date.parse(input.value))) {
           input.type = 'text';
+          input.value = obj[i];
         } else {
           input.type='date';
+          input.value = Date.parse(obj[i]);
         }
 
         renderObject.input.push(input);

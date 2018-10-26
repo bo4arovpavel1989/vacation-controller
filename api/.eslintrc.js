@@ -82,17 +82,12 @@ module.exports = {
         "key-spacing": "off",
         "keyword-spacing": "off",
         "line-comment-position": "off",
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
         "lines-around-comment": "error",
         "lines-around-directive": "error",
         "lines-between-class-members": [
             "error",
             "always"
         ],
-        "max-classes-per-file": "error",
         "max-depth": "error",
         "max-len": "off",
         "max-lines": "error",
@@ -110,7 +105,6 @@ module.exports = {
         "newline-per-chained-call": "error",
         "no-alert": "error",
         "no-array-constructor": "error",
-        "no-async-promise-executor": "error",
         "no-await-in-loop": "error",
         "no-bitwise": "error",
         "no-buffer-constructor": "error",
@@ -141,7 +135,6 @@ module.exports = {
         "no-lonely-if": "error",
         "no-loop-func": "error",
         "no-magic-numbers": "error",
-        "no-misleading-character-class": "error",
         "no-mixed-operators": "error",
         "no-mixed-requires": "error",
         "no-multi-assign": "error",
@@ -221,7 +214,6 @@ module.exports = {
         "prefer-const": "error",
         "prefer-destructuring": "error",
         "prefer-numeric-literals": "error",
-        "prefer-object-spread": "error",
         "prefer-promise-reject-errors": "error",
         "prefer-reflect": "error",
         "prefer-rest-params": "error",
@@ -233,10 +225,8 @@ module.exports = {
             "single"
         ],
         "radix": "error",
-        "require-atomic-updates": "error",
         "require-await": "error",
         "require-jsdoc": "error",
-        "require-unicode-regexp": "error",
         "rest-spread-spacing": "error",
         "semi": "off",
         "semi-spacing": "error",
