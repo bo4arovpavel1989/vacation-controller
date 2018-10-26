@@ -273,6 +273,7 @@ module.exports.FormsHandler = class FormsHandler {
   /**
   * Send delete request and then emits that object deleted to refresh state
   * @param {Object} e - event object
+  * @param {string} form - edit link data-form attr for `${form}FormArea` to render to
   * @returns {void}
   */
   editLinkHandler(e, form){
@@ -289,6 +290,7 @@ module.exports.FormsHandler = class FormsHandler {
   /**
   * Get API response object, transfirm it amd render in Handlebars
   * @param {Object} obj - API response object
+  * @param {string} form - selector for `${form}FormArea` to render to
   * @returns {void}
   */
   renderEditForm(obj, form){

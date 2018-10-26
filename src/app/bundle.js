@@ -10,16 +10,68 @@ module.exports.getPage = function() {
 },{}],2:[function(require,module,exports){
 'use strict'
 
+const {FormsHandler, getData, compare} = require('./helpers');
+const Handlebars = require('./libs/h.min');
+
 module.exports = class EmployeManagment {
   constructor(){
+    this.persons=[];
+    this.shifts=[];
+    this.positions=[];
+    this.getObjectData();
+    this.getEmployeData();
+    this.formsHandler = new FormsHandler({
+      popupButtonSelector: '.popupButton',
+      formsSelector: '.employeManagmentForm',
+      deleteSelector: '.deleteObject',
+      editSelector: '.editObject',
+      editFormSelector: '#editForm'
+    });
+    this.setListeners();
+  }
+
+  setListeners(){
+    this.formsHandler.ee.on('refreshRender', ()=>this.getEmployeData());
+  }
+
+  getObjectData(){
+    getData('getobject/Shift')
+    .then(rep=>{
+      this.shifts=rep.sort(compare('shift', 1));
+      this.render('shifts');
+    })
+    .catch(err=>console.log(err));
+
+    getData('getobject/Position')
+    .then(rep=>{
+      this.positions = rep.sort(compare('position', 1));
+      this.render('positions');
+    })
+    .catch(err=>console.log(err));
+  }
+
+  getEmployeData(){
+    getData('getobject/Person')
+    .then(rep=>{
+      this.persons=rep.sort(compare('person', 1));
+      this.render('persons');
+    })
+    .catch(err=>console.log(err));
 
   }
 
+  render(data){
+    const source = document.getElementById(data).innerHTML;
+    const template = Handlebars.compile(source);
+    const context = {arr: this[data]};
+    const html = template(context);
 
-
+    document.getElementById(`${data}Select`).innerHTML = html;
+    this.formsHandler.refreshListeners();
+    }
 }
 
-},{}],3:[function(require,module,exports){
+},{"./helpers":3,"./libs/h.min":7}],3:[function(require,module,exports){
 'use strict'
 
 const {API_URL} = require('./config');
@@ -295,6 +347,7 @@ module.exports.FormsHandler = class FormsHandler {
   /**
   * Send delete request and then emits that object deleted to refresh state
   * @param {Object} e - event object
+  * @param {string} form - edit link data-form attr for `${form}FormArea` to render to
   * @returns {void}
   */
   editLinkHandler(e, form){
@@ -311,6 +364,7 @@ module.exports.FormsHandler = class FormsHandler {
   /**
   * Get API response object, transfirm it amd render in Handlebars
   * @param {Object} obj - API response object
+  * @param {string} form - selector for `${form}FormArea` to render to
   * @returns {void}
   */
   renderEditForm(obj, form){
