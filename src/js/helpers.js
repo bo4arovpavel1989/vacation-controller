@@ -113,9 +113,7 @@ const compare = function (property, sortOrder){
   }
 }
 
-
 module.exports.compare = compare;
-
 
 /**
 * Class made to handle all button calling popup forms and handle submits
