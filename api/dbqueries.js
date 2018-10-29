@@ -40,13 +40,14 @@ const dbQueries = {
 		});
 	},
 	del(schema, val){
+		console.log(val)
+			console.log(schema)
+
 		return new Promise((resolve, reject)=>{
-			models[schema].find(val).deleteOne()
-				.exec((err, rep)=>{
-					console.log(rep)
-					if(err) reject(err)
-					else resolve(rep);
-				})
+			models[schema].deleteOne(val, err=>{
+				if(err) reject(err)
+				else resolve()
+			})
 		});
 	},
 	create(schema, val){

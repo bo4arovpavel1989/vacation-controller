@@ -95,3 +95,27 @@ module.exports.getFullDates = function(body){
 
   return [dateFrom, dateTo];
 }
+
+module.exports.getOrQuery = function(body){
+  const shifts = body.shifts || [];
+  const positions = body.positions || [];
+  const orQuery = [];
+
+  shifts.forEach(shift=>{
+    positions.forEach(position=>{
+      orQuery.push({shift, position})
+    })
+  })
+
+  return orQuery;
+};
+
+module.exports.getNamesQuery = function(arr){
+  let nameArr = [];
+
+  arr.forEach(el=>{
+    nameArr.push({person: el.person})
+  })
+
+  return nameArr;
+}

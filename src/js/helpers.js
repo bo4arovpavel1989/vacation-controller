@@ -295,6 +295,7 @@ module.exports.FormsHandler = class FormsHandler {
     postData(e.target.dataset.url, getForm(e.target))
       .then(rep=>{
         this.closePopup();
+        console.log(rep);
         this.emit('refreshRender', rep);
       })
       .catch(err=>console.log(err))
