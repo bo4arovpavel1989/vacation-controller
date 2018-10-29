@@ -1,8 +1,11 @@
 const db = require('./dbqueries');
-const {editAllEmbeddedDocs} = require('./customfunctions');
+const {editAllEmbeddedDocs, preHandleAddObject} = require('./customfunctions');
 
 module.exports.addObject = function (req, res) {
-	db.create(req.params.id, req.body)
+	const {type} = req.params;
+
+	preHandleAddObject(req)
+		.then(handledReq=>db.create(type, handledReq.body))
 		.then(()=>res.json({success:true}))
 		.catch(err=>res.status(500).json({err:err.message}))
 };

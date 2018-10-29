@@ -18,7 +18,7 @@ const getRequests = [
 
 const postRequests = [
 	{
-		url: '/addobject/:id',
+		url: '/addobject/:type',
 		middleware:noMiddleware,
 		callback:postRequestsHandlers.addObject
 	},

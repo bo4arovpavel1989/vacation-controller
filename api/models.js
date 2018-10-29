@@ -32,6 +32,7 @@ models.Vacation = new mongoose.Schema({
 	type: {type: String},
 	person: {type: String},
 	dateFrom: {type: Date},
+	dateTo: {type: Date},
 	long: {type: Number}
 });
 
