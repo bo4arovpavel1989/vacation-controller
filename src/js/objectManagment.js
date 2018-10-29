@@ -1,41 +1,42 @@
 'use strict'
 
-const {FormsHandler, getData, compare} = require('./helpers');
+const {FormsHandler, getObjectData, compare} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
 module.exports = class ObjectManagment {
   constructor(){
-    this.getObjectData();
     this.shifts=[];
     this.positions=[];
+    this.shiftSort = 1;
+    this.positionSort = 1;
+    this.getObjectData();
+
     this.formsHandler = new FormsHandler({
-      popupButtonSelector: '.popupButton',
-      formsSelector: '.objectManagmentForm',
-      deleteSelector: '.deleteObject',
-      editSelector: '.editObject',
-      editFormSelector: '#editForm'
+      formsSelector: '.objectManagmentForm'
     });
+
     this.setListeners();
+
+  }
+
+  getObjectData(){
+    getObjectData()
+      .then(reps=>{
+        [this.shifts, this.positions] = reps;
+
+        this.sortAndRender('shift');
+        this.sortAndRender('position');
+      });
+
+  }
+
+  sortAndRender(entry){
+    this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
+    this.render(`${entry}s`);
   }
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', ()=>this.getObjectData());
-  }
-
-  getObjectData(){
-    getData('getobject/Shift')
-    .then(rep=>{
-      this.shifts=rep.sort(compare('shift', 1));
-      this.render('shifts');
-    })
-    .catch(err=>console.log(err));
-
-    getData('getobject/Position')
-    .then(rep=>{
-      this.positions = rep.sort(compare('position', 1));
-      this.render('positions');
-    })
-    .catch(err=>console.log(err));
   }
 
   render(data){

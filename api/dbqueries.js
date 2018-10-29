@@ -41,7 +41,7 @@ const dbQueries = {
 	},
 	del(schema, val){
 		return new Promise((resolve, reject)=>{
-			models[schema].find(val).remove()
+			models[schema].find(val).deleteOne()
 				.exec((err, rep)=>{
 					console.log(rep)
 					if(err) reject(err)

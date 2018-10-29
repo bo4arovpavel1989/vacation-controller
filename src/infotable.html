@@ -4,11 +4,74 @@
   <meta charset="UTF-8">
   <title>Vacation-controller</title>
   <link rel="stylesheet" href="css/main.css">
+  <script id='shifts' type="text/x-handlebars-template">
+    {{#each arr}}
+      <label for="shift{{this._id}}">{{this.shift}}</label>
+      <input type="checkbox" id="shift{{this._id}}" name="shifts" value='{{this.shift}}'>
+    {{/each}}
+  </script>
+  <script id='positions' type="text/x-handlebars-template">
+    {{#each arr}}
+      <label for="position{{this._id}}">{{this.position}}</label>
+      <input type="checkbox" id="position{{this._id}}" name="positions" value='{{this.position}}'>
+    {{/each}}
+  </script>
 </head>
 <body>
+  <div id='pageId' data-id='infotable'></div>
   <div class='container'>
       <div class='header'><h1>Вывод информации</h1></div>
+      <div class='infotable'></div>
+      <div class='filterAree'>
+        <form class='filterManagmentForm'  data-url='getvacationsbyfilter'>
+          <div id='shiftsSelect'>
+
+          </div>
+          <div id='positionsSelect'>
+
+          </div>
+          <select name='monthFrom'>
+            <option value='01'>Январь</option>
+            <option value='02'>Февраль</option>
+            <option value='03'>Март</option>
+            <option value='04'>Апрель</option>
+            <option value='05'>Май</option>
+            <option value='06'>Июнь</option>
+            <option value='07'>Июль</option>
+            <option value='08'>Август</option>
+            <option value='09'>Сентябрь</option>
+            <option value='10'>Октябрь</option>
+            <option value='11'>Ноябрь</option>
+            <option value='12'>Декабрь</option>
+          </select>
+          <select name='yearFrom'/>
+            <option value='2018'>2018</option>
+            <option value='2019'>2019</option>
+          </select>
+          <select name='monthTo'>
+            <option value='01'>Январь</option>
+            <option value='02'>Февраль</option>
+            <option value='03'>Март</option>
+            <option value='04'>Апрель</option>
+            <option value='05'>Май</option>
+            <option value='06'>Июнь</option>
+            <option value='07'>Июль</option>
+            <option value='08'>Август</option>
+            <option value='09'>Сентябрь</option>
+            <option value='10'>Октябрь</option>
+            <option value='11'>Ноябрь</option>
+            <option value='12' selected>Декабрь</option>
+          </select>
+          <select name='yearTo'/>
+            <option value='2018'>2018</option>
+            <option value='2019'>2019</option>
+          </select>
+          <input type='submit' value='показать'/>
+        </form>
+      </div>
+      <div id='renderArea'>
+      </div>
   </div>
 </body>
-<script src='app/bundle.js'/>
+<script src='app/bundle.js'></script>
 </html>

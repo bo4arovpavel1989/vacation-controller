@@ -26,6 +26,12 @@ const postRequests = [
 		url: '/editobject/:type',
 		middleware:noMiddleware,
 		callback:postRequestsHandlers.editObject
+	},
+	// Because i handle form - its in postrequests
+	{
+		url: '/getvacationsbyfilter',
+		middleware:noMiddleware,
+		callback:postRequestsHandlers.getVacationsByFilter
 	}
 ];
 

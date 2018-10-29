@@ -70,3 +70,28 @@ module.exports.editAllEmbeddedDocs = function(req){
   })
 
 }
+
+/**
+ * Function calculates dates from year and month entries
+ * @param {Object} body - request body Object
+ * @returns {Array} - array of first and last dates [first, last]
+ */
+module.exports.getFullDates = function(body){
+	let {monthFrom, yearFrom, monthTo, yearTo} = body;
+
+  monthTo = Number(monthTo);
+  yearTo = Number(yearTo);
+
+  monthTo += 1;
+  if(monthTo === 13) {
+    monthTo = '01';
+    yearTo += 1;
+  } else if(monthTo < 10) {
+    monthTo = '0' + monthTo.toString();
+  }
+
+  const dateFrom = `${yearFrom}-${monthFrom}-01`;
+  const dateTo = `${yearTo}-${monthTo}-01`;
+
+  return [dateFrom, dateTo];
+}

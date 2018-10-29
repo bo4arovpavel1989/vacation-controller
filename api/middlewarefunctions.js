@@ -24,6 +24,6 @@ module.exports.preHandleAddObject = function(req, res, next){
 			next()	 :
 			res.status(500).json({err:'Error prehandling adding object'})
 	} else {
-		res.status(500).json({err:'Error prehandling adding object'})
+		next();
 	}
-  };
+};

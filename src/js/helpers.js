@@ -19,8 +19,14 @@ const getForm = function (formObj) {
   fields.forEach(field=>{
     const input = formObj[field];
 
-    if(input.type !== 'submit')
-      formBody[input.name] = input.value;
+    if(input.type !== 'submit' && input.type !== 'checkbox')
+      formBody[input.name] = input.value
+    else if(input.type === 'checkbox') {
+      if(formBody[input.name] && input.checked)
+        formBody[input.name].push(input.value)
+      else if(input.checked)
+        formBody[input.name] = [input.value]
+    }
   })
 
   return formBody;
@@ -116,6 +122,47 @@ const compare = function (property, sortOrder){
 module.exports.compare = compare;
 
 /**
+* Function gets from API both shifts and positins data
+* @returns {Promise} - array of data [[shifts], [positions]]
+*/
+const getObjectData = function(){
+  return Promise.all([
+    getData('getobject/Shift'),
+    getData('getobject/Position')
+  ]);
+}
+
+module.exports.getObjectData = getObjectData;
+
+/**
+* Function gets from API employe data
+* @returns {Promise} - array of data [person]
+*/
+const getEmployeData = function(){
+  return new Promise((resolve, reject)=>{
+    getData('getobject/Person')
+    .then(rep=>resolve(rep))
+    .catch(err=>reject(err))
+  })
+}
+
+module.exports.getEmployeData = getEmployeData;
+
+/**
+* Function gets from API vacation data
+* @returns {Promise} - array of data [vacation]
+*/
+const getVacationData = function(){
+  return new Promise((resolve, reject)=>{
+    getData('getobject/Vacation')
+    .then(rep=>resolve(rep))
+    .catch(err=>reject(err))
+  })
+}
+
+module.exports.getVacationData = getVacationData;
+
+/**
 * Class made to handle all button calling popup forms and handle submits
 * Form must be wrapped in div with class 'popup' and id made by concat of
 * the calling button data-form plus 'FormArea'
@@ -127,16 +174,15 @@ module.exports.FormsHandler = class FormsHandler {
 
   /**
     * Create listener.
-    * @param {String} buttonSelector - selector of button to call popup form.
-    * @param {String} formsSelector - selector of form to call submit.
+    * @param {Object} selectors - selectors of controlled buttons and forms
     */
   constructor(selectors){
-    this.popupButtonSelector = selectors.popupButtonSelector || '';
+    this.popupButtonSelector = selectors.popupButtonSelector || '.popupButton';
     // Must be ClassName!!!
-    this.formsSelector = selectors.formsSelector || '';
-    this.deleteSelector = selectors.deleteSelector || '';
-    this.editSelector = selectors.editSelector || '';
-    this.editFormSelector = selectors.editFormSelector || '';
+    this.formsSelector = selectors.formsSelector || '.defaultFormm';
+    this.deleteSelector = selectors.deleteSelector || '.deleteObject';
+    this.editSelector = selectors.editSelector || '.editObject';
+    this.editFormSelector = selectors.editFormSelector || '#editForm';
     this.isPopup = false;
     this.ee = new EventEmitter();
     this.addListeners();
@@ -182,7 +228,7 @@ module.exports.FormsHandler = class FormsHandler {
 
     const container = document.getElementById('container');
 
-    if(!container.dataset.hasClickListener){
+    if(container && !container.dataset.hasClickListener){
       container.addEventListener('click', ()=>this.closePopup());
       container.dataset.hasClickListener = true;
     }
@@ -245,11 +291,11 @@ module.exports.FormsHandler = class FormsHandler {
   */
   formHandler(e){
     e.preventDefault();
-
+    
     postData(e.target.dataset.url, getForm(e.target))
-      .then(()=>{
+      .then(rep=>{
         this.closePopup();
-        this.emit('refreshRender');
+        this.emit('refreshRender', rep);
       })
       .catch(err=>console.log(err))
   }
@@ -343,8 +389,8 @@ module.exports.FormsHandler = class FormsHandler {
     return renderObject;
   }
 
-  emit(message){
-    this.ee.emit(message);
+  emit(message, data){
+    this.ee.emit(message, data);
   }
 
 }
