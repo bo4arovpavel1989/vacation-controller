@@ -1,7 +1,7 @@
 const postRequestsHandlers=require('./postrequests.js');
 const getRequestsHandlers=require('./getrequests.js');
 const deleteRequestsHandlers=require('./deleterequests.js');
-const {noMiddleware} = require('./middlewarefunctions.js');
+const {noMiddleware, preHandleAddObject} = require('./middlewarefunctions.js');
 
 const getRequests = [
 	{
@@ -19,7 +19,7 @@ const getRequests = [
 const postRequests = [
 	{
 		url: '/addobject/:type',
-		middleware:noMiddleware,
+		middleware:preHandleAddObject,
 		callback:postRequestsHandlers.addObject
 	},
 	{

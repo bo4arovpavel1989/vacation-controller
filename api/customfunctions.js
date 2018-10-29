@@ -6,7 +6,7 @@ const _ = require('lodash');
  * @param {Object} req - API request Object
  * @returns {Promise} handled request object with dateTo prop added
  */
-const calculateVacationEnd = function(req){
+module.exports.calculateVacationEnd = function(req){
   try{
     const {dateFrom, long} = req.body;
     const dayLong = 1000 * 60 * 60 * 24;
@@ -14,28 +14,11 @@ const calculateVacationEnd = function(req){
 
     req.body.dateTo = dateTo;
 
-    return Promise.resolve(req)
+    return true;
   }catch(err){
-    return Promise.reject(err)
+    return false;
   }
 }
-
-/**
- * Function returns preHandler function if needed
- * @param {Object} req - API request Object
- * @returns {Promise} handler function or just req object if not any
- */
-module.exports.preHandleAddObject = function(req){
-  const {type} = req.params;
-  const addHandlerMap = {
-    Vacation: r=>calculateVacationEnd(r)
-  }
-
-  if(addHandlerMap[type])
-      return addHandlerMap[type](req)
-
-  return Promise.resolve(req);
-  };
 
 /**
  * Function edits fields in other docs, that

@@ -4,8 +4,7 @@ const {editAllEmbeddedDocs, preHandleAddObject} = require('./customfunctions');
 module.exports.addObject = function (req, res) {
 	const {type} = req.params;
 
-	preHandleAddObject(req)
-		.then(handledReq=>db.create(type, handledReq.body))
+	db.create(type, req.body)
 		.then(()=>res.json({success:true}))
 		.catch(err=>res.status(500).json({err:err.message}))
 };
