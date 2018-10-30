@@ -26,45 +26,35 @@
     </form>
   </script>
   <script id='graphData' type="text/x-handlebars-template">
-    <div class='graphTitle'>{{this.title}}</div>
-    <div class='graphArea'>
-      <div class='namesArea'>
-        <div>месяц</div>
-        <div>число</div>
-        {{#each persons}}
-          <div class='personName'>{{this.person}}</div>
-        {{/each}}
-      </div>
-      <div class='dataArea'>
-        <div class='monthesArea'>
+    <caption class='graphTitle'>{{this.title}}</caption>
+        <tr class='monthesArea'>
+          <th width="200"></h>
           {{#each calendar.monthes}}
-            <div class='monthName' style='min-width: {{this.monthWidth}}px'>
+            <th class='monthName' colspan='{{this.dayInMonth}}' width={{this.monthWidth}}>
               {{this.monthName}}
-            </div>
+            </th>
           {{/each}}
-        </div>
-        <div class='datesArea'>
+        </tr>
+        <tr class='datesArea'>
+          <th width="200"></th>
           {{#each calendar.dates}}
-            <div class='dateName greyBorder' style='min-width: {{../dayWidth}}px'>
+            <th class='dateName' width={{../dayWidth}}>
               {{this.date}}
-            </div>
+            </th>
           {{/each}}
-        </div>
-        <div class='vacationArea'>
-          {{#each persons}}
-            <div class='vacationLine'>
-              {{#each this.daysOff}}
-                {{#if this.is}}
-                  <div class='dayOff greyBorder' data-id='{{this._id}}' style='min-width: {{../../dayWidth}}px'></div>
-                {{else}}
-                  <div class='dayDuty greyBorder' style='min-width: {{../../dayWidth}}px'></div>
-                {{/if}}
-              {{/each}}
-            </div>
-          {{/each}}
-        </div>
-      </div>
-    </div>
+        </tr>
+        {{#each persons}}
+          <tr class='vacationLine'>
+            <td class='namesArea' width="200">{{this.person}}</td>
+            {{#each this.daysOff}}
+              {{#if this.is}}
+                <td class='dayOff greyBorder' data-id='{{this._id}}' width={{../../dayWidth}}></td>
+              {{else}}
+                <td class='dayDuty greyBorder' width={{../../dayWidth}}></td>
+              {{/if}}
+            {{/each}}
+          </tr>
+        {{/each}}
   </script>
 </head>
 <body>
@@ -119,8 +109,8 @@
           <input type='submit' value='показать'/>
         </form>
       </div>
-      <div id='graphDataSelect'>
-      </div>
+      <table id='graphDataSelect'  border="1">
+      </table>
   </div>
   <div id='editFormArea' class='popup'>
   </div>
