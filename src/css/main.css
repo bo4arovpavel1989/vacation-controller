@@ -13,6 +13,58 @@
 .deleteObject, .editObject {
   cursor: pointer; }
 
+.graphArea {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; }
+
+.dataArea {
+  overflow-x: scroll; }
+
+.namesArea {
+  position: -webkit-sticky;
+  position: sticky;
+  width: 200px; }
+
+.personName {
+  white-space: nowrap; }
+
+.monthesArea {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; }
+
+.monthName {
+  text-align: center; }
+
+.datesArea {
+  white-space: nowrap;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex; }
+
+.dateName {
+  text-align: center; }
+
+.vacationLine {
+  white-space: nowrap;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  height: 18px; }
+
+.dayOff {
+  background-color: blue; }
+
+.greyBorder {
+  border: 1px solid grey;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
+
 body {
   font: 100% Helvetica, sans-serif;
   color: #333; }

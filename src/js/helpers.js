@@ -25,9 +25,10 @@ module.exports.getDayInMonth = getDayInMonth;
 * @param {String} y1 - year to calculate from
 * @param {String} m2 - month to calculate ti
 * @param {String} y2 - year to calculate to
+* @param {Number} dw - width of single day element
 * @returns {Array} - array of all monthes
 */
-const getMiddleMonthes = function(m1, y1, m2, y2){
+const getMiddleMonthes = function(m1, y1, m2, y2, dw){
   const monthesArray = [];
   let first = Number(m1);
   const last = Number(m2);
@@ -35,14 +36,23 @@ const getMiddleMonthes = function(m1, y1, m2, y2){
   const year2 = Number(y2);
 
   while ((year1 < year2) || (first <= last && year1 === year2)) {
+    let dayInMonth,
+        monthWidth;
+
     if(first < 10){
-      monthesArray.push(`0${first.toString()}`)
+      dayInMonth = getDayInMonth(year1, first)
+      monthWidth = dayInMonth * dw;
+      monthesArray.push({month:`0${first.toString()}`, dayInMonth, monthWidth})
     } else if (first <= 12){
-      monthesArray.push(first.toString())
+      dayInMonth = getDayInMonth(year1, first)
+      monthWidth = dayInMonth * dw;
+      monthesArray.push({month:first.toString(), dayInMonth, monthWidth})
     } else {
-      monthesArray.push('01')
       first = 1;
-      year1++
+      ++year1;
+      dayInMonth = getDayInMonth(year1, first)
+      monthWidth = dayInMonth * dw;
+      monthesArray.push({month:'01', dayInMonth, monthWidth})
     }
 
     first++;

@@ -16,6 +16,47 @@
       <input type="checkbox" id="position{{this._id}}" name="positions" value='{{this.position}}'>
     {{/each}}
   </script>
+  <script id='graphData' type="text/x-handlebars-template">
+    <div class='graphTitle'>{{this.title}}</div>
+    <div class='graphArea'>
+      <div class='namesArea'>
+        <div>месяц</div>
+        <div>число</div>
+        {{#each persons}}
+          <div class='personName'>{{this.person}}</div>
+        {{/each}}
+      </div>
+      <div class='dataArea'>
+        <div class='monthesArea'>
+          {{#each calendar.monthes}}
+            <div class='monthName' style='min-width: {{this.monthWidth}}px'>
+              {{this.month}}
+            </div>
+          {{/each}}
+        </div>
+        <div class='datesArea'>
+          {{#each calendar.dates}}
+            <div class='dateName greyBorder' style='min-width: {{../dayWidth}}px'>
+              {{this.date}}
+            </div>
+          {{/each}}
+        </div>
+        <div class='vacationArea'>
+          {{#each persons}}
+            <div class='vacationLine'>
+              {{#each this.daysoff}}
+                {{#if this}}
+                  <div class='dayOff greyBorder' style='min-width: {{../../dayWidth}}px'></div>
+                {{else}}
+                  <div class='dayDuty greyBorder' style='min-width: {{../../dayWidth}}px'></div>
+                {{/if}}
+              {{/each}}
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </script>
 </head>
 <body>
   <div id='pageId' data-id='infotable'></div>
@@ -69,7 +110,7 @@
           <input type='submit' value='показать'/>
         </form>
       </div>
-      <div id='renderArea'>
+      <div id='graphDataSelect'>
       </div>
   </div>
 </body>
