@@ -16,6 +16,15 @@
       <input type="checkbox" id="position{{this._id}}" name="positions" value='{{this.position}}'>
     {{/each}}
   </script>
+  <script id='editForm' type="text/x-handlebars-template">
+    <form class='editForm {{className}}' data-url='editobject/{{object}}'>
+      <input name='_id' type='text' value={{id}} hidden>
+      {{#each input}}
+        <input name='{{this.name}}' type='{{this.type}}' value='{{{this.value}}}'>
+      {{/each}}
+      <input type='submit' value='сохранить'>
+    </form>
+  </script>
   <script id='graphData' type="text/x-handlebars-template">
     <div class='graphTitle'>{{this.title}}</div>
     <div class='graphArea'>
@@ -30,7 +39,7 @@
         <div class='monthesArea'>
           {{#each calendar.monthes}}
             <div class='monthName' style='min-width: {{this.monthWidth}}px'>
-              {{this.month}}
+              {{this.monthName}}
             </div>
           {{/each}}
         </div>
@@ -44,9 +53,9 @@
         <div class='vacationArea'>
           {{#each persons}}
             <div class='vacationLine'>
-              {{#each this.daysoff}}
-                {{#if this}}
-                  <div class='dayOff greyBorder' style='min-width: {{../../dayWidth}}px'></div>
+              {{#each this.daysOff}}
+                {{#if this.is}}
+                  <div class='dayOff greyBorder' data-id='{{this._id}}' style='min-width: {{../../dayWidth}}px'></div>
                 {{else}}
                   <div class='dayDuty greyBorder' style='min-width: {{../../dayWidth}}px'></div>
                 {{/if}}
@@ -112,6 +121,8 @@
       </div>
       <div id='graphDataSelect'>
       </div>
+  </div>
+  <div id='editFormArea' class='popup'>
   </div>
 </body>
 <script src='app/bundle.js'></script>

@@ -1,6 +1,6 @@
 'use strict'
 
-const {compare, getObjectData, FormsHandler, getDayInMonth, getMiddleMonthes} = require('./helpers');
+const {compare, getObjectData, FormsHandler, getDayInMonth, getMiddleMonthes, getAllIndexes} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
 module.exports = class EmployeManagment {
@@ -88,7 +88,7 @@ module.exports = class EmployeManagment {
     const sortedData = data.sort(compare('person', this.personSort));
 
     sortedData.forEach((datum, i)=>{
-      this.graphData.persons.push({person:datum.person, daysoff:[]});
+      this.graphData.persons.push({person:datum.person, daysOff:[]});
 
       dates.forEach(date=>{
         const currentDate = Date.parse(`${date.year}-${date.month}-${date.date}`);
@@ -96,14 +96,64 @@ module.exports = class EmployeManagment {
         const dateTo = Date.parse(datum.dateTo);
 
         if(currentDate >= dateFrom && currentDate < dateTo)
-          this.graphData.persons[i].daysoff.push(true)
+          this.graphData.persons[i].daysOff.push({is:true, _id:datum._id})
         else
-          this.graphData.persons[i].daysoff.push(false)
+          this.graphData.persons[i].daysOff.push({is:false})
       })
 
     });
 
+    this.concatVacations()
+
     this.render('graphData')
+  }
+
+  /**
+   * Method concats different vacation of single person
+   * To render all vacations of single man in one line
+   * @returns {void}
+   */
+  concatVacations(){
+    const personSet = [];
+    const notConcatedArray = this.graphData.persons;
+    const resultArray = [];
+    let occassions = [];
+
+    notConcatedArray.forEach(person=>{
+      personSet.push(person.person);
+    });
+
+    notConcatedArray.forEach((person, i)=>{
+      const matches = personSet.filter(personInSet=>personInSet === person.person);
+
+      // If person runs into only once
+      if(matches.length === 1)
+        resultArray.push(notConcatedArray[i])
+      // If person has several vacations
+      else if(occassions.indexOf(i) === -1){
+        occassions = getAllIndexes(personSet, person.person)
+        resultArray.push(this.concatVacationsOfSinglePerson(occassions, person.person))
+      }
+    });
+
+    this.graphData.persons = resultArray;
+  }
+
+  concatVacationsOfSinglePerson(indexes, person){
+    const firstOccassion = this.graphData.persons[indexes[0]];
+    const {daysOff} = firstOccassion;
+
+    // Start from 1 - coz i already performed first occassion
+    for (let i = 1; i < indexes.length; i++) {
+      this.graphData.persons[indexes[i]].daysOff.forEach((dayOff, k)=>{
+        if(dayOff.is){
+          daysOff[k].is = true;
+          daysOff[k]._id = dayOff._id;
+        }
+      })
+    }
+
+    return {person, daysOff}
   }
 
   render(data){

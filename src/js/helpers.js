@@ -6,6 +6,19 @@ const Handlebars = require('./libs/h.min');
 
 const handleResponse = response=>response.json().then(json=>response.ok ? json : Promise.reject(json));
 
+
+const getAllIndexes = function (arr, val) {
+    let indexes = [], i;
+
+    for(i = 0; i < arr.length; i++)
+        if (arr[i] === val)
+            indexes.push(i);
+
+    return indexes;
+}
+
+module.exports.getAllIndexes = getAllIndexes;
+
 /**
 * Function calculates quantity of days in month
 * @param {String} year - year to calculate dates to
@@ -18,6 +31,31 @@ const getDayInMonth = function(year, month){
 }
 
 module.exports.getDayInMonth = getDayInMonth;
+
+/**
+* Function gets string name of mont
+* @param {Number} num - number of month
+* @returns {String} - month name
+*/
+const getMonthName = function(num){
+  const monthNamesMap = [
+    'Январь',
+    'Февраль',
+    'Март',
+    'Апрель',
+    'Май',
+    'Июнь',
+    'Июль',
+    'Август',
+    'Сентябрь',
+    'Октябрь',
+    'Ноябрь',
+    'Декабрь',
+  ]
+
+  // Minus one - to operate monthes starting from 01
+  return monthNamesMap[num-1];
+}
 
 /**
 * Function gets all monthes from start till finish
@@ -37,23 +75,26 @@ const getMiddleMonthes = function(m1, y1, m2, y2, dw){
 
   while ((year1 < year2) || (first <= last && year1 === year2)) {
     let dayInMonth,
-        monthWidth;
+        monthWidth,
+        month;
 
     if(first < 10){
       dayInMonth = getDayInMonth(year1, first)
       monthWidth = dayInMonth * dw;
-      monthesArray.push({month:`0${first.toString()}`, dayInMonth, monthWidth})
+      month = `0${first.toString()}`;
     } else if (first <= 12){
       dayInMonth = getDayInMonth(year1, first)
       monthWidth = dayInMonth * dw;
-      monthesArray.push({month:first.toString(), dayInMonth, monthWidth})
+      month = first.toString();
     } else {
       first = 1;
       ++year1;
       dayInMonth = getDayInMonth(year1, first)
       monthWidth = dayInMonth * dw;
-      monthesArray.push({month:'01', dayInMonth, monthWidth})
+      month = 1;
     }
+
+    monthesArray.push({month, dayInMonth, monthWidth, monthName: getMonthName(first)})
 
     first++;
   }
