@@ -5,23 +5,24 @@
   <title>Vacation-controller</title>
   <link rel="stylesheet" href="css/main.css">
   <script id='shifts' type="text/x-handlebars-template">
-    {{#each arr}}
+    {{#each this}}
       <option value='{{this.shift}}'>
         '{{this.shift}}'
       </option>
     {{/each}}
   </script>
   <script id='positions' type="text/x-handlebars-template">
-    {{#each arr}}
+    {{#each this}}
       <option value='{{this.position}}'>
         '{{this.position}}'
       </option>
     {{/each}}
   </script>
   <script id='persons' type="text/x-handlebars-template">
-    {{#each arr}}
+    {{#each this}}
       <div class='personName'>
-        {{this.person}} -
+        {{this.person}} - &nbsp;
+        {{this.shift}} - &nbsp;
         {{this.position}}
         <span class='editObject popupButton' data-form='edit' data-object='Person' data-id='{{this._id}}'>
           &nbsp; &#9998; &nbsp;

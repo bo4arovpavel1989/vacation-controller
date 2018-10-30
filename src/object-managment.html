@@ -5,7 +5,7 @@
   <title>Vacation-controller</title>
   <link rel="stylesheet" href="css/main.css">
   <script id='shifts' type="text/x-handlebars-template">
-    {{#each arr}}
+    {{#each this}}
       <div class='shiftname'>
         {{this.shift}}
         <span class='editObject popupButton' data-form='edit' data-object='Shift' data-id='{{this._id}}'>
@@ -18,7 +18,7 @@
     {{/each}}
   </script>
   <script id='positions' type="text/x-handlebars-template">
-    {{#each arr}}
+    {{#each this}}
       <div class='positionname'>
         {{this.position}}
         <span class='editObject popupButton' data-form='edit' data-object='Position' data-id='{{this._id}}'>

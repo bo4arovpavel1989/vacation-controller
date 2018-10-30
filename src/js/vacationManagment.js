@@ -46,7 +46,7 @@ module.exports = class EmployeManagment {
   render(data){
     const source = document.getElementById(data).innerHTML;
     const template = Handlebars.compile(source);
-    const context = {arr: this[data]};
+    const context = this[data];
     const html = template(context);
 
     document.getElementById(`${data}Select`).innerHTML = html;

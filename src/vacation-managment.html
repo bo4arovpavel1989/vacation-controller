@@ -5,14 +5,14 @@
   <title>Vacation-controller</title>
   <link rel="stylesheet" href="css/main.css">
   <script id='persons' type="text/x-handlebars-template">
-    {{#each arr}}
+    {{#each this}}
       <option value='{{this.person}}'>
         '{{this.person}}'
       </option>
     {{/each}}
   </script>
   <script id='vacations' type="text/x-handlebars-template">
-    {{#each arr}}
+    {{#each this}}
       <div class='vacationName'>
         {{this.person}} -
         {{this.dateFrom}} -
