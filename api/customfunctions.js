@@ -96,6 +96,11 @@ module.exports.getFullDates = function(body){
   return [dateFrom, dateTo];
 }
 
+/**
+ * Function generates $or query for mongo to find certain shifts and positions
+ * @param {Object} body - request body Object
+ * @returns {Array} - array of shifts and positions [{shift, position}]
+ */
 module.exports.getOrQuery = function(body){
   const shifts = body.shifts || [];
   const positions = body.positions || [];
@@ -110,6 +115,11 @@ module.exports.getOrQuery = function(body){
   return orQuery;
 };
 
+/**
+ * Function gets names from Person documents of mongo
+ * @param {Array} arr - array got from Person documents
+ * @returns {Array} - array of names
+ */
 module.exports.getNamesQuery = function(arr){
   let nameArr = [];
 

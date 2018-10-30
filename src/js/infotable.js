@@ -1,12 +1,13 @@
 'use strict'
 
-const {compare, getObjectData, FormsHandler} = require('./helpers');
+const {compare, getObjectData, FormsHandler, getDayInMonth, getMiddleMonthes} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
 module.exports = class EmployeManagment {
   constructor(){
     this.shifts=[];
     this.positions=[];
+    this.graphData={};
 
     this.formsHandler = new FormsHandler({
       formsSelector: '.filterManagmentForm'
@@ -29,7 +30,19 @@ module.exports = class EmployeManagment {
   }
 
   setListeners(){
-    this.formsHandler.ee.on('refreshRender', r=>console.log(r));
+    this.formsHandler.ee.on('refreshRender', data=>this.prepareGraphData(data));
+  }
+
+  prepareGraphData(data){
+    const monthFrom = document.getElementsByName("monthFrom")[0].value;
+    const monthTo = ${document.getElementsByName("monthTo")[0].value};
+
+    this.graphData.title = `${monthFrom}-` +
+    `${document.getElementsByName("yearFrom")[0].value} - ` +
+    `${monthTo}-` +
+    `${document.getElementsByName("yearTo")[0].value} `;
+
+    console.log(getDayInMonth('03'))
   }
 
   render(data){
@@ -39,5 +52,5 @@ module.exports = class EmployeManagment {
     const html = template(context);
 
     document.getElementById(`${data}Select`).innerHTML = html;
-    }
+  }
 }

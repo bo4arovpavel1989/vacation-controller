@@ -78,6 +78,17 @@ const Handlebars = require('./libs/h.min');
 const handleResponse = response=>response.json().then(json=>response.ok ? json : Promise.reject(json));
 
 /**
+* Function calculates quantity of days in month
+* @param {String} month - month to calculate dates to
+* @returns {Number} - number of days in month
+*/
+const getDayInMonth = function(month){
+  return 33 - new Date(2018, month, 33).getDate();
+}
+
+module.exports.getDayInMonth = getDayInMonth;
+
+/**
  * Function gets form object from html and returns body object
  * for fetching to API
  * @param {object} formObj - form object got from HTML
@@ -362,11 +373,10 @@ module.exports.FormsHandler = class FormsHandler {
   */
   formHandler(e){
     e.preventDefault();
-    
+
     postData(e.target.dataset.url, getForm(e.target))
       .then(rep=>{
         this.closePopup();
-        console.log(rep);
         this.emit('refreshRender', rep);
       })
       .catch(err=>console.log(err))
@@ -497,13 +507,14 @@ switch(getPage()) {
 },{"./config":1,"./employeManagment":2,"./infotable":5,"./objectManagment":8,"./vacationManagment":9}],5:[function(require,module,exports){
 'use strict'
 
-const {compare, getObjectData, FormsHandler} = require('./helpers');
+const {compare, getObjectData, FormsHandler, getDayInMonth} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
 module.exports = class EmployeManagment {
   constructor(){
     this.shifts=[];
     this.positions=[];
+    this.graphData={};
 
     this.formsHandler = new FormsHandler({
       formsSelector: '.filterManagmentForm'
@@ -526,7 +537,16 @@ module.exports = class EmployeManagment {
   }
 
   setListeners(){
-    this.formsHandler.ee.on('refreshRender', r=>console.log(r));
+    this.formsHandler.ee.on('refreshRender', data=>this.prepareGraphData(data));
+  }
+
+  prepareGraphData(data){
+    this.graphData.title = `${document.getElementsByName("monthFrom")[0].value}-` +
+    `${document.getElementsByName("yearFrom")[0].value} - ` +
+    `${document.getElementsByName("monthTo")[0].value}-` +
+    `${document.getElementsByName("yearTo")[0].value} `;
+
+    console.log(getDayInMonth('03'))
   }
 
   render(data){
@@ -536,7 +556,7 @@ module.exports = class EmployeManagment {
     const html = template(context);
 
     document.getElementById(`${data}Select`).innerHTML = html;
-    }
+  }
 }
 
 },{"./helpers":3,"./libs/h.min":7}],6:[function(require,module,exports){

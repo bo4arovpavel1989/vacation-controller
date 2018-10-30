@@ -7,6 +7,29 @@ const Handlebars = require('./libs/h.min');
 const handleResponse = response=>response.json().then(json=>response.ok ? json : Promise.reject(json));
 
 /**
+* Function calculates quantity of days in month
+* @param {String} month - month to calculate dates to
+* @returns {Number} - number of days in month
+*/
+const getDayInMonth = function(month){
+  return 33 - new Date(2018, month, 33).getDate();
+}
+
+module.exports.getDayInMonth = getDayInMonth;
+
+/**
+* Function gets all monthes from start till finish
+* @param {String} m1 - month to calculate from
+* @param {String} m2 - month to calculate ti
+* @returns {Array} - array of all monthes
+*/
+const getMiddleMonthes = function(m1, m2){
+  //// TODO: finish function
+}
+
+module.exports.getDayInMonth = getDayInMonth;
+
+/**
  * Function gets form object from html and returns body object
  * for fetching to API
  * @param {object} formObj - form object got from HTML
@@ -291,11 +314,10 @@ module.exports.FormsHandler = class FormsHandler {
   */
   formHandler(e){
     e.preventDefault();
-    
+
     postData(e.target.dataset.url, getForm(e.target))
       .then(rep=>{
         this.closePopup();
-        console.log(rep);
         this.emit('refreshRender', rep);
       })
       .catch(err=>console.log(err))
