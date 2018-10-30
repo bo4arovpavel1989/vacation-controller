@@ -35,14 +35,15 @@ module.exports = class EmployeManagment {
 
   prepareGraphData(data){
     const monthFrom = document.getElementsByName("monthFrom")[0].value;
-    const monthTo = ${document.getElementsByName("monthTo")[0].value};
+    const monthTo = document.getElementsByName("monthTo")[0].value;
+    const yearFrom = document.getElementsByName("yearFrom")[0].value;
+    const yearTo = document.getElementsByName("yearTo")[0].value;
 
-    this.graphData.title = `${monthFrom}-` +
-    `${document.getElementsByName("yearFrom")[0].value} - ` +
-    `${monthTo}-` +
-    `${document.getElementsByName("yearTo")[0].value} `;
+    this.graphData.title = `График отпусков ${monthFrom}-${yearFrom} - ` +
+                            `${monthTo}-${yearTo}`;
 
-    console.log(getDayInMonth('03'))
+    console.log(getMiddleMonthes(monthFrom, yearFrom, monthTo, yearTo))
+    console.log(this.graphData.title)
   }
 
   render(data){

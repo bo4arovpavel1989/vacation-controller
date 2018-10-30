@@ -11,8 +11,9 @@ const handleResponse = response=>response.json().then(json=>response.ok ? json :
 * @param {String} month - month to calculate dates to
 * @returns {Number} - number of days in month
 */
-const getDayInMonth = function(month){
-  return 33 - new Date(2018, month, 33).getDate();
+const getDayInMonth = function(year, month){
+  // Minus 1 to start dates from 01
+  return 33 - new Date(year, Number(month)-1, 33).getDate();
 }
 
 module.exports.getDayInMonth = getDayInMonth;
@@ -20,14 +21,36 @@ module.exports.getDayInMonth = getDayInMonth;
 /**
 * Function gets all monthes from start till finish
 * @param {String} m1 - month to calculate from
+* @param {String} y1 - year to calculate from
 * @param {String} m2 - month to calculate ti
+* @param {String} y2 - year to calculate to
 * @returns {Array} - array of all monthes
 */
-const getMiddleMonthes = function(m1, m2){
-  //// TODO: finish function
+const getMiddleMonthes = function(m1, y1, m2, y2){
+  const monthesArray = [];
+  let first = Number(m1);
+  const last = Number(m2);
+  let year1 = Number(y1);
+  const year2 = Number(y2);
+
+  while ((year1 < year2) || (first <= last && year1 === year2)) {
+    if(first < 10){
+      monthesArray.push(`0${first.toString()}`)
+    } else if (first <= 12){
+      monthesArray.push(first.toString())
+    } else {
+      monthesArray.push('01')
+      first = 1;
+      year1++
+    }
+
+    first++;
+  }
+
+  return monthesArray;
 }
 
-module.exports.getDayInMonth = getDayInMonth;
+module.exports.getMiddleMonthes = getMiddleMonthes;
 
 /**
  * Function gets form object from html and returns body object
