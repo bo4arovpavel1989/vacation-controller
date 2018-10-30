@@ -610,7 +610,7 @@ module.exports = class EmployeManagment {
       const monthLength = getDayInMonth(currentYear, month);
 
       for (let i = 1; i <= monthLength; i++) {
-          this.graphData.calendar.dates.push(i)
+          this.graphData.calendar.dates.push({date:i, month, year: currentYear})
       }
 
       if(month === 12)
