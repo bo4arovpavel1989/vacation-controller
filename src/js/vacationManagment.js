@@ -7,6 +7,9 @@ module.exports = class EmployeManagment {
   constructor(){
     this.persons=[];
     this.vacations=[];
+    this.vacationSort = 1;
+    this.personSort = 1;
+
     this.getVacationData();
 
     this.formsHandler = new FormsHandler({
@@ -39,7 +42,7 @@ module.exports = class EmployeManagment {
     }
 
   sortAndRender(entry){
-      this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
+      this[`${entry}s`] = this[`${entry}s`].sort(compare('person', this[`${entry}Sort`]));
       this.render(`${entry}s`);
   }
 
