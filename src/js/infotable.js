@@ -7,7 +7,14 @@ module.exports = class EmployeManagment {
   constructor(){
     this.shifts=[];
     this.positions=[];
-    this.graphData={};
+    this.graphData={
+      title:'',
+      calendar: {
+        monthes:[],
+        dates:[]
+      },
+      persons:[]
+    };
 
     this.formsHandler = new FormsHandler({
       formsSelector: '.filterManagmentForm'
@@ -33,17 +40,41 @@ module.exports = class EmployeManagment {
     this.formsHandler.ee.on('refreshRender', data=>this.prepareGraphData(data));
   }
 
+  clearGraphData(){
+    this.graphData={
+      title:'',
+      calendar: {
+        monthes:[],
+        dates:[]
+      },
+      persons:[]
+    };
+  }
+
   prepareGraphData(data){
-    const monthFrom = document.getElementsByName("monthFrom")[0].value;
-    const monthTo = document.getElementsByName("monthTo")[0].value;
-    const yearFrom = document.getElementsByName("yearFrom")[0].value;
-    const yearTo = document.getElementsByName("yearTo")[0].value;
+    const mFrom = document.getElementsByName("monthFrom")[0].value;
+    const mTo = document.getElementsByName("monthTo")[0].value;
+    const yFrom = document.getElementsByName("yearFrom")[0].value;
+    const yTo = document.getElementsByName("yearTo")[0].value;
 
-    this.graphData.title = `График отпусков ${monthFrom}-${yearFrom} - ` +
-                            `${monthTo}-${yearTo}`;
+    this.clearGraphData();
+    this.graphData.title = `График отпусков ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
+    this.graphData.calendar.monthes = getMiddleMonthes(mFrom, yFrom, mTo, yTo);
 
-    console.log(getMiddleMonthes(monthFrom, yearFrom, monthTo, yearTo))
-    console.log(this.graphData.title)
+    let currentYear = Number(yFrom);
+
+    this.graphData.calendar.monthes.forEach(month=>{
+      const monthLength = getDayInMonth(currentYear, month);
+
+      for (let i = 1; i <= monthLength; i++) {
+          this.graphData.calendar.dates.push(i)
+      }
+
+      if(month === 12)
+        currentYear++;
+    })
+
+    console.log(this.graphData.calendar)
   }
 
   render(data){

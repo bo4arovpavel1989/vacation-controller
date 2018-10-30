@@ -8,6 +8,7 @@ const handleResponse = response=>response.json().then(json=>response.ok ? json :
 
 /**
 * Function calculates quantity of days in month
+* @param {String} year - year to calculate dates to
 * @param {String} month - month to calculate dates to
 * @returns {Number} - number of days in month
 */
