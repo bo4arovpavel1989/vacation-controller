@@ -48,7 +48,7 @@
             <td class='namesArea' width="200">{{this.person}}</td>
             {{#each this.daysOff}}
               {{#if this.is}}
-                <td class='dayOff greyBorder' data-date='{{this.date}}' data-id='{{this._id}}' width={{../../dayWidth}}></td>
+                <td class='dayOff greyBorder' data-id='{{this._id}}' width={{../../dayWidth}}></td>
               {{else}}
                 <td class='dayDuty greyBorder' width={{../../dayWidth}}></td>
               {{/if}}
