@@ -76,7 +76,7 @@ module.exports = class EmployeManagment {
           this.graphData.calendar.dates.push({date:i, month:month.month, year: currentYear})
       }
 
-      if(month === 12)
+      if(month.month === '12')
         currentYear++;
     })
 

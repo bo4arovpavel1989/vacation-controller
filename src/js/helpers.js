@@ -94,7 +94,7 @@ const getMiddleMonthes = function(m1, y1, m2, y2, dw){
       month = 1;
     }
 
-    monthesArray.push({month, dayInMonth, monthWidth, monthName: getMonthName(first)})
+    monthesArray.push({month, dayInMonth, year:year1, monthWidth, monthName: getMonthName(first)})
 
     first++;
   }
