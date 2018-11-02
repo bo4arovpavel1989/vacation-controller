@@ -2,6 +2,8 @@
 
 const {compare, getObjectData, FormsHandler, getDayInMonth, getMiddleMonthes, getAllIndexes} = require('./helpers');
 const Handlebars = require('./libs/h.min');
+require('./libs/FileSaver.min');
+const TableExport = require('./libs/tableexport.min');
 
 module.exports = class EmployeManagment {
   constructor(){
@@ -105,7 +107,8 @@ module.exports = class EmployeManagment {
 
     this.concatVacations()
 
-    this.render('graphData')
+    this.render('graphData');
+    new TableExport(document.getElementsByTagName("table"));
   }
 
   /**
