@@ -24,7 +24,6 @@ module.exports.getVacationsByFilter = function(req, res){
 	const positions = req.body.positions || [];
 	const dates = getFullDates(req.body);
 	const orQuery = getOrQuery(req.body);
-	console.log(req.body)
 
 	db.find('Person', {$or: orQuery})
 		.then(rep=>{

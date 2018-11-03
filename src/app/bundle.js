@@ -41020,6 +41020,10 @@ module.exports = class EmployeManagment {
       const monthLength = getDayInMonth(currentYear, month.month);
 
       for (let i = 1; i <= monthLength; i++) {
+          // To make dates like 01, 02, 03 etc
+          if(i < 10)
+            i = '0' + i.toString();
+
           this.graphData.calendar.dates.push({date:i, month:month.month, year: currentYear})
       }
 
@@ -41029,6 +41033,13 @@ module.exports = class EmployeManagment {
 
   }
 
+  /**
+   * Function sorts vacation data by name and
+   * makes of array of dutyDays and daysOff
+   * concats data and renders
+   * @param {Array} data - data got from API
+   * @returns {void}
+   */
   prepareGraphData(data){
     this.prepareCalendar();
     const {dates} = this.graphData.calendar;
@@ -41038,6 +41049,10 @@ module.exports = class EmployeManagment {
       this.graphData.persons.push({person:datum.person, daysOff:[]});
 
       dates.forEach(date=>{
+        console.log(`${date.year}-${date.month}-${date.date}`, Date.parse(`${date.year}-${date.month}-${date.date}`))
+          console.log(datum.dateFrom, Date.parse(datum.dateFrom))
+            console.log(datum.dateTo, Date.parse(datum.dateTo))
+              console.log(datum.person)
         const currentDate = Date.parse(`${date.year}-${date.month}-${date.date}`);
         const dateFrom = Date.parse(datum.dateFrom);
         const dateTo = Date.parse(datum.dateTo);
@@ -41077,7 +41092,7 @@ module.exports = class EmployeManagment {
       // If person runs into only once
       if(matches.length === 1)
         resultArray.push(notConcatedArray[i])
-      // If person has several vacations
+      // If person has several vacations and all his occassions havent been calculated yet
       else if(occassions.indexOf(i) === -1){
         occassions = getAllIndexes(personSet, person.person)
         resultArray.push(this.concatVacationsOfSinglePerson(occassions, person.person))

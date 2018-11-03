@@ -6,14 +6,14 @@
   <link rel="stylesheet" href="css/main.css">
   <script id='shifts' type="text/x-handlebars-template">
     {{#each this}}
-      <label for="shift{{this._id}}">{{this.shift}}</label>
-      <input type="checkbox" id="shift{{this._id}}" name="shifts" value='{{this.shift}}'>
+      <label class='checkBox' for="shift{{this._id}}">{{this.shift}}</label>
+      <input type="checkbox" class='checkBox' id="shift{{this._id}}" name="shifts" value='{{this.shift}}'>
     {{/each}}
   </script>
   <script id='positions' type="text/x-handlebars-template">
     {{#each this}}
-      <label for="position{{this._id}}">{{this.position}}</label>
-      <input type="checkbox" id="position{{this._id}}" name="positions" value='{{this.position}}'>
+      <label class='checkBox' for="position{{this._id}}">{{this.position}}</label>
+      <input type="checkbox" class='checkBox' id="position{{this._id}}" name="positions" value='{{this.position}}'>
     {{/each}}
   </script>
   <script id='editForm' type="text/x-handlebars-template">
