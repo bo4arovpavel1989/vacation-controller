@@ -40894,12 +40894,12 @@ module.exports.FormsHandler = class FormsHandler {
         if(typeof obj[i] !== 'string'){
           input.type = typesMap[typeof obj[i]];
           input.value = obj[i];
-        } else if (isNaN(Date.parse(obj[i].split('T')[0]))) {
-          input.type = 'text';
-          input.value = obj[i];
-        } else {
+        } else if (obj[i].split('T')[0].match(/\d\d\d\d-\d\d-\d\d/)) {
           input.type='date';
           [input.value] = obj[i].split('T');
+        } else {
+          input.type='text';
+          input.value = obj[i];
         }
 
         renderObject.input.push(input);

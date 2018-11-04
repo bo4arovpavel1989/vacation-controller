@@ -49,7 +49,7 @@
       <div class='header'><h1>Управление Персоналом</h1></div>
       <div class='main'>
         <div class='controlArea'>
-          <div class='control'><button class='popupButton' data-form='addPerson'>Добавить сотрудника</button></div>
+          <div class='control'><button class='controlButton popupButton' data-form='addPerson'>Добавить сотрудника</button></div>
         </div>
         <div class='objectInfo'>
           <div><h3>Сотрудники</h3></div>
@@ -62,18 +62,26 @@
   <div class='popupArea'>
     <div id='addPersonFormArea' class='popup'>
       <form class='employeManagmentForm' data-url='addobject/Person'>
-        ФИО сотрудника
-        <input name='person' type='text' required>
-        Смена
-        <select name='shift' id='shiftsSelect'>
+        <div class='formControl'>
+          ФИО сотрудника
+          <input name='person' type='text' required>
+        </div>
+        <div class='formControl'>
+          Смена
+          <select name='shift' id='shiftsSelect'>
 
-        </select>
-        Должность
-        <select name='position' id='positionsSelect'>
+          </select>
+        </div>
+        <div class='formControl'>
+          Должность
+          <select name='position' id='positionsSelect'>
 
-        </select>
-        <input name='type' type='hidden' value='Person'>
-        <input type='submit' value='сохранить'>
+          </select>
+          <input name='type' type='hidden' value='Person'>
+        </div>
+        <div class='formControl'>
+          <input type='submit'  class='submitButton' value='сохранить'>
+        </div>
       </form>
     </div>
     <div id='editFormArea' class='popup'>

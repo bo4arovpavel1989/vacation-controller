@@ -42,7 +42,7 @@
       <div class='header'><h1>Управление Отпусками</h1></div>
       <div class='main'>
         <div class='controlArea'>
-          <div class='control'><button class='popupButton' data-form='addVacation'>Добавить отпуск</button></div>
+          <div class='control'><button class='controlButton popupButton' data-form='addVacation'>Добавить отпуск</button></div>
         </div>
         <div class='objectInfo'>
           <div><h3>Отпуска</h3></div>
@@ -55,15 +55,21 @@
   <div class='popupArea'>
     <div id='addVacationFormArea' class='popup'>
       <form class='vacationManagmentForm' data-url='addobject/Vacation'>
-        Cотрудник
-        <select name='person' id='personsSelect'>
+        <div class='formControl'>
+          Cотрудник
+          <select name='person' id='personsSelect'>
 
-        </select>
-        С
-        <input name='dateFrom' type='date'> -
-        <input name='long' type='number'> дней
-        <input name='type' type='hidden' value='Vacation'>
-        <input type='submit' value='сохранить'>
+          </select>
+        </div>
+        <div class='formControl'>
+          С
+          <input name='dateFrom' type='date'> -
+          <input name='long' type='number'> дней
+          <input name='type' type='hidden' value='Vacation'>
+        </div>
+        <div class='formControl'>
+          <input type='submit'  class='submitButton' value='сохранить'>
+        </div>
       </form>
     </div>
     <div id='editFormArea' class='popup'>

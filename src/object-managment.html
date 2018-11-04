@@ -46,8 +46,8 @@
       <div class='header'><h1>Управление объектом</h1></div>
       <div class='main'>
         <div class='controlArea'>
-          <div class='control'><button class='popupButton' data-form='addShift'>Добавить смену</button></div>
-          <div class='control'><button class='popupButton' data-form='addPosition'>Добавить должность</button></div>
+          <div class='control'><button class='controlButton popupButton' data-form='addShift'>Добавить смену</button></div>
+          <div class='control'><button class='controlButton popupButton' data-form='addPosition'>Добавить должность</button></div>
         </div>
         <div class='objectInfo'>
           <div><h3>Смены</h3></div>
@@ -64,26 +64,42 @@
   <div class='popupArea'>
     <div id='addShiftFormArea' class='popup'>
       <form class='objectManagmentForm' data-url='addobject/Shift'>
-        Номер смены
-        <input name='shift' type='text' required>
-        Режим работы
-        <input name='duty' type='number'> через <input name='off' type='number' required>
-        Рабочая смена
-        <input name='dutyDate' type='date' required>
+        <div class='formControl'>
+          Номер смены
+          <input name='shift' type='text' required>
+        </div>
+        <div class='formControl'>
+          Режим работы
+          <input name='duty' type='number'> через <input name='off' type='number' required>
+        </div>
+        <div class='formControl'>
+          Рабочая смена
+          <input name='dutyDate' type='date' required>
+        </div>
         <input name='type' type='hidden' value='Shift'>
-        <input type='submit' value='сохранить'>
+        <div class='formControl'>
+          <input type='submit'  class='submitButton' value='сохранить'>
+        </div>
       </form>
     </div>
     <div id='addPositionFormArea' class='popup'>
       <form class='objectManagmentForm' data-url='addobject/Position'>
-        Должность
-        <input name='position' type='text' required>
-        Минимальное количество в дежурство
-        <input name='shiftQuantity' type='number' required>
-        Минимальное общее количество
-        <input name='totalQuantity' type='number' required>
-        <input name='type' type='hidden' value='Position'>
-        <input type='submit' value='сохранить'>
+        <div class='formControl'>
+          Должность
+          <input name='position' type='text' required>
+        </div>
+        <div class='formControl'>
+          Минимальное количество в дежурство
+          <input name='shiftQuantity' type='number' required>
+        </div>
+        <div class='formControl'>
+          Минимальное общее количество
+          <input name='totalQuantity' type='number' required>
+          <input name='type' type='hidden' value='Position'>
+        </div>
+        <div class='formControl'>
+          <input type='submit'  class='submitButton' value='сохранить'>
+        </div>
       </form>
     </div>
     <div id='editFormArea' class='popup'>
