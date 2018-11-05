@@ -40781,14 +40781,17 @@ module.exports.FormsHandler = class FormsHandler {
 
   /**
   * Adds class 'popedUp' to certain FormArea
+  * @param {Object} e - event Object
   * @param {string} form - data-form attr of popup button
   * @returns {void}
   */
-  openPopup(form){
+  openPopup(e, form){
     const el = document.getElementById(`${form}FormArea`);
-
+    
     this.isPopup = true;
-    el.classList.add('popedUp');
+    el.style.left = e.x + 'px';
+    el.style.top = e.y + 'px';
+    setTimeout(()=>el.classList.add('popedUp'), 10);
   }
 
   /**
@@ -40801,7 +40804,7 @@ module.exports.FormsHandler = class FormsHandler {
   popupButtonClickHandler(e, form){
     e.stopPropagation();
     this.closePopup();
-    this.openPopup(form);
+    this.openPopup(e, form);
   }
 
   /**
