@@ -40479,13 +40479,15 @@ const getMonthName = function(num){
   return monthNamesMap[num-1];
 }
 
+module.exports.getMonthName = getMonthName;
+
 /**
 * Function gets all monthes from start till finish
 * @param {String} m1 - month to calculate from
 * @param {String} y1 - year to calculate from
 * @param {String} m2 - month to calculate ti
 * @param {String} y2 - year to calculate to
-* @param {Number} dw - width of single day element
+* @param {Number} dw - pixel width of single day element
 * @returns {Array} - array of all monthes
 */
 const getMiddleMonthes = function(m1, y1, m2, y2, dw){
@@ -40513,7 +40515,7 @@ const getMiddleMonthes = function(m1, y1, m2, y2, dw){
       ++year1;
       dayInMonth = getDayInMonth(year1, first)
       monthWidth = dayInMonth * dw;
-      month = 1;
+      month = '01';
     }
 
     monthesArray.push({month, dayInMonth, year:year1, monthWidth, monthName: getMonthName(first)})
@@ -40787,7 +40789,7 @@ module.exports.FormsHandler = class FormsHandler {
   */
   openPopup(e, form){
     const el = document.getElementById(`${form}FormArea`);
-    
+
     this.isPopup = true;
     el.style.left = e.x + 'px';
     el.style.top = e.y + 'px';

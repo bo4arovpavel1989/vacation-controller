@@ -4,7 +4,7 @@
   "description": "Controlls vacation query of employes in company",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
     "babelify": "^10.0.0",
     "browser-sync": "^2.26.3",
     "browserify": "^16.2.3",
+    "chai": "^4.2.0",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^6.0.0",
@@ -37,6 +38,7 @@
     "gulp-sass": "^4.0.2",
     "gulp-uglifyjs": "^0.6.2",
     "imagemin-pngquant": "^6.0.0",
+    "mocha": "^5.2.0",
     "vinyl-source-stream": "^2.0.0"
   },
   "dependencies": {
