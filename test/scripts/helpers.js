@@ -48,3 +48,26 @@ describe('getMiddleMonthes2', ()=>{
 		])	
   });
 });
+
+describe('getForm', ()=>{
+	it('should return body object from form object', ()=>{
+		const formObject = {
+			0: {name:'text', type:'text', value:'text'},
+			1: {name:'number', type:'number', value:'2'},
+			2: {name:'date', type:'date', value:'2018-11-08'},
+			3: {name:'checkbox', type:'checkbox', value:'1', checked:true},
+			4: {name:'checkbox', type:'checkbox', value:'2', checked:false},
+			5: {name:'checkbox', type:'checkbox', value:'3', checked:true},
+			6: {name:'submit', type:'submit', value:'submit'}
+		};
+		const {getForm} = helpers,
+			result = getForm(formObject);
+			
+		expect(result).to.eql({
+			checkbox:['1','3'],
+			date:'2018-11-08',
+			number:'2',
+			text:'text'
+		})	
+	});
+});

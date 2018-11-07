@@ -119,9 +119,10 @@ const getForm = function (formObj) {
   fields.forEach(field=>{
     const input = formObj[field];
 
-    if(input.type !== 'submit' && input.type !== 'checkbox')
+    if(input.type !== 'submit' && input.type !== 'checkbox'){
       formBody[input.name] = input.value
-    else if(input.type === 'checkbox') {
+    } else if(input.type === 'checkbox') {
+      // If there ara several checkboxes same name
       if(formBody[input.name] && input.checked)
         formBody[input.name].push(input.value)
       else if(input.checked)

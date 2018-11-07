@@ -2,6 +2,8 @@
 
 const {compare, getObjectData, FormsHandler, getDayInMonth, getMiddleMonthes, getAllIndexes} = require('./helpers');
 const Handlebars = require('./libs/h.min');
+
+// Filesaver needed to tableexport work
 require('./libs/FileSaver.min');
 const TableExport = require('./libs/tableexport.min');
 
@@ -40,6 +42,10 @@ module.exports = class EmployeManagment {
   sortAndRender(entry){
     this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
     this.render(`${entry}s`);
+  }
+
+  TableExport(){
+    return TableExport;
   }
 
   setListeners(){
@@ -104,10 +110,6 @@ module.exports = class EmployeManagment {
       this.graphData.persons.push({person:datum.person, daysOff:[]});
 
       dates.forEach(date=>{
-        console.log(`${date.year}-${date.month}-${date.date}`, Date.parse(`${date.year}-${date.month}-${date.date}`))
-          console.log(datum.dateFrom, Date.parse(datum.dateFrom))
-            console.log(datum.dateTo, Date.parse(datum.dateTo))
-              console.log(datum.person)
         const currentDate = Date.parse(`${date.year}-${date.month}-${date.date}`);
         const dateFrom = Date.parse(datum.dateFrom);
         const dateTo = Date.parse(datum.dateTo);
@@ -123,7 +125,7 @@ module.exports = class EmployeManagment {
     this.concatVacations()
 
     this.render('graphData');
-    new TableExport(document.getElementsByTagName("table"));
+    this.TableExport()(document.getElementsByTagName("table"));
   }
 
   /**
