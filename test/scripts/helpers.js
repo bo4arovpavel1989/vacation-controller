@@ -70,4 +70,78 @@ describe('getForm', ()=>{
 			text:'text'
 		})	
 	});
-});
+}); 
+
+ describe('prepareCalendar', ()=>{
+	 it('should return full calendar based on From and To dates', ()=>{
+		const {prepareCalendar} = helpers;
+		const monthes = [{month:'12'},{month:'01'}];
+		let yFrom = 2018;
+		let result = prepareCalendar(yFrom, monthes);
+		
+		expect(result).to.eql([
+			{date:'01',month:'12',year:2018},
+			{date:'02',month:'12',year:2018},
+			{date:'03',month:'12',year:2018},
+			{date:'04',month:'12',year:2018},
+			{date:'05',month:'12',year:2018},
+			{date:'06',month:'12',year:2018},
+			{date:'07',month:'12',year:2018},
+			{date:'08',month:'12',year:2018},
+			{date:'09',month:'12',year:2018},
+			{date:'10',month:'12',year:2018},
+			{date:'11',month:'12',year:2018},
+			{date:'12',month:'12',year:2018},
+			{date:'13',month:'12',year:2018},
+			{date:'14',month:'12',year:2018},
+			{date:'15',month:'12',year:2018},
+			{date:'16',month:'12',year:2018},
+			{date:'17',month:'12',year:2018},
+			{date:'18',month:'12',year:2018},
+			{date:'19',month:'12',year:2018},
+			{date:'20',month:'12',year:2018},
+			{date:'21',month:'12',year:2018},
+			{date:'22',month:'12',year:2018},
+			{date:'23',month:'12',year:2018},
+			{date:'24',month:'12',year:2018},
+			{date:'25',month:'12',year:2018},
+			{date:'26',month:'12',year:2018},
+			{date:'27',month:'12',year:2018},
+			{date:'28',month:'12',year:2018},
+			{date:'29',month:'12',year:2018},
+			{date:'30',month:'12',year:2018},
+			{date:'31',month:'12',year:2018},
+			{date:'01',month:'01',year:2019},
+			{date:'02',month:'01',year:2019},
+			{date:'03',month:'01',year:2019},
+			{date:'04',month:'01',year:2019},
+			{date:'05',month:'01',year:2019},
+			{date:'06',month:'01',year:2019},
+			{date:'07',month:'01',year:2019},
+			{date:'08',month:'01',year:2019},
+			{date:'09',month:'01',year:2019},
+			{date:'10',month:'01',year:2019},
+			{date:'11',month:'01',year:2019},
+			{date:'12',month:'01',year:2019},
+			{date:'13',month:'01',year:2019},
+			{date:'14',month:'01',year:2019},
+			{date:'15',month:'01',year:2019},
+			{date:'16',month:'01',year:2019},
+			{date:'17',month:'01',year:2019},
+			{date:'18',month:'01',year:2019},
+			{date:'19',month:'01',year:2019},
+			{date:'20',month:'01',year:2019},
+			{date:'21',month:'01',year:2019},
+			{date:'22',month:'01',year:2019},
+			{date:'23',month:'01',year:2019},
+			{date:'24',month:'01',year:2019},
+			{date:'25',month:'01',year:2019},
+			{date:'26',month:'01',year:2019},
+			{date:'27',month:'01',year:2019},
+			{date:'28',month:'01',year:2019},
+			{date:'29',month:'01',year:2019},
+			{date:'30',month:'01',year:2019},
+			{date:'31',month:'01',year:2019},
+		]);
+	 });
+ }); 

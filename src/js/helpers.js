@@ -106,6 +106,34 @@ const getMiddleMonthes = function(m1, y1, m2, y2, dw){
 
 module.exports.getMiddleMonthes = getMiddleMonthes;
 
+  /**
+  * Function returns dates Array from monthes Array
+  * @param {String} yFrom - year to start from
+  * @param {Array} monthes - array of monthes
+  * @returns {Array} dates - array of dates
+  */
+const prepareCalendar= function(yFrom, monthes){
+  let currentYear = Number(yFrom);
+  let dates = []
+
+  monthes.forEach(month=>{
+    const monthLength = getDayInMonth(currentYear, month.month);
+
+      for (let i = 1; i <= monthLength; i++) {
+        // To make dates like 01, 02, 03 etc
+        if(i < 10)
+          i = '0' + i.toString();
+          dates.push({date:i.toString(), month:month.month, year: currentYear})
+      }
+      if(month.month === '12')
+      currentYear++;
+  })
+
+  return dates;
+}
+
+module.exports.prepareCalendar = prepareCalendar;
+
 /**
  * Function gets form object from html and returns body object
  * for fetching to API

@@ -1,6 +1,6 @@
 'use strict'
 
-const {compare, getObjectData, FormsHandler, getDayInMonth, getMiddleMonthes, getAllIndexes} = require('./helpers');
+const {compare, getObjectData, FormsHandler, getMiddleMonthes, getAllIndexes, prepareCalendar} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
 // Filesaver needed to tableexport work
@@ -45,7 +45,7 @@ module.exports = class EmployeManagment {
   }
 
   TableExport(){
-    return TableExport;
+      return TableExport;
   }
 
   setListeners(){
@@ -64,69 +64,54 @@ module.exports = class EmployeManagment {
     };
   }
 
-  prepareCalendar(){
-    const mFrom = document.getElementsByName('monthFrom')[0].value;
-    const mTo = document.getElementsByName('monthTo')[0].value;
-    const yFrom = document.getElementsByName('yearFrom')[0].value;
-    const yTo = document.getElementsByName('yearTo')[0].value;
-    const {dayWidth} = this.graphData;
+    /**
+     * Function sorts vacation data by name and
+     * makes of array of dutyDays and daysOff
+     * concats data and renders
+     * @param {Array} data - data got from API
+     * @returns {void}
+     */
+    prepareGraphData(data){
+      this.clearGraphData();
 
-    this.clearGraphData();
-    this.graphData.title = `График отпусков ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
-    this.graphData.calendar.monthes = getMiddleMonthes(mFrom, yFrom, mTo, yTo, dayWidth);
+      const mFrom = document.getElementsByName('monthFrom')[0].value;
+      const mTo = document.getElementsByName('monthTo')[0].value;
+      const yFrom = document.getElementsByName('yearFrom')[0].value;
+      const yTo = document.getElementsByName('yearTo')[0].value;
+      const {dayWidth} = this.graphData;
 
-    let currentYear = Number(yFrom);
+      this.graphData.calendar.monthes = getMiddleMonthes(mFrom, yFrom, mTo, yTo, dayWidth);
 
-    this.graphData.calendar.monthes.forEach(month=>{
-      const monthLength = getDayInMonth(currentYear, month.month);
+      const {monthes} = this.graphData.calendar;
+      
+      this.graphData.calendar.dates = prepareCalendar(yFrom, monthes);
 
-      for (let i = 1; i <= monthLength; i++) {
-          // To make dates like 01, 02, 03 etc
-          if(i < 10)
-            i = '0' + i.toString();
+      const {dates} = this.graphData.calendar;
+      const sortedData = data.sort(compare('person', this.personSort));
 
-          this.graphData.calendar.dates.push({date:i, month:month.month, year: currentYear})
-      }
+      sortedData.forEach((datum, i)=>{
+        this.graphData.persons.push({person:datum.person, daysOff:[]});
 
-      if(month.month === '12')
-        currentYear++;
-    })
+        dates.forEach(date=>{
+          const currentDate = Date.parse(`${date.year}-${date.month}-${date.date}`);
+          const dateFrom = Date.parse(datum.dateFrom);
+          const dateTo = Date.parse(datum.dateTo);
 
-  }
+          if(currentDate >= dateFrom && currentDate < dateTo)
+            this.graphData.persons[i].daysOff.push({is:true, _id:datum._id})
+          else
+            this.graphData.persons[i].daysOff.push({is:false})
+        })
 
-  /**
-   * Function sorts vacation data by name and
-   * makes of array of dutyDays and daysOff
-   * concats data and renders
-   * @param {Array} data - data got from API
-   * @returns {void}
-   */
-  prepareGraphData(data){
-    this.prepareCalendar();
-    const {dates} = this.graphData.calendar;
-    const sortedData = data.sort(compare('person', this.personSort));
+      });
 
-    sortedData.forEach((datum, i)=>{
-      this.graphData.persons.push({person:datum.person, daysOff:[]});
+      this.concatVacations()
 
-      dates.forEach(date=>{
-        const currentDate = Date.parse(`${date.year}-${date.month}-${date.date}`);
-        const dateFrom = Date.parse(datum.dateFrom);
-        const dateTo = Date.parse(datum.dateTo);
+      this.graphData.title = `График отпусков ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
 
-        if(currentDate >= dateFrom && currentDate < dateTo)
-          this.graphData.persons[i].daysOff.push({is:true, _id:datum._id})
-        else
-          this.graphData.persons[i].daysOff.push({is:false})
-      })
-
-    });
-
-    this.concatVacations()
-
-    this.render('graphData');
-    this.TableExport()(document.getElementsByTagName("table"));
-  }
+      this.render('graphData');
+      this.TableExport()(document.getElementsByTagName("table"));
+    }
 
   /**
    * Method concats different vacation of single person
