@@ -40602,6 +40602,64 @@ const preparePersons = function(sortedData, dates){
 
 module.exports.preparePersons = preparePersons;
 
+/*
+ * Function makes member of concated vacations Array,
+ * where all vacations of same person in the same arraymember
+ * @param {Array} indexes - indexes of members of nonconcated array of same person vacations
+ * @param {String} person - name of the person - it is his vacations
+ * @param {Array} persons - noncancated initial array
+ * @returns {Object} member of concated array {person, daysOff:[...]}
+ */
+const concatVacationsOfSinglePerson = function(indexes, person, persons){
+  const firstOccassion = persons[indexes[0]];
+  const {daysOff} = firstOccassion;
+
+  // Start from 1 - coz i already performed first occassion
+  for (let i = 1; i < indexes.length; i++) {
+    persons[indexes[i]].daysOff.forEach((dayOff, k)=>{
+      if(dayOff.is){
+        daysOff[k].is = true;
+        daysOff[k]._id = dayOff._id;
+      }
+    })
+  }
+
+  return {person, daysOff}
+}
+
+/*
+ * Function concats different vacations of same person to one array
+ * @param {Array} persons - non concated array, where different vacations are different array members
+ * @returns {Array}concated array
+ */
+const concatVacations = function(persons){
+  const personSet = [];
+  const notConcatedArray = persons;
+  const resultArray = [];
+  let occassions = [];
+
+  notConcatedArray.forEach(person=>{
+    personSet.push(person.person);
+  });
+
+  notConcatedArray.forEach((person, i)=>{
+    const matches = personSet.filter(personInSet=>personInSet === person.person);
+
+    // If person runs into only once
+    if(matches.length === 1)
+      resultArray.push(notConcatedArray[i])
+    // If person has several vacations and all his occassions havent been calculated yet
+    else if(occassions.indexOf(i) === -1){
+      occassions = getAllIndexes(personSet, person.person)
+      resultArray.push(concatVacationsOfSinglePerson(occassions, person.person, persons))
+    }
+  });
+
+  return resultArray;
+
+}
+
+module.exports.concatVacations = concatVacations
 
 /**
  * Function gets form object from html and returns body object
@@ -41033,7 +41091,8 @@ const {compare,
   getAllIndexes,
   prepareCalendar,
   preparePersons,
-  getFilterData
+  getFilterData,
+  concatVacations
 } = require('./helpers');
 
 const Handlebars = require('./libs/h.min');
@@ -41099,84 +41158,34 @@ module.exports = class EmployeManagment {
     };
   }
 
-    /**
-     * Function sorts vacation data by name and
-     * makes of array of dutyDays and daysOff
-     * concats data and renders
-     * @param {Array} data - data got from API
-     * @returns {void}
-     */
-    prepareGraphData(data){
-      this.clearGraphData();
-
-      const {mFrom, mTo, yFrom, yTo} = getFilterData();
-      const {dayWidth} = this.graphData;
-
-      this.graphData.calendar.monthes = getMiddleMonthes(mFrom, yFrom, mTo, yTo, dayWidth);
-
-      const {monthes} = this.graphData.calendar;
-
-      this.graphData.calendar.dates = prepareCalendar(yFrom, monthes);
-
-      const {dates} = this.graphData.calendar;
-      const sortedData = data.sort(compare('person', this.personSort));
-
-      this.graphData.persons = preparePersons(sortedData, dates);
-
-      this.concatVacations();
-
-      this.graphData.title = `График отпусков ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
-
-      this.render('graphData');
-      this.TableExport()(document.getElementsByTagName("table"));
-    }
-
   /**
-   * Method concats different vacation of single person
-   * To render all vacations of single man in one line
+   * Function sorts vacation data by name and
+   * makes of array of dutyDays and daysOff
+   * concats data and renders
+   * @param {Array} data - data got from API
    * @returns {void}
    */
-  concatVacations(){
-    const personSet = [];
-    const notConcatedArray = this.graphData.persons;
-    const resultArray = [];
-    let occassions = [];
+  prepareGraphData(data){
+    this.clearGraphData();
 
-    notConcatedArray.forEach(person=>{
-      personSet.push(person.person);
-    });
+    const {mFrom, mTo, yFrom, yTo} = getFilterData();
+    const {dayWidth} = this.graphData;
 
-    notConcatedArray.forEach((person, i)=>{
-      const matches = personSet.filter(personInSet=>personInSet === person.person);
+    this.graphData.calendar.monthes = getMiddleMonthes(mFrom, yFrom, mTo, yTo, dayWidth);
 
-      // If person runs into only once
-      if(matches.length === 1)
-        resultArray.push(notConcatedArray[i])
-      // If person has several vacations and all his occassions havent been calculated yet
-      else if(occassions.indexOf(i) === -1){
-        occassions = getAllIndexes(personSet, person.person)
-        resultArray.push(this.concatVacationsOfSinglePerson(occassions, person.person))
-      }
-    });
+    const {monthes} = this.graphData.calendar;
 
-    this.graphData.persons = resultArray;
-  }
+    this.graphData.calendar.dates = prepareCalendar(yFrom, monthes);
 
-  concatVacationsOfSinglePerson(indexes, person){
-    const firstOccassion = this.graphData.persons[indexes[0]];
-    const {daysOff} = firstOccassion;
+    const {dates} = this.graphData.calendar;
+    const sortedData = data.sort(compare('person', this.personSort));
+    const persons = preparePersons(sortedData, dates);
 
-    // Start from 1 - coz i already performed first occassion
-    for (let i = 1; i < indexes.length; i++) {
-      this.graphData.persons[indexes[i]].daysOff.forEach((dayOff, k)=>{
-        if(dayOff.is){
-          daysOff[k].is = true;
-          daysOff[k]._id = dayOff._id;
-        }
-      })
-    }
+    this.graphData.persons = concatVacations(persons)
+    this.graphData.title = `График отпусков ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
 
-    return {person, daysOff}
+    this.render('graphData');
+    this.TableExport()(document.getElementsByTagName("table"));
   }
 
   render(data){

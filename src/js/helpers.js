@@ -180,6 +180,64 @@ const preparePersons = function(sortedData, dates){
 
 module.exports.preparePersons = preparePersons;
 
+/*
+ * Function makes member of concated vacations Array,
+ * where all vacations of same person in the same arraymember
+ * @param {Array} indexes - indexes of members of nonconcated array of same person vacations
+ * @param {String} person - name of the person - it is his vacations
+ * @param {Array} persons - noncancated initial array
+ * @returns {Object} member of concated array {person, daysOff:[...]}
+ */
+const concatVacationsOfSinglePerson = function(indexes, person, persons){
+  const firstOccassion = persons[indexes[0]];
+  const {daysOff} = firstOccassion;
+
+  // Start from 1 - coz i already performed first occassion
+  for (let i = 1; i < indexes.length; i++) {
+    persons[indexes[i]].daysOff.forEach((dayOff, k)=>{
+      if(dayOff.is){
+        daysOff[k].is = true;
+        daysOff[k]._id = dayOff._id;
+      }
+    })
+  }
+
+  return {person, daysOff}
+}
+
+/*
+ * Function concats different vacations of same person to one array
+ * @param {Array} persons - non concated array, where different vacations are different array members
+ * @returns {Array}concated array
+ */
+const concatVacations = function(persons){
+  const personSet = [];
+  const notConcatedArray = persons;
+  const resultArray = [];
+  let occassions = [];
+
+  notConcatedArray.forEach(person=>{
+    personSet.push(person.person);
+  });
+
+  notConcatedArray.forEach((person, i)=>{
+    const matches = personSet.filter(personInSet=>personInSet === person.person);
+
+    // If person runs into only once
+    if(matches.length === 1)
+      resultArray.push(notConcatedArray[i])
+    // If person has several vacations and all his occassions havent been calculated yet
+    else if(occassions.indexOf(i) === -1){
+      occassions = getAllIndexes(personSet, person.person)
+      resultArray.push(concatVacationsOfSinglePerson(occassions, person.person, persons))
+    }
+  });
+
+  return resultArray;
+
+}
+
+module.exports.concatVacations = concatVacations
 
 /**
  * Function gets form object from html and returns body object
