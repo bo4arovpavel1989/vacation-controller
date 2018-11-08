@@ -2,7 +2,7 @@ const  {describe, it} = require('mocha'),
   {expect} = require('chai'),
   helpers = require('../../src/js/helpers'),
   corrects = require('./corrects');
-console.log(corrects)
+  
 describe('getDayInMonth', ()=>{
   it('Should return quantity of days in month', ()=>{
 		const {getDayInMonth} = helpers,
