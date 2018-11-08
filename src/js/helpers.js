@@ -19,6 +19,21 @@ const getAllIndexes = function (arr, val) {
 
 module.exports.getAllIndexes = getAllIndexes;
 
+/*
+ * Function gets filter data for infotable
+ * @returns {Object} - data defined in filter
+ */
+const getFilterData = function(){
+  return {
+    mFrom: document.getElementsByName('monthFrom')[0].value,
+    mTo: document.getElementsByName('monthTo')[0].value,
+    yFrom: document.getElementsByName('yearFrom')[0].value,
+    yTo: document.getElementsByName('yearTo')[0].value
+  }
+};
+
+module.exports.getFilterData = getFilterData;
+
 /**
 * Function calculates quantity of days in month
 * @param {String} year - year to calculate dates to
@@ -133,6 +148,38 @@ const prepareCalendar= function(yFrom, monthes){
 }
 
 module.exports.prepareCalendar = prepareCalendar;
+
+/**
+ * Function returns person vacation data
+ * in the form of object ready for render in table
+ * @param {Array} sortedData - array of vacation data sorted by person
+ * @param {Array} dates - full array of dates from dateFrom to dateTo
+ * @returns {Array} array if vacation data objects {person, daysOff:[...]}
+ */
+const preparePersons = function(sortedData, dates){
+  let persons = [];
+
+  sortedData.forEach((datum, i)=>{
+    persons.push({person:datum.person, daysOff:[]});
+
+      dates.forEach(date=>{
+      const currentDate = Date.parse(`${date.year}-${date.month}-${date.date}`);
+      const dateFrom = Date.parse(datum.dateFrom);
+      const dateTo = Date.parse(datum.dateTo);
+
+      if(currentDate >= dateFrom && currentDate < dateTo)
+        persons[i].daysOff.push({is:true, _id:datum._id})
+      else
+        persons[i].daysOff.push({is:false})
+    })
+
+  });
+
+  return persons;
+};
+
+module.exports.preparePersons = preparePersons;
+
 
 /**
  * Function gets form object from html and returns body object
