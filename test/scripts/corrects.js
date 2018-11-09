@@ -178,4 +178,111 @@ module.exports.preparePersonsCorrects = [
 				{is:true, _id:'id2'},
 				{is:true, _id:'id2'},
 			]}
-		];		
+		];	
+
+module.exports.personsFromCorrects = [
+	{
+		person:'Person', 
+		daysOff: [
+			{is:false},
+			{is:false},
+			{is:false},
+			{is:true,_id:'id1'},
+			{is:true,_id:'id1'},
+			{is:false}
+		]
+	},
+	{
+		person:'Person', 
+		daysOff: [
+			{is:true,_id:'id2'},
+			{is:false},
+			{is:false},
+			{is:false},
+			{is:false},
+			{is:true,_id:'id2'}
+		]
+	},
+	{
+		person:'Person', 
+		daysOff: [
+			{is:false},
+			{is:true,_id:'id3'},
+			{is:true,_id:'id3'},
+			{is:false},
+			{is:false},
+			{is:false}
+		]
+	},
+	{
+		person:'Person2', 
+		daysOff: [
+			{is:false},
+			{is:true,_id:'id'},
+			{is:true,_id:'id'},
+			{is:false},
+			{is:false},
+			{is:false}
+		]
+	},
+	{
+		person:'Person3', 
+		daysOff: [
+			{is:false},
+			{is:true,_id:'id'},
+			{is:true,_id:'id'},
+			{is:false},
+			{is:false},
+			{is:false}
+		]
+	},
+];
+
+module.exports.concatedVacationsOfPersonCorrects = {
+	person:'Person', 
+	daysOff:[
+		{is:true,_id:'id2'},
+		{is:true,_id:'id3'},
+		{is:true,_id:'id3'},
+		{is:true,_id:'id1'},
+		{is:true,_id:'id1'},
+		{is:true,_id:'id2'}
+	]
+};
+
+module.exports.concatedVacationsOfAllPersonsCorrects = [
+	{
+		person:'Person', 
+		daysOff:[
+			{is:true,_id:'id2'},
+			{is:true,_id:'id3'},
+			{is:true,_id:'id3'},
+			{is:true,_id:'id1'},
+			{is:true,_id:'id1'},
+			{is:true,_id:'id2'}
+		]
+	},
+	{
+		person:'Person2', 
+		daysOff: [
+			{is:false},
+			{is:true,_id:'id'},
+			{is:true,_id:'id'},
+			{is:false},
+			{is:false},
+			{is:false}
+		]
+	},
+	{
+		person:'Person3', 
+		daysOff: [
+			{is:false},
+			{is:true,_id:'id'},
+			{is:true,_id:'id'},
+			{is:false},
+			{is:false},
+			{is:false}
+		]
+	}
+	
+]		

@@ -40627,6 +40627,8 @@ const concatVacationsOfSinglePerson = function(indexes, person, persons){
   return {person, daysOff}
 }
 
+module.exports.concatVacationsOfSinglePerson = concatVacationsOfSinglePerson;
+
 /*
  * Function concats different vacations of same person to one array
  * @param {Array} persons - non concated array, where different vacations are different array members

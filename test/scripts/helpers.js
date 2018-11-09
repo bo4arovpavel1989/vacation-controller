@@ -90,3 +90,27 @@ describe('preparePersons', ()=>{
 		expect(result).to.eql(preparePersonsCorrects)
   });
 });
+
+describe('concatVacationsOfSinglePerson', ()=>{
+	it('should concat all vacations of single person in one array within {person, daysOff:[...]} object', ()=>{
+		const indexes = [0,1,2];
+		const person = 'Person';
+		const {personsFromCorrects} = corrects;
+		const {concatedVacationsOfPersonCorrects} = corrects;
+		const {concatVacationsOfSinglePerson} = helpers;
+		const result = concatVacationsOfSinglePerson(indexes,person,personsFromCorrects);
+		
+		expect(result).to.eql(concatedVacationsOfPersonCorrects);
+	});
+});
+
+describe('concatVacations', ()=>{
+	it('should concat all vacations of each single person in one array within Array of {person, daysOff:[...]} objects', ()=>{
+		const {personsFromCorrects} = corrects;
+		const {concatedVacationsOfAllPersonsCorrects} = corrects;
+		const {concatVacations} = helpers;
+		const result = concatVacations(personsFromCorrects);
+		
+		expect(result).to.eql(concatedVacationsOfAllPersonsCorrects);
+	});
+});
