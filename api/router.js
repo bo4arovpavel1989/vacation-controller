@@ -24,7 +24,7 @@ const postRequests = [
 	},
 	{
 		url: '/editobject/:type',
-		middleware:noMiddleware,
+		middleware:preHandleAddObject,
 		callback:postRequestsHandlers.editObject
 	},
 	// Because i handle form - its in postrequests
