@@ -40350,12 +40350,29 @@ var ODS = XLSX;
 
 }).call(this,require('_process'),require("buffer").Buffer)
 },{"./dist/cpexcel.js":9,"./jszip.js":10,"_process":8,"buffer":4,"crypto":2,"fs":2,"stream":2}],12:[function(require,module,exports){
+'use strict'
+
 module.exports.API_URL = 'http://localhost:8080';
 
 module.exports.getPage = function() {
   let idElement = document.getElementById('pageId');
-  
+
   return idElement.dataset.id;
+}
+
+module.exports.defaultFetch = function(method='GET', body){
+  let configFetch =  {
+      method,
+      mode:'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }
+
+  if(body) Object.assign(configFetch, {body:JSON.stringify(body)})
+
+  return configFetch;
 }
 
 },{}],13:[function(require,module,exports){
@@ -40422,7 +40439,7 @@ module.exports = class EmployeManagment {
 },{"./helpers":14,"./libs/h.min":19}],14:[function(require,module,exports){
 'use strict'
 
-const {API_URL} = require('./config');
+const {API_URL, defaultFetch} = require('./config');
 const EventEmitter = require('./libs/events.min');
 const Handlebars = require('./libs/h.min');
 
@@ -40700,18 +40717,10 @@ module.exports.getForm = getForm;
 */
  const postData = function (url, data) {
   return new Promise((resolve, reject)=>{
-    fetch(`${API_URL}/${url}`, {
-      method:'POST',
-      mode:'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify(data)
-    })
-    .then(handleResponse)
-    .then(rep=>resolve(rep))
-    .catch(err=>reject(err))
+    fetch(`${API_URL}/${url}`, defaultFetch('POST',data))
+      .then(handleResponse)
+      .then(rep=>resolve(rep))
+      .catch(err=>reject(err))
   });
 };
 
@@ -40724,17 +40733,10 @@ module.exports.postData = postData;
 */
 const getData = function (url) {
  return new Promise((resolve, reject)=>{
-   fetch(`${API_URL}/${url}`, {
-     method:'GET',
-     mode:'cors',
-     headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
-     }
-   })
-   .then(handleResponse)
-   .then(rep=>resolve(rep))
-   .catch(err=>reject(err))
+   fetch(`${API_URL}/${url}`, defaultFetch())
+     .then(handleResponse)
+     .then(rep=>resolve(rep))
+     .catch(err=>reject(err))
  });
 }
 
@@ -40747,17 +40749,10 @@ module.exports.getData = getData;
 */
 const deleteData = function (url) {
  return new Promise((resolve, reject)=>{
-   fetch(`${API_URL}/${url}`, {
-     method:'DELETE',
-     mode:'cors',
-     headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
-     }
-   })
-   .then(handleResponse)
-   .then(rep=>resolve(rep))
-   .catch(err=>reject(err))
+   fetch(`${API_URL}/${url}`, defaultFetch('DELETE'))
+     .then(handleResponse)
+     .then(rep=>resolve(rep))
+     .catch(err=>reject(err))
  });
 }
 
@@ -41090,7 +41085,6 @@ const {compare,
   getObjectData,
   FormsHandler,
   getMiddleMonthes,
-  getAllIndexes,
   prepareCalendar,
   preparePersons,
   getFilterData,
@@ -41140,7 +41134,7 @@ module.exports = class EmployeManagment {
     this.render(`${entry}s`);
   }
 
-  TableExport(){
+  tableExport(){
       return TableExport;
   }
 
@@ -41187,7 +41181,7 @@ module.exports = class EmployeManagment {
     this.graphData.title = `График отпусков ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
 
     this.render('graphData');
-    this.TableExport()(document.getElementsByTagName("table"));
+    this.tableExport()(document.getElementsByTagName('table'));
   }
 
   render(data){

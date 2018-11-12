@@ -4,7 +4,6 @@ const {compare,
   getObjectData,
   FormsHandler,
   getMiddleMonthes,
-  getAllIndexes,
   prepareCalendar,
   preparePersons,
   getFilterData,
@@ -54,7 +53,7 @@ module.exports = class EmployeManagment {
     this.render(`${entry}s`);
   }
 
-  TableExport(){
+  tableExport(){
       return TableExport;
   }
 
@@ -101,7 +100,7 @@ module.exports = class EmployeManagment {
     this.graphData.title = `График отпусков ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
 
     this.render('graphData');
-    this.TableExport()(document.getElementsByTagName("table"));
+    this.tableExport()(document.getElementsByTagName('table'));
   }
 
   render(data){

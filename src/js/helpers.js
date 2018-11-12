@@ -1,6 +1,6 @@
 'use strict'
 
-const {API_URL} = require('./config');
+const {API_URL, defaultFetch} = require('./config');
 const EventEmitter = require('./libs/events.min');
 const Handlebars = require('./libs/h.min');
 
@@ -278,18 +278,10 @@ module.exports.getForm = getForm;
 */
  const postData = function (url, data) {
   return new Promise((resolve, reject)=>{
-    fetch(`${API_URL}/${url}`, {
-      method:'POST',
-      mode:'cors',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body:JSON.stringify(data)
-    })
-    .then(handleResponse)
-    .then(rep=>resolve(rep))
-    .catch(err=>reject(err))
+    fetch(`${API_URL}/${url}`, defaultFetch('POST',data))
+      .then(handleResponse)
+      .then(rep=>resolve(rep))
+      .catch(err=>reject(err))
   });
 };
 
@@ -302,17 +294,10 @@ module.exports.postData = postData;
 */
 const getData = function (url) {
  return new Promise((resolve, reject)=>{
-   fetch(`${API_URL}/${url}`, {
-     method:'GET',
-     mode:'cors',
-     headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
-     }
-   })
-   .then(handleResponse)
-   .then(rep=>resolve(rep))
-   .catch(err=>reject(err))
+   fetch(`${API_URL}/${url}`, defaultFetch())
+     .then(handleResponse)
+     .then(rep=>resolve(rep))
+     .catch(err=>reject(err))
  });
 }
 
@@ -325,17 +310,10 @@ module.exports.getData = getData;
 */
 const deleteData = function (url) {
  return new Promise((resolve, reject)=>{
-   fetch(`${API_URL}/${url}`, {
-     method:'DELETE',
-     mode:'cors',
-     headers: {
-       'Accept': 'application/json',
-       'Content-Type': 'application/json'
-     }
-   })
-   .then(handleResponse)
-   .then(rep=>resolve(rep))
-   .catch(err=>reject(err))
+   fetch(`${API_URL}/${url}`, defaultFetch('DELETE'))
+     .then(handleResponse)
+     .then(rep=>resolve(rep))
+     .catch(err=>reject(err))
  });
 }
 
