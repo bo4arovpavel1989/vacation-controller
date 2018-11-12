@@ -1,0 +1,23 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Vacation-controller</title><link rel="stylesheet" href="css/main.css"><script id="persons" type="text/x-handlebars-template">{{#each this}}
+      <option value='{{this.person}}'>
+        '{{this.person}}'
+      </option>
+    {{/each}}</script><script id="vacations" type="text/x-handlebars-template">{{#each this}}
+      <div class='vacationName'>
+        {{this.person}} -
+        {{this.dateFrom}} -
+        {{this.long}} - дней
+        <span class='editObject popupButton' data-form='edit' data-object='Vacation' data-id='{{this._id}}'>
+          &nbsp; &#9998; &nbsp;
+        </span>
+        <span class='deleteObject' data-url='deleteobject/Vacation/{{this._id}}'>
+          &#128465;
+        </span>
+      </div>
+    {{/each}}</script><script id="editForm" type="text/x-handlebars-template"><form class='editForm {{className}}' data-url='editobject/{{object}}'>
+      <input name='_id' type='text' value={{id}} hidden>
+      {{#each input}}
+        <input name='{{this.name}}' type='{{this.type}}' value='{{{this.value}}}'>
+      {{/each}}
+      <input type='submit' class='submitButton' value='сохранить'>
+    </form></script></head><body><div id="pageId" data-id="vacationManagment"></div><div id="container"><div class="header"><h1>Управление Отпусками</h1></div><div class="main"><div class="controlArea"><div class="control"><button class="controlButton popupButton" data-form="addVacation">Добавить отпуск</button></div></div><div class="objectInfo"><div><h3>Отпуска</h3></div><div id="vacationsSelect"></div></div></div></div><div class="popupArea"><div id="addVacationFormArea" class="popup"><form class="vacationManagmentForm" data-url="addobject/Vacation"><div class="formControl">Cотрудник <select name="person" id="personsSelect"></select></div><div class="formControl">С <input name="dateFrom" type="date"> - <input name="long" type="number"> дней <input name="type" type="hidden" value="Vacation"></div><div class="formControl"><input type="submit" class="submitButton" value="сохранить"></div></form></div><div id="editFormArea" class="popup"></div></div></body><script src="app/bundle.js"></script></html>

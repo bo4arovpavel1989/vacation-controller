@@ -12,10 +12,6 @@ const {compare,
 
 const Handlebars = require('./libs/h.min');
 
-// Filesaver needed to tableexport work
-require('./libs/FileSaver.min');
-const TableExport = require('./libs/tableexport.min');
-
 module.exports = class EmployeManagment {
   constructor(){
     this.shifts=[];
@@ -54,10 +50,6 @@ module.exports = class EmployeManagment {
   sortAndRender(entry){
     this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
     this.render(`${entry}s`);
-  }
-
-  tableExport(){
-      return TableExport;
   }
 
   setListeners(){
@@ -100,7 +92,6 @@ module.exports = class EmployeManagment {
     this.graphData.title = `График отпусков ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
 
     this.render('graphData');
-    this.tableExport()(document.getElementsByTagName('table'));
   }
 
   render(data){

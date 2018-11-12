@@ -13,7 +13,6 @@ const gulp = require('gulp'),
       htmlmin = require('gulp-htmlmin'),
       babel = require('gulp-babel'),
       browserify = require('browserify'),
-      babelify = require('babelify'),
       source = require('vinyl-source-stream'),
       livereload = require('gulp-livereload');
 
@@ -63,7 +62,7 @@ gulp.task('img', function() {
   .pipe(gulp.dest('dist/img'));
 });
 
-gulp.task('build', ['clean', 'img', 'sass', 'jslibs'], function() {
+gulp.task('build', ['clean', 'img', 'sass'], function() {
 
   const buildCss = gulp.src([
     'src/css/main.css',
@@ -75,8 +74,9 @@ gulp.task('build', ['clean', 'img', 'sass', 'jslibs'], function() {
   .pipe(gulp.dest('dist/fonts'))
 
   const buildJs = gulp.src('src/app/**/*')
+  .pipe(babel())
   .pipe(uglify())
-  .pipe(gulp.dest('dist/js'))
+  .pipe(gulp.dest('dist/app'))
 
   const buildHtml = gulp.src('src/*.html')
   .pipe(htmlmin({ collapseWhitespace: true }))

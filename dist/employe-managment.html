@@ -1,0 +1,27 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Vacation-controller</title><link rel="stylesheet" href="css/main.css"><script id="shifts" type="text/x-handlebars-template">{{#each this}}
+      <option value='{{this.shift}}'>
+        '{{this.shift}}'
+      </option>
+    {{/each}}</script><script id="positions" type="text/x-handlebars-template">{{#each this}}
+      <option value='{{this.position}}'>
+        '{{this.position}}'
+      </option>
+    {{/each}}</script><script id="persons" type="text/x-handlebars-template">{{#each this}}
+      <div class='personName'>
+        {{this.person}} - &nbsp;
+        {{this.shift}} - &nbsp;
+        {{this.position}}
+        <span class='editObject popupButton' data-form='edit' data-object='Person' data-id='{{this._id}}'>
+          &nbsp; &#9998; &nbsp;
+        </span>
+        <span class='deleteObject' data-url='deleteobject/Person/{{this._id}}'>
+          &#128465;
+        </span>
+      </div>
+    {{/each}}</script><script id="editForm" type="text/x-handlebars-template"><form class='editForm {{className}}' data-url='editobject/{{object}}'>
+      <input name='_id' type='text' value={{id}} hidden>
+      {{#each input}}
+        <input name='{{this.name}}' type='{{this.type}}' value='{{{this.value}}}'>
+      {{/each}}
+      <input type='submit' class='submitButton' value='сохранить'>
+    </form></script></head><body><div id="pageId" data-id="employeManagment"></div><div id="container"><div class="header"><h1>Управление Персоналом</h1></div><div class="main"><div class="controlArea"><div class="control"><button class="controlButton popupButton" data-form="addPerson">Добавить сотрудника</button></div></div><div class="objectInfo"><div><h3>Сотрудники</h3></div><div id="personsSelect"></div></div></div></div><div class="popupArea"><div id="addPersonFormArea" class="popup"><form class="employeManagmentForm" data-url="addobject/Person"><div class="formControl">ФИО сотрудника <input name="person" type="text" required></div><div class="formControl">Смена <select name="shift" id="shiftsSelect"></select></div><div class="formControl">Должность <select name="position" id="positionsSelect"></select> <input name="type" type="hidden" value="Person"></div><div class="formControl"><input type="submit" class="submitButton" value="сохранить"></div></form></div><div id="editFormArea" class="popup"></div></div></body><script src="app/bundle.js"></script></html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Vacation-controller</title><link rel="stylesheet" href="css/main.css"><script id="shifts" type="text/x-handlebars-template">{{#each this}}
+      <label class='checkBox' for="shift{{this._id}}">{{this.shift}}</label>
+      <input type="checkbox" class='checkBox' id="shift{{this._id}}" name="shifts" value='{{this.shift}}'>
+    {{/each}}</script><script id="positions" type="text/x-handlebars-template">{{#each this}}
+      <label class='checkBox' for="position{{this._id}}">{{this.position}}</label>
+      <input type="checkbox" class='checkBox' id="position{{this._id}}" name="positions" value='{{this.position}}'>
+    {{/each}}</script><script id="editForm" type="text/x-handlebars-template"><form class='editForm {{className}}' data-url='editobject/{{object}}'>
+      <input name='_id' type='text' value={{id}} hidden>
+      {{#each input}}
+        <input name='{{this.name}}' type='{{this.type}}' value='{{{this.value}}}'>
+      {{/each}}
+      <input type='submit' value='сохранить'>
+    </form></script><script id="graphData" type="text/x-handlebars-template"><caption class='graphTitle'>{{this.title}}</caption>
+        <tr class='monthesArea'>
+          <th width="200"></h>
+          {{#each calendar.monthes}}
+            <th class='monthName' colspan='{{this.dayInMonth}}' width={{this.monthWidth}}>
+              {{this.monthName}} {{this.year}}
+            </th>
+          {{/each}}
+        </tr>
+        <tr class='datesArea'>
+          <th width="200"></th>
+          {{#each calendar.dates}}
+            <th class='dateName' width={{../dayWidth}}>
+              {{this.date}}
+            </th>
+          {{/each}}
+        </tr>
+        {{#each persons}}
+          <tr class='vacationLine'>
+            <td class='namesArea' width="200">{{this.person}}</td>
+            {{#each this.daysOff}}
+              {{#if this.is}}
+                <td class='dayOff greyBorder' data-id='{{this._id}}' width={{../../dayWidth}}></td>
+              {{else}}
+                <td class='dayDuty greyBorder' width={{../../dayWidth}}></td>
+              {{/if}}
+            {{/each}}
+          </tr>
+        {{/each}}</script></head><body><div id="pageId" data-id="infotable"></div><div class="container"><div class="header"><h1>Вывод информации</h1></div><div class="infotable"></div><div class="filterAree"><form class="filterManagmentForm" data-url="getvacationsbyfilter"><div class="formControl"><div id="shiftsSelect"></div></div><div class="formControl"><div id="positionsSelect"></div></div><div class="formControl"><select name="monthFrom"><option value="01">Январь</option><option value="02">Февраль</option><option value="03">Март</option><option value="04">Апрель</option><option value="05">Май</option><option value="06">Июнь</option><option value="07">Июль</option><option value="08">Август</option><option value="09">Сентябрь</option><option value="10">Октябрь</option><option value="11">Ноябрь</option><option value="12">Декабрь</option></select> <select name="yearFrom"><option value="2019">2019</option><option value="2018">2018</option></select> <select name="monthTo"><option value="01">Январь</option><option value="02">Февраль</option><option value="03">Март</option><option value="04">Апрель</option><option value="05">Май</option><option value="06">Июнь</option><option value="07">Июль</option><option value="08">Август</option><option value="09">Сентябрь</option><option value="10">Октябрь</option><option value="11">Ноябрь</option><option value="12">Декабрь</option></select> <select name="yearTo"><option value="2019">2019</option><option value="2018">2018</option></select></div><div class="formControl"><input type="submit" class="submitButton" value="показать"></div></form></div><table id="graphDataSelect" border="1"></table><div></div><div id="editFormArea" class="popup"></div></div></body><script src="app/bundle.js"></script></html>
