@@ -7,15 +7,15 @@ const _ = require('lodash');
  * @returns {Promise} handled request object with dateTo prop added
  */
 module.exports.calculateVacationEnd = function(req){
-  try{
+  try {
     const {dateFrom, long} = req.body;
     const dayLong = 1000 * 60 * 60 * 24;
     const dateTo = Date.parse(dateFrom) + (long * dayLong);
-
+    
     req.body.dateTo = dateTo;
 
     return true;
-  }catch(err){
+  } catch(err) {
     return false;
   }
 }
