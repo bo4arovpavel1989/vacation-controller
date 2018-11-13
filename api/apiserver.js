@@ -4,7 +4,7 @@ const router = require('./router.js').router;
 const bodyParser = require('body-parser')
 const server = require('http').createServer();
 
-app.set('port', (process.env.PORT || 8080));
+app.set('port', (process.env.PORT || 9200));
 
 app.use(express.static(__dirname + '/../dist'));
 app.use(bodyParser.json())

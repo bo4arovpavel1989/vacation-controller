@@ -49,6 +49,7 @@
     "jquery": "^3.3.1",
     "lodash": "^4.17.11",
     "mongoose": "^5.3.6",
+    "node-windows": "^0.1.14",
     "tableexport": "^5.0.3"
   }
 }

@@ -1,0 +1,2 @@
+2018-11-13 09:09:51 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\git\vacation-controller\node_modules\node-windows\lib\wrapper.js --file D:\git\vacation-controller\api\apiserver.js --log "Vacation-controllers wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2018-11-13 09:09:51 - Started 281672
