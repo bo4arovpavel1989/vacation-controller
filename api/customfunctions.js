@@ -11,7 +11,7 @@ module.exports.calculateVacationEnd = function(req){
     const {dateFrom, long} = req.body;
     const dayLong = 1000 * 60 * 60 * 24;
     const dateTo = Date.parse(dateFrom) + (long * dayLong);
-    
+
     req.body.dateTo = dateTo;
 
     return true;
@@ -128,4 +128,19 @@ module.exports.getNamesQuery = function(arr){
   })
 
   return nameArr;
+}
+
+/**
+ * Function gets $0r dates query from FromTo and dateTo
+ * so that searched vacation must be between from and to
+ * @param {Array} dates - array got from Person documents
+ * @returns {Array} - array of dates queries
+ */
+module.exports.getDatesQuery = function(dates){
+  return [
+    {dateFrom: {$lte:dates[0]}, dateTo:{$gte:dates[1]}},
+    {dateFrom: {$lte:dates[0]}, dateTo:{$gte:dates[0], $lt:dates[1]}},
+    {dateFrom: {$gte:dates[0], $lt:dates[1]}, dateTo:{$gte:dates[0], $lt:dates[1]}},
+    {dateFrom: {$gte:dates[0], $lt:dates[1]}, dateTo:{$gte:dates[1]}}
+  ]
 }
