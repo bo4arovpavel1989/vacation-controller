@@ -69,8 +69,8 @@ describe('getForm', ()=>{
 		const {prepareCalendar} = helpers,
 			monthes = [{month:'12'},{month:'01'}],
 			{prepareCalendarCorrects} = corrects;
-		let yFrom = 2018;
-		let result = prepareCalendar(yFrom, monthes);
+		let yFrom = 2018,
+			result = prepareCalendar(yFrom, monthes);
 		
 		expect(result).to.eql(prepareCalendarCorrects);
 	 });
@@ -93,12 +93,12 @@ describe('preparePersons', ()=>{
 
 describe('concatVacationsOfSinglePerson', ()=>{
 	it('should concat all vacations of single person in one array within {person, daysOff:[...]} object', ()=>{
-		const indexes = [0,1,2];
-		const person = 'Person';
-		const {personsFromCorrects} = corrects;
-		const {concatedVacationsOfPersonCorrects} = corrects;
-		const {concatVacationsOfSinglePerson} = helpers;
-		const result = concatVacationsOfSinglePerson(indexes,person,personsFromCorrects);
+		const indexes = [0,1,2],
+			person = 'Person',
+			{personsFromCorrects} = corrects,
+			{concatedVacationsOfPersonCorrects} = corrects,
+			{concatVacationsOfSinglePerson} = helpers,
+			result = concatVacationsOfSinglePerson(indexes,person,personsFromCorrects);
 		
 		expect(result).to.eql(concatedVacationsOfPersonCorrects);
 	});
@@ -106,10 +106,10 @@ describe('concatVacationsOfSinglePerson', ()=>{
 
 describe('concatVacations', ()=>{
 	it('should concat all vacations of each single person in one array within Array of {person, daysOff:[...]} objects', ()=>{
-		const {personsFromCorrects} = corrects;
-		const {concatedVacationsOfAllPersonsCorrects} = corrects;
-		const {concatVacations} = helpers;
-		const result = concatVacations(personsFromCorrects);
+		const {personsFromCorrects} = corrects,
+			{concatedVacationsOfAllPersonsCorrects} = corrects,
+			{concatVacations} = helpers,
+			result = concatVacations(personsFromCorrects);
 		
 		expect(result).to.eql(concatedVacationsOfAllPersonsCorrects);
 	});

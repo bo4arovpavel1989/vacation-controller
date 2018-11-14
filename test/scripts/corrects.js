@@ -285,4 +285,4 @@ module.exports.concatedVacationsOfAllPersonsCorrects = [
 		]
 	}
 	
-]		
+]
