@@ -133,14 +133,18 @@ module.exports.getNamesQuery = function(arr){
 /**
  * Function gets $0r dates query from FromTo and dateTo
  * so that searched vacation must be between from and to
- * @param {Array} dates - array got from Person documents
+ * @param {Array} dates - array if filter dates [startDate, finishDate]
  * @returns {Array} - array of dates queries
  */
 module.exports.getDatesQuery = function(dates){
   return [
+    // If persons vacation starts before and ends after filter dates
     {dateFrom: {$lte:dates[0]}, dateTo:{$gte:dates[1]}},
+      // If persons vacation starts before and ends between filter dates
     {dateFrom: {$lte:dates[0]}, dateTo:{$gte:dates[0], $lt:dates[1]}},
+      // If persons vacation starts between and ends between filter dates
     {dateFrom: {$gte:dates[0], $lt:dates[1]}, dateTo:{$gte:dates[0], $lt:dates[1]}},
+      // If persons vacation starts between and ends after filter dates
     {dateFrom: {$gte:dates[0], $lt:dates[1]}, dateTo:{$gte:dates[1]}}
   ]
 }
