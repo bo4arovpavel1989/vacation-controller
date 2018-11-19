@@ -60,3 +60,16 @@ describe('getNamesQuery', ()=>{
 			])	
   });
 });
+ 
+describe('getDatesQuery', ()=>{
+  it('Should get $or dates query for vacations', ()=>{
+	const dates = ['2018-12-01', '2019-01-31'],
+		{getDatesQuery} = customFunctions,
+		result = getDatesQuery(dates);
+		
+	expect(result).to.eql([
+		{dateFrom: {$lte: '2018-12-01'}, dateTo: {$gte: '2018-12-01'}},
+		{dateFrom: {$gte: '2018-12-01', $lt: '2019-01-31'}}
+	])	
+  });
+});
