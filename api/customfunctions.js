@@ -4,7 +4,7 @@ const _ = require('lodash');
 /**
  * Function calculates end date of Vacation
  * @param {Object} req - API request Object
- * @returns {Promise} handled request object with dateTo prop added
+ * @returns {Boolean} represents if operation successed
  */
 module.exports.calculateVacationEnd = function(req){
   try {
@@ -41,6 +41,7 @@ module.exports.editAllEmbeddedDocs = function(req){
 
   return new Promise((resolve, reject)=>{
     const {type} = req.params,
+          // _id of edited doc
           {_id} = req.body,
           dependant = dependencyTree[type],
           newState = req.body;
@@ -49,9 +50,10 @@ module.exports.editAllEmbeddedDocs = function(req){
       resolve();
 
     // As for dependant always has only 1 property
-    let [propToChange] = _.values(dependant);
-    let [docToChange] = _.keys(dependant);
+    const [propToChange] = _.values(dependant);
+    const [docToChange] = _.keys(dependant);
 
+    // First of all - find old value of edited doc
     db.findOne(type, {_id})
       .then(rep=>{
         return Promise.resolve(rep[propToChange])
@@ -60,9 +62,11 @@ module.exports.editAllEmbeddedDocs = function(req){
         let findProp = {},
             setProp = {$set:{}};
 
+        // Find query for update - to find all dependant docs
         findProp[propToChange] = propOldVal;
         setProp.$set[propToChange] = newState[propToChange];
 
+        // Update all same values in dependant docs
         return db.update(docToChange, findProp, setProp, {multi: true})
       })
       .then(()=>resolve())
