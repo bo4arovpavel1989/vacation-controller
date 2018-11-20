@@ -74,13 +74,21 @@ describe('getDatesQuery', ()=>{
 	});
 });
  
-describe('editAllEmbeddedDocs', async ()=>{
-	it('Should make update query for all dependant docs before editing', ()=>{
+describe('editAllEmbeddedDocs', ()=>{
+	it('Should make update query for all dependant docs before editing', (done)=>{
 		const {editReq} = corrects,
-			{editAllEmbeddedDocs} = customFunctions,
-			result = await editAllEmbeddedDocs(editReq);
+			{editAllEmbeddedDocs} = customFunctions;
+		
+		delete editAllEmbeddedDocs.db;
+		
+		editAllEmbeddedDocs.db = {
+			findOne: (findParams) => Promise.resolve(),
+			update: (updateParams) => Promise.resolve(true)
+		};	
 			
-			
-			
+		return editAllEmbeddedDocs(editReq).then(result=>{
+			expect(result).to.equal(true);
+		});
+	
 	});
 });

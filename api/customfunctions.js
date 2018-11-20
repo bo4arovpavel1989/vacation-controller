@@ -41,6 +41,8 @@ module.exports.editAllEmbeddedDocs = function(req){
 
   this.db = db;
 
+  console.log(this.db)
+
   return new Promise((resolve, reject)=>{
     const {type} = req.params,
           // _id of edited doc
