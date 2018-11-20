@@ -37,7 +37,9 @@ module.exports.editAllEmbeddedDocs = function(req){
     Person:{
       Vacation:'person'
     }
-  }
+  };
+
+  this.db = db;
 
   return new Promise((resolve, reject)=>{
     const {type} = req.params,
@@ -54,7 +56,7 @@ module.exports.editAllEmbeddedDocs = function(req){
     const [docToChange] = _.keys(dependant);
 
     // First of all - find old value of edited doc
-    db.findOne(type, {_id})
+    this.db.findOne(type, {_id})
       .then(rep=>{
         return Promise.resolve(rep[propToChange])
       })
@@ -67,9 +69,10 @@ module.exports.editAllEmbeddedDocs = function(req){
         setProp.$set[propToChange] = newState[propToChange];
 
         // Update all same values in dependant docs
-        return db.update(docToChange, findProp, setProp, {multi: true})
+        console.log(findProp)
+        return this.db.update(docToChange, findProp, setProp)
       })
-      .then(()=>resolve())
+      .then(()=>resolve(true))
       .catch(err=>reject(err.message))
   })
 

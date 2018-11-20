@@ -74,8 +74,13 @@ describe('getDatesQuery', ()=>{
 	});
 });
  
-describe('editAllEmbeddedDocs', ()=>{
+describe('editAllEmbeddedDocs', async ()=>{
 	it('Should make update query for all dependant docs before editing', ()=>{
-	
+		const {editReq} = corrects,
+			{editAllEmbeddedDocs} = customFunctions,
+			result = await editAllEmbeddedDocs(editReq);
+			
+			
+			
 	});
 });
