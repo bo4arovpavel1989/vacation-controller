@@ -4,6 +4,7 @@ const  {describe, it} = require('mocha'),
 	sinon = require("sinon"),
 	sinonChai = require("sinon-chai"),
 	customFunctions = require('../../api/customfunctions'),
+	db = require('../../api/dbqueries'),
 	corrects = require('./corrects');
   
 chai.use(sinonChai);
@@ -80,17 +81,13 @@ describe('getDatesQuery', ()=>{
 });
  
 describe('editAllEmbeddedDocs', ()=>{
-	it('Should make update query for all dependant docs before editing', ()=>{
+	it('Should make update query for Vacation doc when Person doc is edited', ()=>{
 		const {editReq} = corrects,
 			{editAllEmbeddedDocs} = customFunctions,
-			dbFunc = {
-				findOne: (findParams) => Promise.resolve({person: 'personOld'}),
-				update: (updateParams) => Promise.resolve(true)
-			},
-			spyFind = sinon.spy(dbFunc, "findOne"),
-			spyUpdate = sinon.spy(dbFunc, "update");	
-			
-		return editAllEmbeddedDocs(editReq, dbFunc).then(result=>{
+			spyFind = sinon.stub(db, "findOne").resolves({person: 'personOld'}),
+			spyUpdate = sinon.stub(db, "update").resolves(true);	
+				
+		return editAllEmbeddedDocs(editReq).then(result=>{
 			expect(result).to.equal(true);
 			expect(spyFind).to.have.been.calledWith('Person', {_id: 'id'});
 			expect(spyUpdate).to.have.been.calledWith('Vacation', {person: 'personOld'}, {$set: {person: 'personNew'}});

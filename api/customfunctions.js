@@ -27,7 +27,7 @@ module.exports.calculateVacationEnd = function(req){
  * @param {Object} dbFunc - database API Object
  * @returns {Promise} indicates success of the operation
  */
-module.exports.editAllEmbeddedDocs = function editAllEmbeddedDocs (req, dbFunc){
+module.exports.editAllEmbeddedDocs = function editAllEmbeddedDocs (req){
   const dependencyTree = {
     Shift: {
       Person: 'shift'
@@ -55,7 +55,7 @@ module.exports.editAllEmbeddedDocs = function editAllEmbeddedDocs (req, dbFunc){
     const [propToChange] = _.values(dependant);
 
     // First of all - find old value of edited doc
-    dbFunc.findOne(type, {_id})
+    db.findOne(type, {_id})
       .then(rep=>{
         return Promise.resolve(rep[propToChange])
       })
@@ -69,7 +69,7 @@ module.exports.editAllEmbeddedDocs = function editAllEmbeddedDocs (req, dbFunc){
         setProp.$set[propToChange] = newState[propToChange];
 
         // Update all same values in dependant docs
-        return dbFunc.update(docToChange, findProp, setProp)
+        return db.update(docToChange, findProp, setProp)
       })
       .then(()=>resolve(true))
       .catch(err=>reject(err.message))

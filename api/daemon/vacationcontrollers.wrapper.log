@@ -24,3 +24,15 @@
 2018-11-20 09:22:45 - Finished vacationcontrollers.exe
 2018-11-20 09:43:14 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\git\vacation-controller\node_modules\node-windows\lib\wrapper.js --file D:\git\vacation-controller\api\apiserver.js --log "Vacation-controllers wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
 2018-11-20 09:43:14 - Started 604304
+2018-11-21 09:59:56 - Stopping vacationcontrollers.exe
+2018-11-21 09:59:56 - ProcessKill 604304
+2018-11-21 09:59:56 - Found child process: 602124 Name: node.exe
+2018-11-21 09:59:56 - Stopping process 602124
+2018-11-21 09:59:56 - Send SIGINT 602124
+2018-11-21 09:59:56 - SIGINT to 602124 failed - Killing as fallback
+2018-11-21 09:59:56 - Stopping process 604304
+2018-11-21 09:59:56 - Send SIGINT 604304
+2018-11-21 09:59:56 - SIGINT to604304 successful
+2018-11-21 09:59:56 - Finished vacationcontrollers.exe
+2018-11-21 10:02:55 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\git\vacation-controller\node_modules\node-windows\lib\wrapper.js --file D:\git\vacation-controller\api\apiserver.js --log "Vacation-controllers wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2018-11-21 10:02:55 - Started 639308

@@ -18,3 +18,13 @@ TypeError: Cannot read property 'send' of null
     at process.emit (events.js:208:7)
     at Signal.wrap.onsignal (internal/process.js:208:44)
 (node:602124) DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
+D:\git\vacation-controller\node_modules\node-windows\lib\wrapper.js:177
+    child.send('shutdown');
+          ^
+
+TypeError: Cannot read property 'send' of null
+    at process.killkid (D:\git\vacation-controller\node_modules\node-windows\lib\wrapper.js:177:11)
+    at emitNone (events.js:106:13)
+    at process.emit (events.js:208:7)
+    at Signal.wrap.onsignal (internal/process.js:208:44)
+(node:640836) DeprecationWarning: current URL string parser is deprecated, and will be removed in a future version. To use the new parser, pass option { useNewUrlParser: true } to MongoClient.connect.
