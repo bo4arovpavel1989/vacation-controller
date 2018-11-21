@@ -9,6 +9,6 @@ module.exports.orQueryCorrects = [
 	];	
 		
 module.exports.editReq = {
-	params: {type: 'Shift'},
-	body: {_id: 'id', person: 'person'}
+	params: {type: 'Person'},
+	body: {_id: 'id', person: 'personNew'}
 };

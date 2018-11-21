@@ -24,9 +24,10 @@ module.exports.calculateVacationEnd = function(req){
  * Function edits fields in other docs, that
  * contain edited field
  * @param {Object} req - API request Object
+ * @param {Object} dbFunc - database API Object
  * @returns {Promise} indicates success of the operation
  */
-module.exports.editAllEmbeddedDocs = function(req){
+module.exports.editAllEmbeddedDocs = function editAllEmbeddedDocs (req, dbFunc){
   const dependencyTree = {
     Shift: {
       Person: 'shift'
@@ -39,10 +40,6 @@ module.exports.editAllEmbeddedDocs = function(req){
     }
   };
 
-  this.db = db;
-
-  console.log(this.db)
-
   return new Promise((resolve, reject)=>{
     const {type} = req.params,
           // _id of edited doc
@@ -51,14 +48,14 @@ module.exports.editAllEmbeddedDocs = function(req){
           newState = req.body;
 
     if(!dependant)
-      resolve();
+      resolve(false);
 
     // As for dependant always has only 1 property
-    const [propToChange] = _.values(dependant);
     const [docToChange] = _.keys(dependant);
+    const [propToChange] = _.values(dependant);
 
     // First of all - find old value of edited doc
-    this.db.findOne(type, {_id})
+    dbFunc.findOne(type, {_id})
       .then(rep=>{
         return Promise.resolve(rep[propToChange])
       })
@@ -68,11 +65,11 @@ module.exports.editAllEmbeddedDocs = function(req){
 
         // Find query for update - to find all dependant docs
         findProp[propToChange] = propOldVal;
+        // $set query for update - to set new state
         setProp.$set[propToChange] = newState[propToChange];
 
         // Update all same values in dependant docs
-        console.log(findProp)
-        return this.db.update(docToChange, findProp, setProp)
+        return dbFunc.update(docToChange, findProp, setProp)
       })
       .then(()=>resolve(true))
       .catch(err=>reject(err.message))

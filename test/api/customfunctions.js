@@ -1,7 +1,12 @@
 const  {describe, it} = require('mocha'),
-  {expect} = require('chai'),
-  customFunctions = require('../../api/customfunctions'),
-  corrects = require('./corrects');
+	chai = require('chai'),
+	{expect} = chai,
+	sinon = require("sinon"),
+	sinonChai = require("sinon-chai"),
+	customFunctions = require('../../api/customfunctions'),
+	corrects = require('./corrects');
+  
+chai.use(sinonChai);
     
 describe('calculateVacationEnd', ()=>{
 	it('Should calculate dateTo prop of vacation object', ()=>{
@@ -75,19 +80,20 @@ describe('getDatesQuery', ()=>{
 });
  
 describe('editAllEmbeddedDocs', ()=>{
-	it('Should make update query for all dependant docs before editing', (done)=>{
+	it('Should make update query for all dependant docs before editing', ()=>{
 		const {editReq} = corrects,
-			{editAllEmbeddedDocs} = customFunctions;
-		
-		delete editAllEmbeddedDocs.db;
-		
-		editAllEmbeddedDocs.db = {
-			findOne: (findParams) => Promise.resolve(),
-			update: (updateParams) => Promise.resolve(true)
-		};	
+			{editAllEmbeddedDocs} = customFunctions,
+			dbFunc = {
+				findOne: (findParams) => Promise.resolve({person: 'personOld'}),
+				update: (updateParams) => Promise.resolve(true)
+			},
+			spyFind = sinon.spy(dbFunc, "findOne"),
+			spyUpdate = sinon.spy(dbFunc, "update");	
 			
-		return editAllEmbeddedDocs(editReq).then(result=>{
+		return editAllEmbeddedDocs(editReq, dbFunc).then(result=>{
 			expect(result).to.equal(true);
+			expect(spyFind).to.have.been.calledWith('Person', {_id: 'id'});
+			expect(spyUpdate).to.have.been.calledWith('Vacation', {person: 'personOld'}, {$set: {person: 'personNew'}});
 		});
 	
 	});
