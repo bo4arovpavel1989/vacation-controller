@@ -1,5 +1,5 @@
 const db = require('./dbqueries');
-const {getPositions} = require('./customfunctions');
+const {getPositions, getVacationHandoutBounds} = require('./customfunctions');
 
 module.exports.getObject = function(req, res) {
   const query = req.params.id ? {_id: req.params.id} : {},
@@ -11,9 +11,18 @@ module.exports.getObject = function(req, res) {
 }
 
 module.exports.getVacationHandout = function(req, res){
+  let positions, dateTo;
+
   getPositions()
-    .then(positions=>{
+    .then(rep=>{
+      positions=rep;
       console.log(positions)
+      
+      return getVacationHandoutBounds()
+    })
+    .then(rep=>{
+      dateTo = rep;
+      console.log(dateTo);
       res.json({positions})
     })
 }

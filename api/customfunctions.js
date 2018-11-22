@@ -153,11 +153,21 @@ module.exports.getDatesQuery = function(dates){
 
 
 /**
- * Function gets all shifts from database
- * @returns {Promise} - array of shifts
+ * Function gets all positions from database
+ * @returns {Promise} - array of positions
  */
 module.exports.getPositions = function(){
   return new Promise((resolve, reject)=>db.find('Position', {})
       .then(rep=>resolve(rep))
       .catch(err=>reject(err)))
 }
+
+/**
+ * Function gets date bounds for vacation handout calculation
+ * @returns {Promise} - top bound of vacation handout date
+ */
+module.exports.getVacationHandoutBounds = function(){
+  return new Promise((resolve, reject)=>db.findBy('Vacation', {}, {dateTo:-1}, 0, 1)
+    .then(rep=>resolve(rep[0].dateTo))
+    .catch(err=>reject(err)))
+};
