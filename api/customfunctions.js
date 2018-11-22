@@ -150,3 +150,14 @@ module.exports.getDatesQuery = function(dates){
     {dateFrom: {$gte:dates[0], $lt:dates[1]}}
   ]
 }
+
+
+/**
+ * Function gets all shifts from database
+ * @returns {Promise} - array of shifts
+ */
+module.exports.getPositions = function(){
+  return new Promise((resolve, reject)=>db.find('Position', {})
+      .then(rep=>resolve(rep))
+      .catch(err=>reject(err)))
+}

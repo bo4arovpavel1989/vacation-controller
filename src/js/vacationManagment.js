@@ -1,6 +1,6 @@
 'use strict'
 
-const {FormsHandler, getEmployeData, getVacationData, compare} = require('./helpers');
+const {FormsHandler, getEmployeData, getVacationData, getVacationHandout, compare} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
 module.exports = class EmployeManagment {
@@ -11,6 +11,7 @@ module.exports = class EmployeManagment {
     this.personSort = 1;
 
     this.getVacationData();
+    this.getVacationHandout();
 
     this.formsHandler = new FormsHandler({
       formsSelector: '.vacationManagmentForm'
@@ -30,6 +31,9 @@ module.exports = class EmployeManagment {
     this.formsHandler.ee.on('refreshRender', ()=>this.getVacationData());
   }
 
+  getVacationHandout(){
+    getVacationHandout();
+  }
 
   getVacationData(){
     getVacationData()

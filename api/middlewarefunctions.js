@@ -11,7 +11,7 @@ module.exports.noMiddleware = function(req, res, next){
  * @param {Object} req - API request Object
  * @param {Object} res - API response Object
  * @param {Object} next - API middleware next Object
- * @returns {Promise} handler function or just req object if not any
+ * @returns {void}
  */
 module.exports.preHandleAddObject = function(req, res, next){
   const {type} = req.params;
@@ -26,4 +26,16 @@ module.exports.preHandleAddObject = function(req, res, next){
 	} else {
 		next();
 	}
+};
+
+/**
+ * Function returns preHandler function if needed
+ * @param {Object} req - API request Object
+ * @param {Object} res - API response Object
+ * @param {Object} next - API middleware next Object
+ * @returns {void}
+ */
+module.exports.checkCachedHandout = function(req, res, next){
+	next();
+	// TODO - make function checking if there were changes in vacation after last handout
 };

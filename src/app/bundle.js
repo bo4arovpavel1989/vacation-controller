@@ -465,6 +465,20 @@ const getVacationData = function(){
 module.exports.getVacationData = getVacationData;
 
 /**
+* Function gets from API vacationhandout data
+* @returns {Promise} - array of data [handoutdata]
+*/
+const getVacationHandout = function(){
+  return new Promise((resolve, reject)=>{
+    getData('vacationhandout')
+    .then(rep=>resolve(rep))
+    .catch(err=>reject(err))
+  })
+}
+
+module.exports.getVacationHandout = getVacationHandout;
+
+/**
 * Class made to handle all button calling popup forms and handle submits
 * Form must be wrapped in div with class 'popup' and id made by concat of
 * the calling button data-form plus 'FormArea'
@@ -895,7 +909,7 @@ module.exports = class ObjectManagment {
 },{"./helpers":3,"./libs/h.min":7}],9:[function(require,module,exports){
 'use strict'
 
-const {FormsHandler, getEmployeData, getVacationData, compare} = require('./helpers');
+const {FormsHandler, getEmployeData, getVacationData, getVacationHandout, compare} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
 module.exports = class EmployeManagment {
@@ -906,6 +920,7 @@ module.exports = class EmployeManagment {
     this.personSort = 1;
 
     this.getVacationData();
+    this.getVacationHandout();
 
     this.formsHandler = new FormsHandler({
       formsSelector: '.vacationManagmentForm'
@@ -925,6 +940,9 @@ module.exports = class EmployeManagment {
     this.formsHandler.ee.on('refreshRender', ()=>this.getVacationData());
   }
 
+  getVacationHandout(){
+    getVacationHandout();
+  }
 
   getVacationData(){
     getVacationData()

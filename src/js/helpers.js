@@ -377,6 +377,20 @@ const getVacationData = function(){
 module.exports.getVacationData = getVacationData;
 
 /**
+* Function gets from API vacationhandout data
+* @returns {Promise} - array of data [handoutdata]
+*/
+const getVacationHandout = function(){
+  return new Promise((resolve, reject)=>{
+    getData('vacationhandout')
+    .then(rep=>resolve(rep))
+    .catch(err=>reject(err))
+  })
+}
+
+module.exports.getVacationHandout = getVacationHandout;
+
+/**
 * Class made to handle all button calling popup forms and handle submits
 * Form must be wrapped in div with class 'popup' and id made by concat of
 * the calling button data-form plus 'FormArea'

@@ -1,7 +1,7 @@
 const postRequestsHandlers=require('./postrequests.js');
 const getRequestsHandlers=require('./getrequests.js');
 const deleteRequestsHandlers=require('./deleterequests.js');
-const {noMiddleware, preHandleAddObject} = require('./middlewarefunctions.js');
+const {noMiddleware, preHandleAddObject, checkCachedHandout} = require('./middlewarefunctions.js');
 
 const getRequests = [
 	{
@@ -13,6 +13,11 @@ const getRequests = [
 		url:'/getobject/:type',
 		middleware:noMiddleware,
 		callback:getRequestsHandlers.getObject
+	},
+	{
+		url:'/vacationhandout',
+		middleware:checkCachedHandout,
+		callback:getRequestsHandlers.getVacationHandout
 	}
 ];
 
