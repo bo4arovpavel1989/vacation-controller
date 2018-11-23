@@ -171,3 +171,28 @@ module.exports.getVacationHandoutBounds = function(){
     .then(rep=>resolve(rep[0].dateTo))
     .catch(err=>reject(err)))
 };
+
+/**
+ * Function generates array for dates when at least one employe is on vacation
+ * @param {Date} dateTo - end date of vacation calendar
+ * @returns {Array} - array of dates
+ */
+module.exports.getVacationCalendar = async function(dateTo){
+  const dateFrom = Date.now(),
+    dateToParsed = Date.parse(dateTo),
+    day = 24 * 60 * 60 * 1000;
+  let currentDate = dateFrom;
+  let vacationCalendar = [];
+  console.log(currentDate);
+  console.log(dateToParsed);
+  while(currentDate < dateToParsed) {
+    console.log(1);
+    let isVacation = await db.count('Vacation', {dateFrom: {$lte: currentDate}, dateTo: {$gt: {currentDate}}});
+
+    if(isVacation) vacationCalendar.push(currentDate);
+    console.log(isVacation)
+    currentDate += day;
+  }
+
+  return vacationCalendar;
+}
