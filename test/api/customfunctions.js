@@ -95,3 +95,20 @@ describe('editAllEmbeddedDocs', ()=>{
 	
 	});
 });
+
+ 
+describe('getShiftOnDuty', ()=>{
+	it('Should get dutyshift for certain day', ()=>{
+		const day = '2019-01-01',
+			{shiftsFromDb} = corrects,
+			{getShiftOnDuty} = customFunctions,
+			spyFind = sinon.stub(db, 'find').resolves(shiftsFromDb)
+		
+		return getShiftOnDuty('2019-01-01').then(result=>{
+			expect(result).to.deep.equal([
+				{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30'},
+				{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26'}
+			])
+		});
+	});
+});

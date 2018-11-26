@@ -16,20 +16,17 @@ module.exports.getVacationHandout = function(req, res){
   getPositions()
     .then(rep=>{
       positions=rep;
-      console.log(positions)
 
       return getVacationHandoutBounds()
     })
     .then(rep=>{
       dateTo = rep;
-      console.log(dateTo);
 
       return getVacationCalendar(dateTo)
     })
     .then(rep=>{
       vacationCalendar = rep;
 
-      console.log(vacationCalendar)
-      return checkVacationCalendar(vacationCalendar);
+      return checkVacationCalendar(vacationCalendar, positions);
     })
 }

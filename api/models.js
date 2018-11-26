@@ -8,8 +8,11 @@ let models = {};
 models.Shift = new mongoose.Schema({
 	type: {type: String},
 	shift: {type: String},
+	// Number of duty days without days off
 	duty: {type: Number},
+	// Number of daysOff between duties
 	off: {type: Number},
+	// Date of first duty 
 	dutyDate: {type: Date},
 	workDays: {type: Array}
 });

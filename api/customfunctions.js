@@ -201,24 +201,62 @@ module.exports.getVacationCalendar = async function(dateTo){
  * @returns {Array} - array of duty shifts
  */
 const getShiftOnDuty = function(day){
+  let dutyShifts = [];
+
   return new Promise((resolve, reject)=>{
-    
+    db.find('Shift')
+      .then(shifts=>{
+        shifts.forEach(shift=>{
+          let {off, duty} = shift,
+            dutyDate = Date.parse(shift.dutyDate),
+            currentDate = Date.parse(day),
+            oneDay = 24 * 60 * 60 * 1000,
+            // Date, when duty ends
+            dutyDateEnd = dutyDate + (duty * oneDay);
+
+              console.log(dutyDate)
+                console.log(currentDate)
+                  console.log(dutyDateEnd)
+
+          while (dutyDate <= currentDate) {
+            console.log(dutyDate)
+              console.log(currentDate)
+                console.log(dutyDateEnd)
+
+            if(dutyDate <= currentDate && dutyDateEnd > currentDate) dutyShifts.push(shift)
+
+            dutyDate = dutyDateEnd + oneDay * off;
+            dutyDateEnd = dutyDate + (duty * oneDay)
+          }
+
+        });
+
+        resolve(dutyShifts);
+      })
   });
 }
 
+module.exports.getShiftOnDuty = getShiftOnDuty;
 
 /**
  * Function loops trought vacationCalendar to check every day
  * for people who are in vacation or in duty
  * @param {Array} vacationCalendar - array of dates, when at least 1 employe is at vacation
+ * @param {Array} positions - array of positions to check
  * @returns {Promise} - array of dates with wrong vacations
  */
- module.exports.checkVacationCalendar = async function(vacationCalendar){
+ module.exports.checkVacationCalendar = async function(vacationCalendar, positions){
    let shifts, day;
 
+   shifts = await getShiftOnDuty('2019-01-01');
+
+   //console.log(shifts)
+   /*
    for (let i = 0; i < vacationCalendar.length; i++) {
      day = vacationCalendar[i]
      shifts = await getShiftOnDuty(day);
-   }
 
+     console.log(shifts)
+   }
+   */
  };
