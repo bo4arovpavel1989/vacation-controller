@@ -1,5 +1,5 @@
 const db = require('./dbqueries');
-const {getPositions, getVacationHandoutBounds, getVacationCalendar} = require('./customfunctions');
+const {getPositions, getVacationHandoutBounds, getVacationCalendar, checkVacationCalendar} = require('./customfunctions');
 
 module.exports.getObject = function(req, res) {
   const query = req.params.id ? {_id: req.params.id} : {},
@@ -11,7 +11,7 @@ module.exports.getObject = function(req, res) {
 }
 
 module.exports.getVacationHandout = function(req, res){
-  let positions, dateTo;
+  let positions, dateTo, vacationCalendar;
 
   getPositions()
     .then(rep=>{
@@ -24,8 +24,12 @@ module.exports.getVacationHandout = function(req, res){
       dateTo = rep;
       console.log(dateTo);
 
-      let vacationCalendar = getVacationCalendar(dateTo);
-      console.log(vacationCalendar);
-      res.json({positions})
+      return getVacationCalendar(dateTo)
+    })
+    .then(rep=>{
+      vacationCalendar = rep;
+
+      console.log(vacationCalendar)
+      return checkVacationCalendar(vacationCalendar);
     })
 }

@@ -175,7 +175,7 @@ module.exports.getVacationHandoutBounds = function(){
 /**
  * Function generates array for dates when at least one employe is on vacation
  * @param {Date} dateTo - end date of vacation calendar
- * @returns {Array} - array of dates
+ * @returns {Promise} - array of dates
  */
 module.exports.getVacationCalendar = async function(dateTo){
   const dateFrom = Date.now(),
@@ -183,16 +183,42 @@ module.exports.getVacationCalendar = async function(dateTo){
     day = 24 * 60 * 60 * 1000;
   let currentDate = dateFrom;
   let vacationCalendar = [];
-  console.log(currentDate);
-  console.log(dateToParsed);
-  while(currentDate < dateToParsed) {
-    console.log(1);
-    let isVacation = await db.count('Vacation', {dateFrom: {$lte: currentDate}, dateTo: {$gt: {currentDate}}});
 
-    if(isVacation) vacationCalendar.push(currentDate);
-    console.log(isVacation)
+  while(currentDate < dateToParsed) {
+    let isVacation = await db.count('Vacation', {dateFrom: {$lte: currentDate}, dateTo: {$gt: currentDate}});
+
+    if(isVacation) vacationCalendar.push(new Date(currentDate));
     currentDate += day;
   }
 
   return vacationCalendar;
 }
+
+
+/**
+ * Function gets shifts that in duty this day
+ * @param {Date} day - date to check for
+ * @returns {Array} - array of duty shifts
+ */
+const getShiftOnDuty = function(day){
+  return new Promise((resolve, reject)=>{
+    
+  });
+}
+
+
+/**
+ * Function loops trought vacationCalendar to check every day
+ * for people who are in vacation or in duty
+ * @param {Array} vacationCalendar - array of dates, when at least 1 employe is at vacation
+ * @returns {Promise} - array of dates with wrong vacations
+ */
+ module.exports.checkVacationCalendar = async function(vacationCalendar){
+   let shifts, day;
+
+   for (let i = 0; i < vacationCalendar.length; i++) {
+     day = vacationCalendar[i]
+     shifts = await getShiftOnDuty(day);
+   }
+
+ };
