@@ -21,3 +21,11 @@ module.exports.shiftsFromDb = [
 	{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28'},
 	{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26'}
 ];
+
+module.exports.guardList = [
+	
+];
+
+module.exports.medicList = [
+
+];

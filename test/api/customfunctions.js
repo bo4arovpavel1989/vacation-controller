@@ -112,3 +112,24 @@ describe('getShiftOnDuty', ()=>{
 		});
 	});
 });
+
+ 
+describe('checkTotalPositionsQuantity', ()=>{
+	it('Check how many persons of certaion position are available (not no vacation)', ()=>{
+		const calendarDate = {date:'2019-01-01', vacations:[
+			{person:'Abraham'}, {person:'Bob'}, {person:'Cortes'}
+		]};
+		const positions = [
+			{position:'Guard', totalQuantity:2},
+			{position:'Medic', totalQuantity:3}
+		];
+		const {guardList, medicList} = corrects;
+		const {checkTotalPositionsQuantity} = customFunctions,
+		spyFind = sinon.stub(db, 'find')
+			.withArgs('Person', {position:'Guard'}).resolves(guardList)
+			.withArgs('Person', {position:'Medic'}).resolves(medicList);
+		
+		
+		
+	});
+});

@@ -233,6 +233,38 @@ const getShiftOnDuty = function(day){
 module.exports.getShiftOnDuty = getShiftOnDuty;
 
 /**
+ * Function checks total quantity of persons on vacation and signs whether
+ * threshold of duty person was violated
+ * @param {Object} calendarDate - vacation calendar day {date: Date, vacations:Array}
+ * @param {Array}  positions - positions to check
+ * @returns {Object} - whether empty Object or Object with problem vacations
+ */
+const checkTotalPositionsQuantity = async function(calendarDate, positions){
+  let {vacations} = calendarDate;
+  let problem = {};
+
+  for (let i = 0; i < positions.length; i++){
+    let {position} = positions[i];
+    let allPersonsOfPosition = await db.find('Person', {position});
+    let totalDutyQuantity = allPersonsOfPosition.length;
+
+    for (let j = 0; j < allPersonsOfPosition.length; j++){
+      let {person} = allPersonsOfPosition[j];
+
+      // If person is on vacation that day
+      if(_.some(vacations, {person})) totalDutyQuantity--;
+    }
+
+    if(totalDutyQuantity < position.totalQuantity)
+      problem[position.position] = {total: `Total quantity less than ${position.totalQuantity}`}
+  }
+
+  return problem;
+}
+
+module.exports.checkTotalPositionsQuantity = checkTotalPositionsQuantity;
+
+/**
  * Function checks of person is on vacation this day
  * @param {String} person - name of person
  * @param {Date} date - date to check
@@ -257,8 +289,9 @@ const checkIfPersonOnVacation = function(person, date) {
  * @returns {Promise} - array of dates with wrong vacations
  */
  module.exports.checkVacationCalendar = async function(vacationCalendar, positions){
-   let allShifts, shifts, day, dutyPersons, personsByShift;
+   let allShifts, shifts, day, dutyPersons, personsByShift, problemsCalendar;
 
+   problemsCalendar = [];
    personsByShift = {};
    allShifts = await db.find('Shift');
 
@@ -270,9 +303,12 @@ const checkIfPersonOnVacation = function(person, date) {
    }
 
    for (let i = 0; i < vacationCalendar.length; i++) {
+     let problem;
      dutyPersons = {};
      day = vacationCalendar[i].date;
      shifts = await getShiftOnDuty(day);
+
+     problem = await checkTotalPositionsQuantity(vacationCalendar[i], positions)
 
      positions.forEach(position=>{
        dutyPersons[position.position] = [];
