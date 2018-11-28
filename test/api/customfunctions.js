@@ -9,10 +9,10 @@ const  {describe, it} = require('mocha'),
   
 chai.use(sinonChai);
 
-let spyFind;
+let spyFind, spyFindOnem spyUpdate;
 
 beforeEach(()=>{
-    spyFind = sinon.stub(db, 'find');
+	spyFind = sinon.stub(db, 'find');
 	spyFindOne = sinon.stub(db, "findOne");
 	spyUpdate = sinon.stub(db, "update");
 });
@@ -131,7 +131,7 @@ describe('getShiftOnDuty', ()=>{
 
  
 describe('checkTotalPositionsQuantity', ()=>{		
-	it('Check how many persons of certaion position are available (not no vacation)', ()=>{
+	it('Check if there are enought (at least threshold) of employes of each position', ()=>{
 		const calendarDate = {date:'2019-01-01', vacations:[
 				{person:'Abraham', dateFrom:'2018-12-01', dateTo:'2019-01-15'}, 
 				{person:'Bob', dateFrom:'2018-12-15', dateTo:'2019-01-15'}, 
