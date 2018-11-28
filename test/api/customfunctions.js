@@ -9,7 +9,7 @@ const  {describe, it} = require('mocha'),
   
 chai.use(sinonChai);
 
-let spyFind, spyFindOnem spyUpdate;
+let spyFind, spyFindOne, spyUpdate;
 
 beforeEach(()=>{
 	spyFind = sinon.stub(db, 'find');
