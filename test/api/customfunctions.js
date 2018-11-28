@@ -8,6 +8,20 @@ const  {describe, it} = require('mocha'),
 	corrects = require('./corrects');
   
 chai.use(sinonChai);
+
+let spyFind;
+
+beforeEach(()=>{
+    spyFind = sinon.stub(db, 'find');
+	spyFindOne = sinon.stub(db, "findOne");
+	spyUpdate = sinon.stub(db, "update");
+});
+
+afterEach(()=>{
+    spyFind.restore();
+    spyFindOne.restore();
+    spyUpdate.restore();
+});
     
 describe('calculateVacationEnd', ()=>{
 	it('Should calculate dateTo prop of vacation object', ()=>{
@@ -83,13 +97,14 @@ describe('getDatesQuery', ()=>{
 describe('editAllEmbeddedDocs', ()=>{
 	it('Should make update query for Vacation doc when Person doc is edited', ()=>{
 		const {editReq} = corrects,
-			{editAllEmbeddedDocs} = customFunctions,
-			spyFind = sinon.stub(db, "findOne").resolves({person: 'personOld'}),
-			spyUpdate = sinon.stub(db, "update").resolves(true);	
+			{editAllEmbeddedDocs} = customFunctions;
+			
+		spyFindOne.resolves({person: 'personOld'});
+		spyUpdate.resolves(true);	
 				
 		return editAllEmbeddedDocs(editReq).then(result=>{
 			expect(result).to.equal(true);
-			expect(spyFind).to.have.been.calledWith('Person', {_id: 'id'});
+			expect(spyFindOne).to.have.been.calledWith('Person', {_id: 'id'});
 			expect(spyUpdate).to.have.been.calledWith('Vacation', {person: 'personOld'}, {$set: {person: 'personNew'}});
 		});
 	
@@ -97,13 +112,14 @@ describe('editAllEmbeddedDocs', ()=>{
 });
 
  
-describe('getShiftOnDuty', ()=>{
+describe('getShiftOnDuty', ()=>{	
 	it('Should get dutyshift for certain day', ()=>{
 		const day = '2019-01-01',
 			{shiftsFromDb} = corrects,
-			{getShiftOnDuty} = customFunctions,
-			spyFind = sinon.stub(db, 'find').resolves(shiftsFromDb)
+			{getShiftOnDuty} = customFunctions;
 		
+		spyFind.resolves(shiftsFromDb)
+	
 		return getShiftOnDuty('2019-01-01').then(result=>{
 			expect(result).to.deep.equal([
 				{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30'},
@@ -114,22 +130,28 @@ describe('getShiftOnDuty', ()=>{
 });
 
  
-describe('checkTotalPositionsQuantity', ()=>{
+describe('checkTotalPositionsQuantity', ()=>{		
 	it('Check how many persons of certaion position are available (not no vacation)', ()=>{
 		const calendarDate = {date:'2019-01-01', vacations:[
-			{person:'Abraham'}, {person:'Bob'}, {person:'Cortes'}
-		]};
-		const positions = [
-			{position:'Guard', totalQuantity:2},
-			{position:'Medic', totalQuantity:3}
-		];
-		const {guardList, medicList} = corrects;
-		const {checkTotalPositionsQuantity} = customFunctions,
-		spyFind = sinon.stub(db, 'find')
+				{person:'Abraham', dateFrom:'2018-12-01', dateTo:'2019-01-15'}, 
+				{person:'Bob', dateFrom:'2018-12-15', dateTo:'2019-01-15'}, 
+				{person:'Cortes', dateFrom:'2018-12-15', dateTo:'2019-01-02'}
+			]},
+			positions = [
+				{position:'Guard', totalQuantity:2},
+				{position:'Medic', totalQuantity:3}
+			],
+			{guardList, medicList} = corrects,
+			{checkTotalPositionsQuantity} = customFunctions;	
+			
+		spyFind
 			.withArgs('Person', {position:'Guard'}).resolves(guardList)
 			.withArgs('Person', {position:'Medic'}).resolves(medicList);
-		
-		
-		
+			
+		return checkTotalPositionsQuantity(calendarDate, positions).then(result=>{
+			expect(result).to.deep.equal({
+				'Medic': {total:'Total quantity 2 less than threshold 3'}
+			});
+		});	
 	});
 });

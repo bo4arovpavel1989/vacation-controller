@@ -245,6 +245,7 @@ const checkTotalPositionsQuantity = async function(calendarDate, positions){
 
   for (let i = 0; i < positions.length; i++){
     let {position} = positions[i];
+    let {totalQuantity} = positions[i];
     let allPersonsOfPosition = await db.find('Person', {position});
     let totalDutyQuantity = allPersonsOfPosition.length;
 
@@ -252,11 +253,19 @@ const checkTotalPositionsQuantity = async function(calendarDate, positions){
       let {person} = allPersonsOfPosition[j];
 
       // If person is on vacation that day
-      if(_.some(vacations, {person})) totalDutyQuantity--;
+      console.log({person})
+      console.log(vacations)
+      if(_.some(vacations, {person})) {
+        console.log(person + ' is on vacation');
+        totalDutyQuantity--;
+      }
     }
 
-    if(totalDutyQuantity < position.totalQuantity)
-      problem[position.position] = {total: `Total quantity less than ${position.totalQuantity}`}
+    if(totalDutyQuantity < totalQuantity){
+      problem[position] = {
+        total: `Total quantity ${totalDutyQuantity} less than threshold ${totalQuantity}`
+      }
+    }
   }
 
   return problem;

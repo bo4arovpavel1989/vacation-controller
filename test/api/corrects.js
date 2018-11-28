@@ -23,9 +23,9 @@ module.exports.shiftsFromDb = [
 ];
 
 module.exports.guardList = [
-	
+	{person:'Abraham'}, {person:'Bob'}, {person:'Diego'}, {person:'Elm'} 
 ];
 
 module.exports.medicList = [
-
+	{person:'Adam'}, {person:'Bill'}, {person:'Cortes'}
 ];
