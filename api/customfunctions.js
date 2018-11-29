@@ -342,6 +342,7 @@ const checkIfPersonOnVacation = function(person, date) {
       if(dutyPersons[position.position].length < position.shiftQuantity){
         problem.shift = new Set();
 
+        //
         dutyPersons[position.position].forEach(person=>{
             problem.shift.add(person.shift)
         })
