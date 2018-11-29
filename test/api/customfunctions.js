@@ -149,9 +149,7 @@ describe('checkTotalPositionsQuantity', ()=>{
 			.withArgs('Person', {position:'Medic'}).resolves(medicList);
 			
 		return checkTotalPositionsQuantity(calendarDate, positions).then(result=>{
-			expect(result).to.deep.equal({
-				'Medic': {total:'Total quantity 2 less than threshold 3'}
-			});
+			expect(result).to.deep.equal(['Medic']);
 		});	
 	});
 });
