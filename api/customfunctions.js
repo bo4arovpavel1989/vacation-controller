@@ -245,8 +245,10 @@ const checkTotalPositionsQuantity = async function(calendarDate, positions){
 
   for (let i = 0; i < positions.length; i++){
     let {position} = positions[i];
+    // Minimum employes if the position quantity threshold
     let {totalQuantity} = positions[i];
     let allPersonsOfPosition = await db.find('Person', {position});
+    // Actual total quantity
     let totalDutyQuantity = allPersonsOfPosition.length;
 
     for (let j = 0; j < allPersonsOfPosition.length; j++){
@@ -284,78 +286,120 @@ const checkIfPersonOnVacation = function(person, date) {
   })
 };
 
+/**
+ * Function arrange all employes by theri shifts
+ * @returns {Object} - objects of shifts, containing array of perons {shift:Array, shift:Array}
+ */
+const getPersonsByShift = async function(){
+  let allShifts = await db.find('Shift'),
+    personsByShift = {};
+
+  for(let i = 0; i < allShifts.length; i++){
+    let {shift} = allShifts[i],
+      persons = await db.find('Person', {shift});
+
+    personsByShift[shift] = persons;
+  }
+
+  return personsByShift;
+}
+
+module.exports.getPersonsByShift = getPersonsByShift;
+
+/**
+ * Function gets persons that are on duty today
+ * @param {Object} personsByShift - list of employes by their shift
+ * @param {Date} date - date of duty
+ * @param {Array} positions - array of positions to check
+ * @returns {Object} - object containing persons on duty that day
+ */
+const getDutyPersons = async function(personsByShift, date, positions){
+  let dutyPersons = {},
+    // Shifts that are on duty exactly that day
+    shifts = await getShiftOnDuty(date);
+
+  positions.forEach(position=>{
+   dutyPersons[position.position] = [];
+  });
+
+  for (let j = 0; j < shifts.length; j++){
+    let {shift} = shifts[j],
+      persons = personsByShift[shift];
+
+      for(let k = 0; k < persons.length; k++){
+        let person = persons[k],
+          isOnVacation = await checkIfPersonOnVacation(person.person, date);
+
+        if(!isOnVacation) dutyPersons[person.position].push(person);
+      }
+  }
+
+  return dutyPersons;
+};
+
+module.exports.getDutyPersons = getDutyPersons;
+
+/**
+ * Function checks if duty persons quantity is more than threshold
+ * otherwise it pushes this position to problem array
+ * @param {Object} dutyPersons - list of employes by their positions
+ * @param {Array} positions - array of positions to check
+ * @returns {Object} - object containing positions with not enough persons if any
+ */
+const checkShiftPositionQuantity = function(dutyPersons, positions){
+  let shiftProblem = {
+    position:[]
+  };
+
+  positions.forEach(position=>{
+    if(dutyPersons[position.position].length < position.shiftQuantity){
+      // Shifts that have problems
+      shiftProblem.shift = new Set();
+
+      dutyPersons[position.position].forEach(person=>{
+          shiftProblem.shift.add(person.shift)
+      })
+
+      shiftProblem.position.push(position.position);
+    }
+  });
+
+  return shiftProblem;
+};
+
+module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
 
 /**
  * Function loops trought vacationCalendar to check every day
  * for people who are in vacation or in duty
  * @param {Array} vacationCalendar - array of dates, when at least 1 employe is at vacation
  * @param {Array} positions - array of positions to check
- * @returns {Array} - array of dates with wrong vacations
+ * @returns {Array} - array of dates with problem vacations
  */
  module.exports.checkVacationCalendar = async function(vacationCalendar, positions){
-   let allShifts, shifts, day, dutyPersons, personsByShift, problemsCalendar;
-
-   problemsCalendar = [];
-   personsByShift = {};
-   allShifts = await db.find('Shift');
-
-   for(let i = 0; i < allShifts.length; i++){
-     let shift = allShifts[i].shift;
-     let persons = await db.find('Person', {shift});
-
-     personsByShift[shift] = persons;
-   }
+  let personsByShift = getPersonsByShift(),
+    problemsCalendar = [];
 
    for (let i = 0; i < vacationCalendar.length; i++) {
-     let problem = {
-       totalProblem:[],
-       shiftProblem:[],
-       shift:[],
-       date:vacationCalendar[i].date
-     };
+    let problem = {
+           totalProblem:[],
+           shiftProblem:[],
+           date:vacationCalendar[i].date
+         },
+      dutyPersons = await getDutyPersons(personsByShift, problem.date, positions);
 
-     dutyPersons = {};
-     day = vacationCalendar[i].date;
-     // Shifts that are on duty exactly that day
-     shifts = await getShiftOnDuty(day);
+    // Check positions in all shifts
+    problem.totalProblem = await checkTotalPositionsQuantity(vacationCalendar[i], positions);
 
-     // Check positions in all shifts
-     problem.totalProblem = await checkTotalPositionsQuantity(vacationCalendar[i], positions)
-
-     positions.forEach(position=>{
-       dutyPersons[position.position] = [];
-     });
-
-    for (let j = 0; j < shifts.length; j++){
-      let {shift} = shifts[j],
-        persons = personsByShift[shift];
-
-        for(let k = 0; k < persons.length; k++){
-          let person = persons[k],
-            isOnVacation = await checkIfPersonOnVacation(person.person, day);
-
-          if(!isOnVacation) dutyPersons[person.position].push(person);
-        }
-    }
-
-    positions.forEach(position=>{
-      if(dutyPersons[position.position].length < position.shiftQuantity){
-        problem.shift = new Set();
-
-        //
-        dutyPersons[position.position].forEach(person=>{
-            problem.shift.add(person.shift)
-        })
-
-        problem.shiftProblem.push(position.position);
-      }
-    });
+    // Check position in shifts in duty that day
+    problem.shiftProblem = checkShiftPositionQuantity(dutyPersons, positions);
 
     if(problem.totalProblem.length > 0 || problem.shiftProblem.length > 0){
       problemsCalendar.push(problem)
     }
    }
 
-   console.log(problemsCalendar)
+   console.log(problemsCalendar);
+
    return problemsCalendar;
  };

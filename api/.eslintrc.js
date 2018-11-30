@@ -210,7 +210,7 @@ module.exports = {
         "padded-blocks": "off",
         "padding-line-between-statements": "error",
         "prefer-arrow-callback": "error",
-        "prefer-const": "error",
+        "prefer-const": "off",
         "prefer-destructuring": "error",
         "prefer-numeric-literals": "error",
         "prefer-promise-reject-errors": "error",
@@ -235,7 +235,7 @@ module.exports = {
         ],
         "sort-imports": "off",
         "sort-keys": "off",
-        "sort-vars": "error",
+        "sort-vars": "off",
         "space-before-blocks": "off",
         "space-before-function-paren": "off",
         "space-in-parens": [
