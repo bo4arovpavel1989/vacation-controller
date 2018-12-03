@@ -303,7 +303,7 @@ const getPersonsByShift = async function(){
 
     personsByShift[shift] = persons;
   }
-  
+
   return personsByShift;
 }
 
@@ -380,7 +380,7 @@ module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
  * @returns {Array} - array of dates with problem vacations
  */
  module.exports.checkVacationCalendar = async function(vacationCalendar, positions){
-  let personsByShift = getPersonsByShift(),
+  let personsByShift = await getPersonsByShift(),
     problemsCalendar = [];
 
    for (let i = 0; i < vacationCalendar.length; i++) {
