@@ -15,12 +15,14 @@ beforeEach(()=>{
 	spyFind = sinon.stub(db, 'find');
 	spyFindOne = sinon.stub(db, "findOne");
 	spyUpdate = sinon.stub(db, "update");
+	spyCount = sinon.stub(db, 'count');
 });
 
 afterEach(()=>{
     spyFind.restore();
     spyFindOne.restore();
     spyUpdate.restore();
+    spyCount.restore();
 });
     
 describe('calculateVacationEnd', ()=>{
@@ -151,5 +153,42 @@ describe('checkTotalPositionsQuantity', ()=>{
 		return checkTotalPositionsQuantity(calendarDate, positions).then(result=>{
 			expect(result).to.deep.equal(['Medic']);
 		});	
+	});
+});
+ 
+describe('checkIfPersonOnVacation', ()=>{		
+	it('Returns true if person is on vacation', ()=>{
+		const person = 'John',
+			date = '2019-02-01',
+			{checkIfPersonOnVacation} = customFunctions;
+			
+		spyCount.resolves(1);
+		
+		return checkIfPersonOnVacation(person, date).then(result=>{
+			expect(spyCount).to.have.been.calledWith('Vacation', {person, dateFrom:{$lte:date}, dateTo:{$gt: date}});
+			expect(result).to.equal(true);
+		});
+	});
+});
+
+describe('getPersonsByShift', ()=>{		
+	it('Returns object of employes by their shifts', ()=>{
+		const {getPersonsByShift} = customFunctions;
+		
+		spyFind
+			.withArgs('Shift').resolves([{shift:'s1'},{shift:'s2'},{shift:'s3'}])
+			.withArgs('Person', {shift:'s1'}).resolves([{person:'Abraham'}, {person:'Bill'}])
+			.withArgs('Person', {shift:'s2'}).resolves([{person:'Adam'}, {person:'Bob'}])
+			.withArgs('Person', {shift:'s3'}).resolves([{person:'Alex'}, {person:'Betty'}]);
+			
+		
+		return getPersonsByShift().then(result=>{
+			expect(result).to.eql({
+				s1:[{person:'Abraham'}, {person:'Bill'}],
+				s2:[{person:'Adam'}, {person:'Bob'}],
+				s3:[{person:'Alex'}, {person:'Betty'}]
+			});	
+		});
+		
 	});
 });

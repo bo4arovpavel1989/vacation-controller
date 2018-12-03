@@ -278,16 +278,19 @@ module.exports.checkTotalPositionsQuantity = checkTotalPositionsQuantity;
  */
 const checkIfPersonOnVacation = function(person, date) {
   return new Promise((resolve, reject)=>{
-    db.find('Vacation', {person, dateFrom:{$lte:date}, dateTo:{$gt: date}})
+    db.count('Vacation', {person, dateFrom:{$lte:date}, dateTo:{$gt: date}})
       .then(rep=>{
-        resolve(rep.length > 0)
+        resolve(rep > 0);
       })
       .catch(err=>reject(err))
   })
 };
 
+module.exports.checkIfPersonOnVacation = checkIfPersonOnVacation;
+
 /**
  * Function arrange all employes by theri shifts
+ * goal is to avoid too many data base requests
  * @returns {Object} - objects of shifts, containing array of perons {shift:Array, shift:Array}
  */
 const getPersonsByShift = async function(){
@@ -300,7 +303,7 @@ const getPersonsByShift = async function(){
 
     personsByShift[shift] = persons;
   }
-
+  
   return personsByShift;
 }
 
