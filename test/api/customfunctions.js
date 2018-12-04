@@ -135,15 +135,10 @@ describe('getShiftOnDuty', ()=>{
 describe('checkTotalPositionsQuantity', ()=>{		
 	it('Check if there are enought (at least threshold) of employes of each position', ()=>{
 		const calendarDate = {date:'2019-01-01', vacations:[
-				{person:'Abraham', dateFrom:'2018-12-01', dateTo:'2019-01-15'}, 
-				{person:'Bob', dateFrom:'2018-12-15', dateTo:'2019-01-15'}, 
-				{person:'Cortes', dateFrom:'2018-12-15', dateTo:'2019-01-02'}
+				{person:'Carl1', dateFrom:'2018-12-01', dateTo:'2019-01-15'}, 
+				{person:'Carl2', dateFrom:'2018-12-15', dateTo:'2019-01-15'}
 			]},
-			positions = [
-				{position:'Guard', totalQuantity:2},
-				{position:'Medic', totalQuantity:3}
-			],
-			{guardList, medicList} = corrects,
+			{guardList, medicList, positions} = corrects,
 			{checkTotalPositionsQuantity} = customFunctions;	
 			
 		spyFind
@@ -151,7 +146,8 @@ describe('checkTotalPositionsQuantity', ()=>{
 			.withArgs('Person', {position:'Medic'}).resolves(medicList);
 			
 		return checkTotalPositionsQuantity(calendarDate, positions).then(result=>{
-			expect(result).to.deep.equal(['Medic']);
+			// We assume that there are not enought of Guards
+			expect(result).to.deep.equal(['Guard']);
 		});	
 	});
 });
@@ -159,7 +155,7 @@ describe('checkTotalPositionsQuantity', ()=>{
 describe('checkIfPersonOnVacation', ()=>{		
 	it('Returns true if person is on vacation', ()=>{
 		const person = 'John',
-			date = '2019-02-01',
+			date = '2019-01-01',
 			{checkIfPersonOnVacation} = customFunctions;
 			
 		spyCount.resolves(1);
@@ -173,21 +169,19 @@ describe('checkIfPersonOnVacation', ()=>{
 
 describe('getPersonsByShift', ()=>{		
 	it('Returns object of employes by their shifts', ()=>{
-		const {getPersonsByShift} = customFunctions;
+		const {getPersonsByShift} = customFunctions,
+			{shiftsFromDb} = corrects,
+			{personsByShift} = corrects;
 		
 		spyFind
-			.withArgs('Shift').resolves([{shift:'s1'},{shift:'s2'},{shift:'s3'}])
-			.withArgs('Person', {shift:'s1'}).resolves([{person:'Abraham'}, {person:'Bill'}])
-			.withArgs('Person', {shift:'s2'}).resolves([{person:'Adam'}, {person:'Bob'}])
-			.withArgs('Person', {shift:'s3'}).resolves([{person:'Alex'}, {person:'Betty'}]);
+			.withArgs('Shift').resolves(shiftsFromDb);
 			
+		for (let shift in personsByShift){
+			spyFind.withArgs('Person',{shift}).resolves(personsByShift[shift])
+		}			
 		
 		return getPersonsByShift().then(result=>{
-			expect(result).to.eql({
-				s1:[{person:'Abraham'}, {person:'Bill'}],
-				s2:[{person:'Adam'}, {person:'Bob'}],
-				s3:[{person:'Alex'}, {person:'Betty'}]
-			});	
+			expect(result).to.eql(personsByShift);	
 		});
 		
 	});
@@ -203,13 +197,22 @@ describe('getDutyPersons', ()=>{
 		
 		spyFind.resolves(shiftsFromDb);
 		
-		spyCount
-			.withArgs('Vacation', sinon.match({person:'Adam4'})).resolves(1)
-			.withArgs('Vacation', sinon.match({person:'Bob4'})).resolves(0) 
-			.withArgs('Vacation', sinon.match({person:'Adam6'})).resolves(0)
-			.withArgs('Vacation', sinon.match({person:'Bob6'})).resolves(0) 
-			.withArgs('Vacation', sinon.match({person:'Carl4'})).resolves(0) 
-			.withArgs('Vacation', sinon.match({person:'Carl6'})).resolves(0);  
+		personsByShift['Суточная 4'].forEach(personObject=>{
+			let {person} = personObject;
+			let resolver;
+			
+			// We assume that Adam4 is on vacation that day
+			if(person === 'Adam4') resolver = 1
+			else resolver = 0;
+				
+			spyCount.withArgs('Vacation', sinon.match({person})).resolves(resolver);
+		});
+		
+		personsByShift['Оперативная 2'].forEach(personObject=>{
+			let {person} = personObject;
+			// We assume that there is nobody at vacation on the shift
+			spyCount.withArgs('Vacation', sinon.match({person})).resolves(0);
+		}); 
 			
 		return 	getDutyPersons(personsByShift, date, positions).then(result=>{
 			expect(result).to.deep.equal({

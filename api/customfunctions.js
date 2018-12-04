@@ -336,7 +336,7 @@ const getDutyPersons = async function(personsByShift, date, positions){
         if(!isOnVacation) dutyPersons[person.position].push(person);
       }
   }
-  console.log(dutyPersons)
+  
   return dutyPersons;
 };
 
