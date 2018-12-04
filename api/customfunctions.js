@@ -291,7 +291,7 @@ module.exports.checkIfPersonOnVacation = checkIfPersonOnVacation;
 /**
  * Function arrange all employes by theri shifts
  * goal is to avoid too many data base requests
- * @returns {Object} - objects of shifts, containing array of perons {shift:Array, shift:Array}
+ * @returns {Promise} - objects of shifts, containing array of perons {shift:Array, shift:Array}
  */
 const getPersonsByShift = async function(){
   let allShifts = await db.find('Shift'),
@@ -314,7 +314,7 @@ module.exports.getPersonsByShift = getPersonsByShift;
  * @param {Object} personsByShift - list of employes by their shift
  * @param {Date} date - date of duty
  * @param {Array} positions - array of positions to check
- * @returns {Object} - object containing persons on duty that day
+ * @returns {Promise} - object containing persons on duty that day {position:[person]}
  */
 const getDutyPersons = async function(personsByShift, date, positions){
   let dutyPersons = {},
@@ -336,7 +336,7 @@ const getDutyPersons = async function(personsByShift, date, positions){
         if(!isOnVacation) dutyPersons[person.position].push(person);
       }
   }
-
+  console.log(dutyPersons)
   return dutyPersons;
 };
 
@@ -377,7 +377,7 @@ module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
  * for people who are in vacation or in duty
  * @param {Array} vacationCalendar - array of dates, when at least 1 employe is at vacation
  * @param {Array} positions - array of positions to check
- * @returns {Array} - array of dates with problem vacations
+ * @returns {Promise} - array of dates with problem vacations
  */
  module.exports.checkVacationCalendar = async function(vacationCalendar, positions){
   let personsByShift = await getPersonsByShift(),

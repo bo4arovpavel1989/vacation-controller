@@ -29,3 +29,35 @@ module.exports.guardList = [
 module.exports.medicList = [
 	{person:'Adam'}, {person:'Bill'}, {person:'Cortes'}
 ];
+
+module.exports.positions = [
+	{position:'Medic', totalQuantity:2,shiftQuantity:1},
+	{position:'Guard', totalQuantity:2,shiftQuantity:1}
+]
+
+module.exports.personsByShift = {
+	'Суточная 1': [{person:'Adam1',position:'Medic',shift:'Суточная 1'},
+		{person:'Bob1',position:'Medic',shift:'Суточная 1'},
+		{person:'Carl1',position:'Guard',shift:'Суточная 1'}
+	],
+	'Суточная 2': [{person:'Adam2',position:'Medic',shift:'Суточная 2'},
+		{person:'Bob2',position:'Medic',shift:'Суточная 2'},
+		{person:'Carl2',position:'Guard',shift:'Суточная 2'}
+	],
+	'Суточная 3': [{person:'Adam3',position:'Medic',shift:'Суточная 3'},
+		{person:'Bob3',position:'Medic',shift:'Суточная 3'},
+		{person:'Carl3',position:'Guard',shift:'Суточная 3'}
+	],
+	'Суточная 4': [{person:'Adam4',position:'Medic',shift:'Суточная 4'},
+		{person:'Bob4',position:'Medic',shift:'Суточная 4'},
+		{person:'Carl4',position:'Guard',shift:'Суточная 4'}
+	],
+	'Оперативная 1': [{person:'Adam5',position:'Medic',shift:'Оперативная 1'},
+		{person:'Bob5',position:'Medic',shift:'Оперативная 1'},
+		{person:'Carl5',position:'Guard',shift:'Оперативная 1'}
+	],
+	'Оперативная 2': [{person:'Adam6',position:'Medic',shift:'Оперативная 2'},
+		{person:'Bob6',position:'Medic',shift:'Оперативная 2'},
+		{person:'Carl6',position:'Guard',shift:'Оперативная 2'}
+	],
+};

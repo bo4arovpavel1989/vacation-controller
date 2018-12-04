@@ -120,7 +120,7 @@ describe('getShiftOnDuty', ()=>{
 			{shiftsFromDb} = corrects,
 			{getShiftOnDuty} = customFunctions;
 		
-		spyFind.resolves(shiftsFromDb)
+		spyFind.resolves(shiftsFromDb);
 	
 		return getShiftOnDuty('2019-01-01').then(result=>{
 			expect(result).to.deep.equal([
@@ -190,5 +190,39 @@ describe('getPersonsByShift', ()=>{
 			});	
 		});
 		
+	});
+});
+
+describe('getDutyPersons', ()=>{		
+	it('Returns object with persons on duty by their positions', ()=>{
+		const {personsByShift} = corrects,
+			{getDutyPersons} = customFunctions,
+			{shiftsFromDb} = corrects,
+			{positions} = corrects,
+			date = '2019-01-01';
+		
+		spyFind.resolves(shiftsFromDb);
+		
+		spyCount
+			.withArgs('Vacation', sinon.match({person:'Adam4'})).resolves(1)
+			.withArgs('Vacation', sinon.match({person:'Bob4'})).resolves(0) 
+			.withArgs('Vacation', sinon.match({person:'Adam6'})).resolves(0)
+			.withArgs('Vacation', sinon.match({person:'Bob6'})).resolves(0) 
+			.withArgs('Vacation', sinon.match({person:'Carl4'})).resolves(0) 
+			.withArgs('Vacation', sinon.match({person:'Carl6'})).resolves(0);  
+			
+		return 	getDutyPersons(personsByShift, date, positions).then(result=>{
+			expect(result).to.deep.equal({
+				Medic:[
+					{person:'Bob4',position:'Medic',shift:'Суточная 4'},
+					{person:'Adam6',position:'Medic',shift:'Оперативная 2'},
+					{person:'Bob6',position:'Medic',shift:'Оперативная 2'}
+				],
+				Guard:[
+					{person:'Carl4',position:'Guard',shift:'Суточная 4'},
+					{person:'Carl6',position:'Guard',shift:'Оперативная 2'}
+				]
+			});
+		})
 	});
 });
