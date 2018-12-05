@@ -291,7 +291,7 @@ module.exports.checkIfPersonOnVacation = checkIfPersonOnVacation;
 /**
  * Function arrange all employes by theri shifts
  * goal is to avoid too many data base requests
- * @returns {Promise} - objects of shifts, containing array of perons {shift:Array, shift:Array}
+ * @returns {Promise} - objects of shifts, containing array of perons {shift1:Array, shift2:Array}
  */
 const getPersonsByShift = async function(){
   let allShifts = await db.find('Shift'),
@@ -314,7 +314,7 @@ module.exports.getPersonsByShift = getPersonsByShift;
  * @param {Object} personsByShift - list of employes by their shift
  * @param {Date} date - date of duty
  * @param {Array} positions - array of positions to check
- * @returns {Promise} - object containing persons on duty that day {position:Array}
+ * @returns {Promise} - object containing persons on duty that day {position1:Array, position2:Array}
  */
 const getDutyPersons = async function(personsByShift, date, positions){
   let dutyPersons = {},
