@@ -114,6 +114,42 @@ describe('editAllEmbeddedDocs', ()=>{
 });
 
  
+describe('getVacationCalendar', ()=>{	
+	before(){
+		spyDateNow = sinon.stub(Date, 'now');
+	}
+	
+	after(){
+		spyDateNow.restore();
+	}
+	
+	it('Should get array of dates with vacations', ()=>{
+		const {getVacationCalendar} = customFunctions;
+		const {vacationCalendar} = corrects;
+		const dateTo = '2019-01-10';
+		const dateFrom = '2019-01-01';
+		const day = 24 * 60 * 60 * 1000;
+		
+		spyDateNow.returns(Date.parse(dateFrom));
+		
+		let currentDate = Date.parse(dateFrom);
+		
+		while(currentDate < dateToParsed) {
+			if(currentDate === Date.parse(dateFrom))
+				spyFind('Vacation', {dateFrom: {$lte: currentDate}, dateTo: {$gt: currentDate}}).resolves(vacations);
+			else
+				spyFind('Vacation', {dateFrom: {$lte: currentDate}, dateTo: {$gt: currentDate}}).resolves([]);
+			
+			currentDate += day;
+		}
+		
+		return getVacationCalendar(dateTo).then(result=>{
+			expect(result).to.deep.equal(vacationCalendar)
+		});
+		
+	});
+});
+ 
 describe('getShiftOnDuty', ()=>{	
 	it('Should get dutyshift for certain day', ()=>{
 		const day = '2019-01-01',
@@ -230,5 +266,11 @@ describe('checkShiftPositionQuantity', ()=>{
 			result = checkShiftPositionQuantity(dutyPersons, positions);
 		
 		expect(result).to.deep.equal(shiftProblem);	
+	});
+});
+
+describe('checkVacationCalendar', ()=>{		
+	it('Returns problem calendar from vacationCalendar', ()=>{
+		
 	});
 });
