@@ -193,6 +193,7 @@ describe('getDutyPersons', ()=>{
 			{getDutyPersons} = customFunctions,
 			{shiftsFromDb} = corrects,
 			{positions} = corrects,
+			{dutyPersons} = corrects,
 			date = '2019-01-01';
 		
 		spyFind.resolves(shiftsFromDb);
@@ -215,17 +216,19 @@ describe('getDutyPersons', ()=>{
 		}); 
 			
 		return 	getDutyPersons(personsByShift, date, positions).then(result=>{
-			expect(result).to.deep.equal({
-				Medic:[
-					{person:'Bob4',position:'Medic',shift:'Суточная 4'},
-					{person:'Adam6',position:'Medic',shift:'Оперативная 2'},
-					{person:'Bob6',position:'Medic',shift:'Оперативная 2'}
-				],
-				Guard:[
-					{person:'Carl4',position:'Guard',shift:'Суточная 4'},
-					{person:'Carl6',position:'Guard',shift:'Оперативная 2'}
-				]
-			});
+			expect(result).to.deep.equal(dutyPersons);
 		})
+	});
+});
+
+describe('checkShiftPositionQuantity', ()=>{		
+	it('Returns object with persons on duty by their positions', ()=>{
+		const {dutyPersons} = corrects,
+			{positions} = corrects,
+			{shiftProblem} = corrects,
+			{checkShiftPositionQuantity} = customFunctions,
+			result = checkShiftPositionQuantity(dutyPersons, positions);
+		
+		expect(result).to.deep.equal(shiftProblem);	
 	});
 });

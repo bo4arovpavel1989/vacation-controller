@@ -314,7 +314,7 @@ module.exports.getPersonsByShift = getPersonsByShift;
  * @param {Object} personsByShift - list of employes by their shift
  * @param {Date} date - date of duty
  * @param {Array} positions - array of positions to check
- * @returns {Promise} - object containing persons on duty that day {position:[person]}
+ * @returns {Promise} - object containing persons on duty that day {position:Array}
  */
 const getDutyPersons = async function(personsByShift, date, positions){
   let dutyPersons = {},
@@ -336,7 +336,7 @@ const getDutyPersons = async function(personsByShift, date, positions){
         if(!isOnVacation) dutyPersons[person.position].push(person);
       }
   }
-  
+
   return dutyPersons;
 };
 
@@ -347,25 +347,31 @@ module.exports.getDutyPersons = getDutyPersons;
  * otherwise it pushes this position to problem array
  * @param {Object} dutyPersons - list of employes by their positions
  * @param {Array} positions - array of positions to check
- * @returns {Object} - object containing positions with not enough persons if any
+ * @returns {Array} - array of objects [{shift:Array, position:String}]
+ * containing positions with not enough persons if any
  */
 const checkShiftPositionQuantity = function(dutyPersons, positions){
-  let shiftProblem = {
-    position:[]
-  };
+  let shiftProblem = [];
 
-  positions.forEach(position=>{
-    if(dutyPersons[position.position].length < position.shiftQuantity){
-      // Shifts that have problems
-      shiftProblem.shift = new Set();
+  positions.forEach(positionObject=>{
+    let {position} = positionObject;
 
-      dutyPersons[position.position].forEach(person=>{
-          shiftProblem.shift.add(person.shift)
+    if(dutyPersons[position].length < positionObject.shiftQuantity){
+      let problem = {position};
+
+        // Shifts that have problems
+      problem.shift = new Set();
+
+      dutyPersons[position].forEach(person=>{
+          problem.shift.add(person.shift)
       })
 
-      shiftProblem.position.push(position.position);
+      problem.shift = Array.from(problem.shift);
+
+      shiftProblem.push(problem);
     }
   });
+
 
   return shiftProblem;
 };

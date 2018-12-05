@@ -48,8 +48,8 @@ module.exports.medicList = [
 ];
 
 module.exports.positions = [
-	{position:'Medic', totalQuantity:8,shiftQuantity:1},
-	{position:'Guard', totalQuantity:6,shiftQuantity:1}
+	{position:'Medic', totalQuantity:8,shiftQuantity:3},
+	{position:'Guard', totalQuantity:6,shiftQuantity:3}
 ]
 
 module.exports.personsByShift = {
@@ -78,3 +78,20 @@ module.exports.personsByShift = {
 		{person:'Carl6',position:'Guard',shift:'Оперативная 2'}
 	],
 };
+
+module.exports.dutyPersons = {
+				Medic:[
+					{person:'Bob4',position:'Medic',shift:'Суточная 4'},
+					{person:'Adam6',position:'Medic',shift:'Оперативная 2'},
+					{person:'Bob6',position:'Medic',shift:'Оперативная 2'}
+				],
+				Guard:[
+					{person:'Carl4',position:'Guard',shift:'Суточная 4'},
+					{person:'Carl6',position:'Guard',shift:'Оперативная 2'}
+				]
+			};
+			
+module.exports.shiftProblem = [{
+	shift:['Суточная 4', 'Оперативная 2'],
+	position:'Guard'
+}];			
