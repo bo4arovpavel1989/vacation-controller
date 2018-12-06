@@ -199,35 +199,29 @@ module.exports.getVacationCalendar = async function(dateTo){
 /**
  * Function gets shifts that in duty this day
  * @param {Date} day - date to check for
+ * @param {Array} allShifts - array of shifts ibjects from db
  * @returns {Array} - array of duty shifts
  */
-const getShiftOnDuty = function(day){
+const getShiftOnDuty = function(day, allShifts){
   let dutyShifts = [];
 
-  return new Promise((resolve, reject)=>{
-    db.find('Shift')
-      .then(shifts=>{
-        shifts.forEach(shift=>{
-          let {off, duty} = shift,
-            dutyDate = Date.parse(shift.dutyDate),
-            currentDate = Date.parse(day),
-            oneDay = 24 * 60 * 60 * 1000,
-            // Date, when duty ends
-            dutyDateEnd = dutyDate + (duty * oneDay);
+  allShifts.forEach(shift=>{
+    let {off, duty} = shift,
+      dutyDate = Date.parse(shift.dutyDate),
+      currentDate = Date.parse(day),
+      oneDay = 24 * 60 * 60 * 1000,
+      // Date, when duty ends
+      dutyDateEnd = dutyDate + (duty * oneDay);
 
-          while (dutyDate <= currentDate) {
+    while (dutyDate <= currentDate) {
+      if(dutyDate <= currentDate && dutyDateEnd > currentDate) dutyShifts.push(shift)
+          dutyDate = dutyDateEnd + oneDay * off;
+          dutyDateEnd = dutyDate + (duty * oneDay)
+      }
 
-            if(dutyDate <= currentDate && dutyDateEnd > currentDate) dutyShifts.push(shift)
+    });
 
-            dutyDate = dutyDateEnd + oneDay * off;
-            dutyDateEnd = dutyDate + (duty * oneDay)
-          }
-
-        });
-
-        resolve(dutyShifts);
-      })
-  });
+    return dutyShifts;
 }
 
 module.exports.getShiftOnDuty = getShiftOnDuty;
@@ -273,17 +267,11 @@ module.exports.checkTotalPositionsQuantity = checkTotalPositionsQuantity;
 /**
  * Function checks of person is on vacation this day
  * @param {String} person - name of person
- * @param {Date} date - date to check
- * @returns {Promise} - boolean represents if is on vacation
+ * @param {Object} vacationDate - object containing vacation date and array of vacations
+ * @returns {Boolean} - boolean represents if is on vacation
  */
-const checkIfPersonOnVacation = function(person, date) {
-  return new Promise((resolve, reject)=>{
-    db.count('Vacation', {person, dateFrom:{$lte:date}, dateTo:{$gt: date}})
-      .then(rep=>{
-        resolve(rep > 0);
-      })
-      .catch(err=>reject(err))
-  })
+const checkIfPersonOnVacation = function(person, vacationDate) {
+  return _.some(vacationDate.vacations, {person})
 };
 
 module.exports.checkIfPersonOnVacation = checkIfPersonOnVacation;
@@ -291,11 +279,11 @@ module.exports.checkIfPersonOnVacation = checkIfPersonOnVacation;
 /**
  * Function arrange all employes by theri shifts
  * goal is to avoid too many data base requests
+ * @param {Array} allShifts - array of shifts [{shift, duty, off, dutyDate}]
  * @returns {Promise} - objects of shifts, containing array of perons {shift1:Array, shift2:Array}
  */
-const getPersonsByShift = async function(){
-  let allShifts = await db.find('Shift'),
-    personsByShift = {};
+const getPersonsByShift = async function(allShifts){
+  let personsByShift = {};
 
   for(let i = 0; i < allShifts.length; i++){
     let {shift} = allShifts[i],
@@ -312,14 +300,15 @@ module.exports.getPersonsByShift = getPersonsByShift;
 /**
  * Function gets persons that are on duty today
  * @param {Object} personsByShift - list of employes by their shift
- * @param {Date} date - date of duty
+ * @param {Object} vacationDate -  - object containing vacation date and array of vacations
+ * @param {Array} allShifts - array of all shifts objects from db
  * @param {Array} positions - array of positions to check
  * @returns {Promise} - object containing persons on duty that day {position1:Array, position2:Array}
  */
-const getDutyPersons = async function(personsByShift, date, positions){
+const getDutyPersons = async function(personsByShift, vacationDate, allShifts, positions){
   let dutyPersons = {},
     // Shifts that are on duty exactly that day
-    shifts = await getShiftOnDuty(date);
+    shifts = await getShiftOnDuty(vacationDate.date,allShifts);
 
   positions.forEach(position=>{
    dutyPersons[position.position] = [];
@@ -331,7 +320,7 @@ const getDutyPersons = async function(personsByShift, date, positions){
 
       for(let k = 0; k < persons.length; k++){
         let person = persons[k],
-          isOnVacation = await checkIfPersonOnVacation(person.person, date);
+          isOnVacation = checkIfPersonOnVacation(person.person, vacationDate);
 
         if(!isOnVacation) dutyPersons[person.position].push(person);
       }
@@ -381,12 +370,13 @@ module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
 /**
  * Function loops trought vacationCalendar to check every day
  * for people who are in vacation or in duty
- * @param {Array} vacationCalendar - array of dates, when at least 1 employe is at vacation
+ * @param {Array} vacationCalendar - array of objects with date, when at least 1 employe is at vacation
  * @param {Array} positions - array of positions to check
  * @returns {Promise} - array of dates with problem vacations
  */
  module.exports.checkVacationCalendar = async function(vacationCalendar, positions){
-  let personsByShift = await getPersonsByShift(),
+  let allShifts = await db.find('Shift'),
+    personsByShift = await getPersonsByShift(allShifts),
     problemsCalendar = [];
 
    for (let i = 0; i < vacationCalendar.length; i++) {
@@ -395,7 +385,7 @@ module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
            shiftProblem:[],
            date:vacationCalendar[i].date
          },
-      dutyPersons = await getDutyPersons(personsByShift, problem.date, positions);
+      dutyPersons = await getDutyPersons(personsByShift, vacationCalendar[i], allShifts, positions);
 
     // Check positions in all shifts
     problem.totalProblem = await checkTotalPositionsQuantity(vacationCalendar[i], positions);

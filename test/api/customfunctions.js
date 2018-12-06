@@ -41,6 +41,23 @@ describe('calculateVacationEnd', ()=>{
 	});
 });
 
+describe('editAllEmbeddedDocs', ()=>{
+	it('Should make update query for Vacation doc when Person doc is edited', ()=>{
+		const {editReq} = corrects,
+			{editAllEmbeddedDocs} = customFunctions;
+
+		spyFindOne.resolves({person: 'personOld'});
+		spyUpdate.resolves(true);
+
+		return editAllEmbeddedDocs(editReq).then(result=>{
+			expect(result).to.equal(true);
+			expect(spyFindOne).to.have.been.calledWith('Person', {_id: 'id'});
+			expect(spyUpdate).to.have.been.calledWith('Vacation', {person: 'personOld'}, {$set: {person: 'personNew'}});
+		});
+
+	});
+});
+
 describe('getFullDates', ()=>{
 	it('Should calculate dates from and to', ()=>{
 		const body = {monthFrom:'12',yearFrom:'2018',monthTo:'02',yearTo:'2019'},
@@ -95,24 +112,6 @@ describe('getDatesQuery', ()=>{
 		])
 	});
 });
-
-describe('editAllEmbeddedDocs', ()=>{
-	it('Should make update query for Vacation doc when Person doc is edited', ()=>{
-		const {editReq} = corrects,
-			{editAllEmbeddedDocs} = customFunctions;
-
-		spyFindOne.resolves({person: 'personOld'});
-		spyUpdate.resolves(true);
-
-		return editAllEmbeddedDocs(editReq).then(result=>{
-			expect(result).to.equal(true);
-			expect(spyFindOne).to.have.been.calledWith('Person', {_id: 'id'});
-			expect(spyUpdate).to.have.been.calledWith('Vacation', {person: 'personOld'}, {$set: {person: 'personNew'}});
-		});
-
-	});
-});
-
 
 describe('getVacationCalendar', ()=>{
 	before(()=>{
@@ -193,15 +192,11 @@ describe('checkTotalPositionsQuantity', ()=>{
 describe('checkIfPersonOnVacation', ()=>{
 	it('Returns true if person is on vacation', ()=>{
 		const person = 'John',
-			date = '2019-01-01',
-			{checkIfPersonOnVacation} = customFunctions;
-
-		spyCount.resolves(1);
-
-		return checkIfPersonOnVacation(person, date).then(result=>{
-			expect(spyCount).to.have.been.calledWith('Vacation', {person, dateFrom:{$lte:date}, dateTo:{$gt: date}});
+			vacationDate = corrects.vacationCalendar[0],
+			{checkIfPersonOnVacation} = customFunctions,
+			result = checkIfPersonOnVacation(person, vacationDate);
+		
 			expect(result).to.equal(true);
-		});
 	});
 });
 
@@ -210,15 +205,12 @@ describe('getPersonsByShift', ()=>{
 		const {getPersonsByShift} = customFunctions,
 			{shiftsFromDb} = corrects,
 			{personsByShift} = corrects;
-
-		spyFind
-			.withArgs('Shift').resolves(shiftsFromDb);
-
+			
 		for (let shift in personsByShift){
 			spyFind.withArgs('Person',{shift}).resolves(personsByShift[shift])
 		}
 
-		return getPersonsByShift().then(result=>{
+		return getPersonsByShift(shiftsFromDb).then(result=>{
 			expect(result).to.eql(personsByShift);
 		});
 
@@ -273,6 +265,28 @@ describe('checkShiftPositionQuantity', ()=>{
 
 describe('checkVacationCalendar', ()=>{
 	it('Returns problem calendar from vacationCalendar', ()=>{
+		const {vacationCalendar} = corrects,
+			{positions} = corrects,
+			{checkVacationCalendar} = customFunctions
+			{shiftsFromDb} = corrects,
+			{personsByShift} = corrects;
+			
+		// Stubbing db queries in getPersonsByShift
+		spyFind
+			.withArgs('Shift').resolves(shiftsFromDb);
 
+		for (let shift in personsByShift){
+			spyFind.withArgs('Person',{shift}).resolves(personsByShift[shift])
+		}	
+		// Stubbed getPersonsByShift
+		
+		//Stubbing db queries in getDutyPersons
+		
+		// Stubbing db queries in getShiftOnDuty
+		 /*already stubbed in getPersonsByShift*/
+		// Stubbed getShiftOnDuty
+		
+		
+		// stubbed getDutyPersons
 	});
 });
