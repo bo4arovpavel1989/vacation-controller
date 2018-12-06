@@ -155,16 +155,13 @@ describe('getShiftOnDuty', ()=>{
 	it('Should get dutyshift for certain day', ()=>{
 		const day = '2019-01-01',
 			{shiftsFromDb} = corrects,
-			{getShiftOnDuty} = customFunctions;
+			{getShiftOnDuty} = customFunctions,
+			result = getShiftOnDuty(day, shiftsFromDb);
 
-		spyFind.resolves(shiftsFromDb);
-
-		return getShiftOnDuty('2019-01-01').then(result=>{
-			expect(result).to.deep.equal([
-				{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30'},
-				{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26'}
-			])
-		});
+		expect(result).to.deep.equal([
+			{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30'},
+			{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26'}
+		])
 	});
 });
 
@@ -191,12 +188,12 @@ describe('checkTotalPositionsQuantity', ()=>{
 
 describe('checkIfPersonOnVacation', ()=>{
 	it('Returns true if person is on vacation', ()=>{
-		const person = 'John',
+		const person = 'Adam4',
 			vacationDate = corrects.vacationCalendar[0],
 			{checkIfPersonOnVacation} = customFunctions,
 			result = checkIfPersonOnVacation(person, vacationDate);
 		
-			expect(result).to.equal(true);
+		expect(result).to.equal(true);
 	});
 });
 
@@ -220,34 +217,14 @@ describe('getPersonsByShift', ()=>{
 describe('getDutyPersons', ()=>{
 	it('Returns object with persons on duty by their positions', ()=>{
 		const {personsByShift} = corrects,
+			vacationDate = corrects.vacationCalendar[0],
 			{getDutyPersons} = customFunctions,
 			{shiftsFromDb} = corrects,
 			{positions} = corrects,
 			{dutyPersons} = corrects,
-			date = '2019-01-01';
+			result = getDutyPersons(personsByShift, vacationDate, shiftsFromDb, positions);
 
-		spyFind.resolves(shiftsFromDb);
-
-		personsByShift['Суточная 4'].forEach(personObject=>{
-			let {person} = personObject;
-			let resolver;
-
-			// We assume that Adam4 is on vacation that day
-			if(person === 'Adam4') resolver = 1
-			else resolver = 0;
-
-			spyCount.withArgs('Vacation', sinon.match({person})).resolves(resolver);
-		});
-
-		personsByShift['Оперативная 2'].forEach(personObject=>{
-			let {person} = personObject;
-			// We assume that there is nobody at vacation on the shift
-			spyCount.withArgs('Vacation', sinon.match({person})).resolves(0);
-		});
-
-		return 	getDutyPersons(personsByShift, date, positions).then(result=>{
-			expect(result).to.deep.equal(dutyPersons);
-		})
+		expect(result).to.deep.equal(dutyPersons);
 	});
 });
 
@@ -266,27 +243,28 @@ describe('checkShiftPositionQuantity', ()=>{
 describe('checkVacationCalendar', ()=>{
 	it('Returns problem calendar from vacationCalendar', ()=>{
 		const {vacationCalendar} = corrects,
-			{positions} = corrects,
-			{checkVacationCalendar} = customFunctions
+			{guardList, medicList, positions} = corrects,
+			{checkVacationCalendar} = customFunctions,
 			{shiftsFromDb} = corrects,
 			{personsByShift} = corrects;
 			
-		// Stubbing db queries in getPersonsByShift
 		spyFind
 			.withArgs('Shift').resolves(shiftsFromDb);
 
+		// Stubbing db queries in getPersonsByShift
 		for (let shift in personsByShift){
 			spyFind.withArgs('Person',{shift}).resolves(personsByShift[shift])
 		}	
 		// Stubbed getPersonsByShift
 		
-		//Stubbing db queries in getDutyPersons
-		
-		// Stubbing db queries in getShiftOnDuty
-		 /*already stubbed in getPersonsByShift*/
-		// Stubbed getShiftOnDuty
-		
-		
-		// stubbed getDutyPersons
+		// Stubbing db queries in checkTotalPositionsQuantity
+		spyFind
+			.withArgs('Person', {position:'Guard'}).resolves(guardList)
+			.withArgs('Person', {position:'Medic'}).resolves(medicList);
+		// Stubbed checkTotalPositionsQuantity
+			
+		return checkVacationCalendar(vacationCalendar, positions).then(result=>{
+			expect(result).to.deep.equal([]);
+		})
 	});
 });

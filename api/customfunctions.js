@@ -303,12 +303,12 @@ module.exports.getPersonsByShift = getPersonsByShift;
  * @param {Object} vacationDate -  - object containing vacation date and array of vacations
  * @param {Array} allShifts - array of all shifts objects from db
  * @param {Array} positions - array of positions to check
- * @returns {Promise} - object containing persons on duty that day {position1:Array, position2:Array}
+ * @returns {Object} - object containing persons on duty that day {position1:Array, position2:Array}
  */
-const getDutyPersons = async function(personsByShift, vacationDate, allShifts, positions){
+const getDutyPersons = function(personsByShift, vacationDate, allShifts, positions){
   let dutyPersons = {},
     // Shifts that are on duty exactly that day
-    shifts = await getShiftOnDuty(vacationDate.date,allShifts);
+    shifts = getShiftOnDuty(vacationDate.date, allShifts);
 
   positions.forEach(position=>{
    dutyPersons[position.position] = [];
@@ -385,7 +385,7 @@ module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
            shiftProblem:[],
            date:vacationCalendar[i].date
          },
-      dutyPersons = await getDutyPersons(personsByShift, vacationCalendar[i], allShifts, positions);
+      dutyPersons = getDutyPersons(personsByShift, vacationCalendar[i], allShifts, positions);
 
     // Check positions in all shifts
     problem.totalProblem = await checkTotalPositionsQuantity(vacationCalendar[i], positions);
