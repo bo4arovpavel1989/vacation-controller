@@ -243,7 +243,7 @@ describe('checkShiftPositionQuantity', ()=>{
 describe('checkVacationCalendar', ()=>{
 	it('Returns problem calendar from vacationCalendar', ()=>{
 		const {vacationCalendar} = corrects,
-			{guardList, medicList, positions} = corrects,
+			{guardList, medicList, positions, problemsCalendar} = corrects,
 			{checkVacationCalendar} = customFunctions,
 			{shiftsFromDb} = corrects,
 			{personsByShift} = corrects;
@@ -264,7 +264,7 @@ describe('checkVacationCalendar', ()=>{
 		// Stubbed checkTotalPositionsQuantity
 			
 		return checkVacationCalendar(vacationCalendar, positions).then(result=>{
-			expect(result).to.deep.equal([]);
+			expect(result).to.deep.equal(problemsCalendar);
 		})
 	});
 });

@@ -48,8 +48,8 @@ module.exports.medicList = [
 ];
 
 module.exports.positions = [
-	{position:'Medic', totalQuantity:8,shiftQuantity:3},
-	{position:'Guard', totalQuantity:6,shiftQuantity:3}
+	{position:'Medic', totalQuantity:8,shiftQuantity:4},
+	{position:'Guard', totalQuantity:6,shiftQuantity:2}
 ]
 
 module.exports.vacations = [
@@ -142,5 +142,30 @@ module.exports.dutyPersons = {
 
 module.exports.shiftProblem = [{
 	shift:['Суточная 4', 'Оперативная 2'],
-	position:'Guard'
+	position:'Medic'
 }];
+
+module.exports.problemsCalendar = [
+	{
+		date: new Date('2019-01-01'),
+		shiftProblem:[{
+			position:'Medic',
+			shift:[
+				'Суточная 4',
+				'Оперативная 2'
+			]
+		}],
+		totalProblem:[]
+	},
+	{
+		date: new Date('2019-01-05'),
+		shiftProblem:[{
+			position:'Medic',
+			shift:[
+				'Суточная 4',
+				'Оперативная 2'
+			]
+	}	],
+		totalProblem:[]
+	}
+];
