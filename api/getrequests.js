@@ -15,8 +15,8 @@ module.exports.getVacationHandout = function(req, res){
       .then(rep=>{
         if(rep.needToUpdate)
           return getNewProblemsCalendar()
-        else
-          return Promise.resolve(rep)
+
+        return Promise.resolve(rep)
       })
       .then(calendar=>res.json({calendar}))
       .catch(err=>res.status(500).json({err:err.message}))
