@@ -1,4 +1,4 @@
-const {calculateVacationEnd} = require('./customfunctions');
+const {prehandleVacation} = require('./customfunctions');
 
 
 module.exports.noMiddleware = function(req, res, next){
@@ -16,13 +16,17 @@ module.exports.noMiddleware = function(req, res, next){
 module.exports.preHandleAddObject = function(req, res, next){
   const {type} = req.params;
   const addHandlerMap = {
-    Vacation: r=>calculateVacationEnd(r)
+    Vacation: r=>prehandleVacation(r)
   }
 
   if(addHandlerMap[type]){
-		addHandlerMap[type](req) ?
-			next()	 :
-			res.status(500).json({err:'Error prehandling adding object'})
+		addHandlerMap[type](req)
+			.then(rep=>{
+				if(rep)
+					return next();
+
+				return	res.status(500).json({err:'Error prehandling adding object'});
+			});
 	} else {
 		next();
 	}

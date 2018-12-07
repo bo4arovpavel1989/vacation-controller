@@ -13,8 +13,10 @@ module.exports.getObject = function(req, res) {
 module.exports.getVacationHandout = function(req, res){
     db.findOne('ProblemsCalendar')
       .then(rep=>{
-        if(rep.needToUpdate)
+        if(!rep || rep.needToUpdate)
           return getNewProblemsCalendar()
+
+        console.log('Getting problemsCalendar from cache');
 
         return Promise.resolve(rep)
       })

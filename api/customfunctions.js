@@ -6,7 +6,7 @@ const _ = require('lodash');
  * @param {Object} req - API request Object
  * @returns {Boolean} represents if operation successed
  */
-module.exports.calculateVacationEnd = function(req){
+const calculateVacationEnd = function(req){
   try {
     const {dateFrom, long} = req.body;
     const dayLong = 1000 * 60 * 60 * 24;
@@ -19,6 +19,43 @@ module.exports.calculateVacationEnd = function(req){
     return false;
   }
 }
+
+/**
+ * Function marks Problemscalendar as needed to update
+ * when changes in vacation
+ * @returns {Promise} boolean represents success of operation
+ */
+const markProblemscalendar = async function(){
+  try {
+    await db.update('ProblemsCalendar', {}, {$set: {needToUpdate: true}});
+
+    return true;
+  } catch(err){
+    return false;
+  }
+}
+
+module.exports.calculateVacationEnd = calculateVacationEnd;
+
+/**
+ * Function handles middleware function for adding vacations route
+ * @param {Object} req - request object
+ * @returns {Promise} representing success status of the operation
+ */
+module.exports.prehandleVacation = function(req){
+  return new Promise((resolve, reject)=>{
+    Promise.all([
+      Promise.resolve(calculateVacationEnd(req)),
+      markProblemscalendar()
+    ])
+    .then(reps=>{
+      // Represents all operations were success
+      resolve(reps.every(el=>el));
+    })
+    .catch(err=>reject(err));
+  });
+};
+
 
 /**
  * Function edits fields in other docs, that
@@ -403,8 +440,6 @@ module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
     }
    }
 
-   console.log(problemsCalendar);
-
    return problemsCalendar;
  };
 
@@ -420,6 +455,18 @@ module.exports.getNewProblemsCalendar = async function(){
     dateTo = await getVacationHandoutBounds(),
     vacationCalendar = await getVacationCalendar(dateTo),
     problemsCalendar = await checkVacationCalendar(vacationCalendar, positions);
+
+    db.update('ProblemsCalendar', {}, {
+        $set:{
+          data: problemsCalendar,
+          updated: new Date(),
+          needToUpdate: false
+        }
+      },
+      {upsert:true}
+    );
+
+    console.log('Getting new problemsCalendar');
 
     return problemsCalendar;
 };

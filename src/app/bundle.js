@@ -941,7 +941,9 @@ module.exports = class EmployeManagment {
   }
 
   getVacationHandout(){
-    getVacationHandout();
+    return getVacationHandout()
+      .then(rep=>console.log(rep))
+      .catch(err=>console.log(err));
   }
 
   getVacationData(){
