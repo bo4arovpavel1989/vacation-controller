@@ -418,8 +418,8 @@ module.exports.checkVacationCalendar = checkVacationCalendar;
 module.exports.getNewProblemsCalendar = async function(){
   let positions = await getPositions(),
     dateTo = await getVacationHandoutBounds(),
-    vacationCalendar = await getVacationCalendar(dateto),
+    vacationCalendar = await getVacationCalendar(dateTo),
     problemsCalendar = await checkVacationCalendar(vacationCalendar, positions);
-    
+
     return problemsCalendar;
 };
