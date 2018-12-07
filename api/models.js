@@ -12,7 +12,7 @@ models.Shift = new mongoose.Schema({
 	duty: {type: Number},
 	// Number of daysOff between duties
 	off: {type: Number},
-	// Date of first duty 
+	// Date of first duty
 	dutyDate: {type: Date},
 	workDays: {type: Array}
 });
@@ -38,6 +38,13 @@ models.Vacation = new mongoose.Schema({
 	dateTo: {type: Date},
 	long: {type: Number}
 });
+
+models.ProblemsCalendar = new mongoose.Schema({
+	data:{type:Array},
+	updated:{type:Date},
+	needToUpdate:{type:Boolean}
+});
+
 
 for (let schema of Object.keys(models)) {
 	models[schema] = mongoose.model(schema.toLowerCase(), models[schema])

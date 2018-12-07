@@ -156,28 +156,32 @@ module.exports.getDatesQuery = function(dates){
  * Function gets all positions from database
  * @returns {Promise} - array of positions
  */
-module.exports.getPositions = function(){
+const getPositions = function(){
   return new Promise((resolve, reject)=>db.find('Position', {})
       .then(rep=>resolve(rep))
       .catch(err=>reject(err)))
 }
 
+module.exports.getPositions = getPositions;
+
 /**
  * Function gets date bounds for vacation handout calculation
  * @returns {Promise} - top bound of vacation handout date
  */
-module.exports.getVacationHandoutBounds = function(){
+const getVacationHandoutBounds = function(){
   return new Promise((resolve, reject)=>db.findBy('Vacation', {}, {dateTo:-1}, 0, 1)
     .then(rep=>resolve(rep[0].dateTo))
     .catch(err=>reject(err)))
 };
+
+module.exports.getVacationHandoutBounds = getVacationHandoutBounds;
 
 /**
  * Function generates array for dates when at least one employe is on vacation
  * @param {Date} dateTo - end date of vacation calendar
  * @returns {Promise} - array of dates
  */
-module.exports.getVacationCalendar = async function(dateTo){
+const getVacationCalendar = async function(dateTo){
   const dateFrom = Date.now(),
     dateToParsed = Date.parse(dateTo),
     day = 24 * 60 * 60 * 1000;
@@ -195,6 +199,7 @@ module.exports.getVacationCalendar = async function(dateTo){
   return vacationCalendar;
 }
 
+module.exports.getVacationCalendar=getVacationCalendar;
 
 /**
  * Function gets shifts that in duty this day
@@ -374,7 +379,7 @@ module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
  * @param {Array} positions - array of positions to check
  * @returns {Promise} - array of dates with problem vacations
  */
- module.exports.checkVacationCalendar = async function(vacationCalendar, positions){
+ const checkVacationCalendar = async function(vacationCalendar, positions){
   let allShifts = await db.find('Shift'),
     personsByShift = await getPersonsByShift(allShifts),
     problemsCalendar = [];
@@ -402,3 +407,19 @@ module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
 
    return problemsCalendar;
  };
+
+module.exports.checkVacationCalendar = checkVacationCalendar;
+
+
+/**
+ * Function updates problemsCalendar
+ * @returns {Promise} -array of dates with position problems
+ */
+module.exports.getNewProblemsCalendar = async function(){
+  let positions = await getPositions(),
+    dateTo = await getVacationHandoutBounds(),
+    vacationCalendar = await getVacationCalendar(dateto),
+    problemsCalendar = await checkVacationCalendar(vacationCalendar, positions);
+    
+    return problemsCalendar;
+};
