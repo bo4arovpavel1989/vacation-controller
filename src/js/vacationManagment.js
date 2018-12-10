@@ -35,7 +35,9 @@ module.exports = class EmployeManagment {
   getVacationHandout(){
     return getVacationHandout()
       .then(rep=>{
-        this.problemsCalendar = rep.data;
+        if (rep.length === 0) rep.push(false);
+        
+        this.problemsCalendar = rep;
 
         console.log(rep)
 

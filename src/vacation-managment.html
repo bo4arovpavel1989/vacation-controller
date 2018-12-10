@@ -15,7 +15,7 @@
     {{#each this}}
       <div class='vacationName'>
         {{this.person}} -
-        {{this.dateFrom}} -
+         {{formatDate this.dateFrom day="numeric" month="long" year="numeric"}} -
         {{this.long}} - дней
         <span class='editObject popupButton' data-form='edit' data-object='Vacation' data-id='{{this._id}}'>
           &nbsp; &#9998; &nbsp;
@@ -37,14 +37,15 @@
   </script>
   <script id='problemsCalendar' type="text/x-handlebars-template">
     {{#each this}}
-      {{#if date}}
+      {{#if this}}
       <div>Обнаружена проблема в отпусках {{formatDate date day="numeric" month="long" year="numeric"}}:</div>
         {{#each shiftProblem}}
-          <div>{{position}} в сменах {{#each shift}}{{this}} {{/each}}</div>
+          <div>{{position}} в сменах: {{#each shift}}{{this}} {{/each}}</div>
         {{/each}}
         {{#each totalProblem}}
-          <div>{{position}} в сменах {{#each shift}}{{this}} {{/each}}</div>
+          <div>Для всех смен не хватает: {{this}}</div>
         {{/each}}
+        <br>
       {{else}}
         <div class='correctCalendar'>Проблем в расписании отпусков не обнаружено!</div>
       {{/if}}

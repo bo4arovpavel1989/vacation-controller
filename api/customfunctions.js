@@ -56,6 +56,20 @@ module.exports.prehandleVacation = function(req){
   });
 };
 
+/**
+ * Function handles middleware function for editing positions
+ * when edited position it s necessary to refresh problemscalendar
+ * @returns {Promise} representing success status of the operation
+ */
+module.exports.prehandlePosition = function(){
+  console.log('Prehandling position...');
+  
+  return new Promise((resolve, reject)=>{
+    markProblemscalendar()
+      .then(rep=>resolve(rep))
+      .catch(err=>reject(err))
+  });
+};
 
 /**
  * Function edits fields in other docs, that

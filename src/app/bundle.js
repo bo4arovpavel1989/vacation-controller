@@ -1,7 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 'use strict'
 
-module.exports.API_URL = 'http://K47_8:9200';
+module.exports.API_URL = 'http://localhost:9200';
 
 module.exports.getPage = function() {
   let idElement = document.getElementById('pageId');
@@ -91,7 +91,7 @@ module.exports = class EmployeManagment {
 const {API_URL, defaultFetch} = require('./config');
 const EventEmitter = require('./libs/events.min');
 const Handlebars = require('./libs/h.min');
-const HandlebarsIntl = require('./libs/h-intl.min');
+const {HandlebarsIntl} = require('./libs/h-intl.min');
 
 HandlebarsIntl.registerWith(Handlebars);
 
@@ -950,7 +950,9 @@ module.exports = class EmployeManagment {
   getVacationHandout(){
     return getVacationHandout()
       .then(rep=>{
-        this.problemsCalendar = rep.data;
+        if (rep.length === 0) rep.push(false);
+        
+        this.problemsCalendar = rep;
 
         console.log(rep)
 

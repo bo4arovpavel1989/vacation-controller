@@ -1,4 +1,4 @@
-const {prehandleVacation} = require('./customfunctions');
+const {prehandleVacation, prehandlePosition} = require('./customfunctions');
 
 
 module.exports.noMiddleware = function(req, res, next){
@@ -16,7 +16,8 @@ module.exports.noMiddleware = function(req, res, next){
 module.exports.preHandleAddObject = function(req, res, next){
   const {type} = req.params;
   const addHandlerMap = {
-    Vacation: r=>prehandleVacation(r)
+    Vacation: r=>prehandleVacation(r),
+		Position: r=>prehandlePosition(r)
   }
 
   if(addHandlerMap[type]){

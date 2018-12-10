@@ -18,7 +18,7 @@ module.exports.getVacationHandout = function(req, res){
 
         console.log('Getting problemsCalendar from cache');
 
-        return Promise.resolve(rep)
+        return Promise.resolve(rep.data)
       })
       .then(calendar=>res.json(calendar))
       .catch(err=>res.status(500).json({err:err.message}))
