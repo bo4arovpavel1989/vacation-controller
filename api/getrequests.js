@@ -20,6 +20,6 @@ module.exports.getVacationHandout = function(req, res){
 
         return Promise.resolve(rep)
       })
-      .then(calendar=>res.json({calendar}))
+      .then(calendar=>res.json(calendar))
       .catch(err=>res.status(500).json({err:err.message}))
 }

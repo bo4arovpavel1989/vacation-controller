@@ -9,6 +9,7 @@ module.exports = class EmployeManagment {
     this.vacations=[];
     this.vacationSort = 1;
     this.personSort = 1;
+    this.problemsCalendar = [];
 
     this.getVacationData();
     this.getVacationHandout();
@@ -33,7 +34,13 @@ module.exports = class EmployeManagment {
 
   getVacationHandout(){
     return getVacationHandout()
-      .then(rep=>console.log(rep))
+      .then(rep=>{
+        this.problemsCalendar = rep.data;
+
+        console.log(rep)
+
+        this.render('problemsCalendar');
+      })
       .catch(err=>console.log(err));
   }
 

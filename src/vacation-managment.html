@@ -35,6 +35,21 @@
       <input type='submit' class='submitButton' value='сохранить'>
     </form>
   </script>
+  <script id='problemsCalendar' type="text/x-handlebars-template">
+    {{#each this}}
+      {{#if date}}
+      <div>Обнаружена проблема в отпусках {{formatDate date day="numeric" month="long" year="numeric"}}:</div>
+        {{#each shiftProblem}}
+          <div>{{position}} в сменах {{#each shift}}{{this}} {{/each}}</div>
+        {{/each}}
+        {{#each totalProblem}}
+          <div>{{position}} в сменах {{#each shift}}{{this}} {{/each}}</div>
+        {{/each}}
+      {{else}}
+        <div class='correctCalendar'>Проблем в расписании отпусков не обнаружено!</div>
+      {{/if}}
+    {{/each}}
+  </script>
 </head>
 <body>
   <div id='pageId' data-id='vacationManagment'></div>
@@ -45,7 +60,7 @@
           <div class='control'><button class='controlButton popupButton' data-form='addVacation'>Добавить отпуск</button></div>
           <div class='handout'>
             <div><h3>Сводка</h3></div>
-            <div class='vacationStatus'>
+            <div class='vacationStatus' id='problemsCalendarSelect'>
               Проверка корректности расписания отпусков...
             </div>
           </div>

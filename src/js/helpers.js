@@ -3,6 +3,9 @@
 const {API_URL, defaultFetch} = require('./config');
 const EventEmitter = require('./libs/events.min');
 const Handlebars = require('./libs/h.min');
+const HandlebarsIntl = require('./libs/h-intl.min');
+
+HandlebarsIntl.registerWith(Handlebars);
 
 const handleResponse = response=>response.json().then(json=>response.ok ? json : Promise.reject(json));
 
