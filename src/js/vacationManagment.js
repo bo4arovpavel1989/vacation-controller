@@ -12,7 +12,6 @@ module.exports = class EmployeManagment {
     this.problemsCalendar = [];
 
     this.getVacationData();
-    this.getVacationHandout();
 
     this.formsHandler = new FormsHandler({
       formsSelector: '.vacationManagmentForm'
@@ -36,7 +35,7 @@ module.exports = class EmployeManagment {
     return getVacationHandout()
       .then(rep=>{
         if (rep.length === 0) rep.push(false);
-        
+
         this.problemsCalendar = rep;
 
         console.log(rep)
@@ -47,14 +46,15 @@ module.exports = class EmployeManagment {
   }
 
   getVacationData(){
-    getVacationData()
-    .then(rep=>{
-      this.vacations=rep;
+    return getVacationData()
+      .then(rep=>{
+        this.vacations=rep;
 
-      this.sortAndRender('vacation');
-    })
-      .catch(err=>console.log(err));
-    }
+        this.getVacationHandout();
+        this.sortAndRender('vacation');
+      })
+        .catch(err=>console.log(err));
+      }
 
   sortAndRender(entry){
       this[`${entry}s`] = this[`${entry}s`].sort(compare('person', this[`${entry}Sort`]));

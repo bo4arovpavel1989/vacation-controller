@@ -43,7 +43,7 @@ const postRequests = [
 const deleteRequests = [
 		{
 			url: '/deleteobject/:type/:id',
-			middleware:noMiddleware,
+			middleware:preHandleAddObject,
 			callback:deleteRequestsHandlers.deleteObject
 		}
 ];

@@ -18,7 +18,7 @@ module.exports.preHandleAddObject = function(req, res, next){
   const addHandlerMap = {
     Vacation: r=>prehandleVacation(r),
 		Position: r=>prehandlePosition(r)
-  }
+  };
 
   if(addHandlerMap[type]){
 		addHandlerMap[type](req)
