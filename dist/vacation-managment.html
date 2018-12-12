@@ -5,7 +5,7 @@
     {{/each}}</script><script id="vacations" type="text/x-handlebars-template">{{#each this}}
       <div class='vacationName'>
         {{this.person}} -
-        {{this.dateFrom}} -
+         {{formatDate this.dateFrom day="numeric" month="long" year="numeric"}} -
         {{this.long}} - дней
         <span class='editObject popupButton' data-form='edit' data-object='Vacation' data-id='{{this._id}}'>
           &nbsp; &#9998; &nbsp;
@@ -20,4 +20,17 @@
         <input name='{{this.name}}' type='{{this.type}}' value='{{{this.value}}}'>
       {{/each}}
       <input type='submit' class='submitButton' value='сохранить'>
-    </form></script></head><body><div id="pageId" data-id="vacationManagment"></div><div id="container"><div class="header"><h1>Управление Отпусками</h1></div><div class="main"><div class="controlArea"><div class="control"><button class="controlButton popupButton" data-form="addVacation">Добавить отпуск</button></div></div><div class="objectInfo"><div><h3>Отпуска</h3></div><div id="vacationsSelect"></div></div></div></div><div class="popupArea"><div id="addVacationFormArea" class="popup"><form class="vacationManagmentForm" data-url="addobject/Vacation"><div class="formControl">Cотрудник <select name="person" id="personsSelect"></select></div><div class="formControl">С <input name="dateFrom" type="date"> - <input name="long" type="number"> дней <input name="type" type="hidden" value="Vacation"></div><div class="formControl"><input type="submit" class="submitButton" value="сохранить"></div></form></div><div id="editFormArea" class="popup"></div></div></body><script src="app/bundle.js"></script></html>
+    </form></script><script id="problemsCalendar" type="text/x-handlebars-template">{{#each this}}
+      {{#if this}}
+      <div>Обнаружена проблема в отпусках {{formatDate date day="numeric" month="long" year="numeric"}}:</div>
+        {{#each shiftProblem}}
+          <div>{{position}} в сменах: {{#each shift}}{{this}} {{/each}}</div>
+        {{/each}}
+        {{#each totalProblem}}
+          <div>Для всех смен не хватает: {{this}}</div>
+        {{/each}}
+        <br>
+      {{else}}
+        <div class='correctCalendar'>Проблем в расписании отпусков не обнаружено!</div>
+      {{/if}}
+    {{/each}}</script></head><body><div id="pageId" data-id="vacationManagment"></div><div id="container"><div class="header"><h1>Управление Отпусками</h1></div><div class="main"><div class="controlArea"><div class="control"><button class="controlButton popupButton" data-form="addVacation">Добавить отпуск</button></div><div class="handout"><div><h3>Сводка</h3></div><div class="vacationStatus" id="problemsCalendarSelect">Проверка корректности расписания отпусков...</div></div></div><div class="objectInfo"><div><h3>Отпуска</h3></div><div id="vacationsSelect"></div></div></div></div><div class="popupArea"><div id="addVacationFormArea" class="popup"><form class="vacationManagmentForm" data-url="addobject/Vacation"><div class="formControl">Cотрудник <select name="person" id="personsSelect"></select></div><div class="formControl">С <input name="dateFrom" type="date"> - <input name="long" type="number"> дней <input name="type" type="hidden" value="Vacation"></div><div class="formControl"><input type="submit" class="submitButton" value="сохранить"></div></form></div><div id="editFormArea" class="popup"></div></div></body><script src="app/bundle.js"></script></html>
