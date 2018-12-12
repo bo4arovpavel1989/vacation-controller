@@ -63,7 +63,7 @@ module.exports.prehandleVacation = function(req){
  */
 module.exports.prehandlePosition = function(){
   console.log('Prehandling position...');
-  
+
   return new Promise((resolve, reject)=>{
     markProblemscalendar()
       .then(rep=>resolve(rep))
@@ -226,6 +226,39 @@ const getVacationHandoutBounds = function(){
 };
 
 module.exports.getVacationHandoutBounds = getVacationHandoutBounds;
+
+/**
+ * Function sets for all shifts their duty dates
+ * as close as possible to Date.now()
+ * @returns {Promise} representing status of the operation
+ */
+const refreshShiftsDuties = async function(){
+  const shifts = await db.find('Shift'),
+    currentDate = Date.now();
+
+  for (let i = 0; i < shifts.length; i++) {
+    const shift = shifts[i],
+      oneDay = 24 * 60 * 60 * 1000;
+    let {dutyDate, off, duty, _id} = shift;
+
+    dutyDate = Date.parse(dutyDate);
+
+    let dutyDateEnd = dutyDate + (duty * oneDay),
+      prevDutyDate = dutyDate;
+
+    while(dutyDate < currentDate){
+      prevDutyDate = dutyDate;
+      dutyDate = dutyDateEnd + (oneDay * off);
+      dutyDateEnd = dutyDate + (duty * oneDay);
+    }
+
+    dutyDate = prevDutyDate;
+
+    await db.update('Shift', {_id}, {$set:{dutyDate}});
+  }
+};
+
+module.exports.refreshShiftsDuties = refreshShiftsDuties;
 
 /**
  * Function generates array for dates when at least one employe is on vacation
