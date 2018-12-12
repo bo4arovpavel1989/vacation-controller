@@ -253,7 +253,7 @@ const refreshShiftsDuties = async function(){
     }
 
     dutyDate = prevDutyDate;
-
+	
     await db.update('Shift', {_id}, {$set:{dutyDate}});
   }
 };

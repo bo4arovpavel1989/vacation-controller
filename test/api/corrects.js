@@ -23,7 +23,12 @@ module.exports.shiftsFromDb = [
 ];
 
 module.exports.refreshedDutyDates = [
-1, 2, 3, 4, 5, 6
+Date.parse('2018-12-29'), 
+Date.parse('2018-12-30'), 
+Date.parse('2018-12-31'), 
+Date.parse('2018-12-28'), 
+Date.parse('2018-12-28'), 
+Date.parse('2018-12-30')
 ];
 
 module.exports.guardList = [

@@ -124,15 +124,19 @@ describe('refreshShiftsDuties', ()=>{
 	
 	it('Should call update dutyDate queries for shift documents', ()=>{
 		const {shiftsFromDb, refreshedDutyDates} = corrects;
+		const {refreshShiftsDuties} = customFunctions
 			
 		spyDateNow.returns(Date.parse('2019-01-01'));
 		spyFind.withArgs('Shift').resolves(shiftsFromDb);
 		
-		shiftsFromDb.forEach((shift, i)=>{
-			let {_id} = shift
-			dutyDate = refreshedDutyDates[i];
-			
-			expect(spyUpdate).to.have.been.calledWith('Shift', {_id}, {dutyDate});
+		return refreshShiftsDuties().then(()=>{
+			for (let i = 0; i < shiftsFromDb.length; i++){
+				let shift = shiftsFromDb[i];
+				let {_id} = shift,
+					dutyDate = refreshedDutyDates[i];
+				
+				expect(spyUpdate).calledWith('Shift', {_id}, {$set:{dutyDate}});
+			}
 		});
 	});
 });
@@ -183,8 +187,8 @@ describe('getShiftOnDuty', ()=>{
 			result = getShiftOnDuty(day, shiftsFromDb);
 
 		expect(result).to.deep.equal([
-			{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30'},
-			{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26'}
+			{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4'},
+			{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6'}
 		])
 	});
 });
