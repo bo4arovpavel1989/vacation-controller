@@ -27,8 +27,8 @@ Date.parse('2018-12-29'),
 Date.parse('2018-12-30'), 
 Date.parse('2018-12-31'), 
 Date.parse('2018-12-28'), 
-Date.parse('2018-12-28'), 
-Date.parse('2018-12-30')
+Date.parse('2018-12-30'), 
+Date.parse('2018-12-28')
 ];
 
 module.exports.guardList = [
