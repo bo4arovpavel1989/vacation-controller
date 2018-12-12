@@ -113,6 +113,30 @@ describe('getDatesQuery', ()=>{
 	});
 });
 
+describe('refreshShiftsDuties', ()=>{
+	before(()=>{
+		spyDateNow = sinon.stub(Date, 'now');
+	});
+
+	after(()=>{
+		spyDateNow.restore();
+	});
+	
+	it('Should call update dutyDate queries for shift documents', ()=>{
+		const {shiftsFromDb, refreshedDutyDates} = corrects;
+			
+		spyDateNow.returns(Date.parse('2019-01-01'));
+		spyFind.withArgs('Shift').resolves(shiftsFromDb);
+		
+		shiftsFromDb.forEach((shift, i)=>{
+			let {_id} = shift
+			dutyDate = refreshedDutyDates[i];
+			
+			expect(spyUpdate).to.have.been.calledWith('Shift', {_id}, {dutyDate});
+		});
+	});
+});
+
 describe('getVacationCalendar', ()=>{
 	before(()=>{
 		spyDateNow = sinon.stub(Date, 'now');
