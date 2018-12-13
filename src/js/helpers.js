@@ -640,6 +640,21 @@ module.exports.PageScript = class PageScript {
     this.render(`${entry}s`, selector);
   }
 
+  getObjectData(handleObjectData){
+    return getObjectData()
+      .then(handleObjectData);
+  }
+
+  getEmployeData(handleEmployeData){
+    return getEmployeData()
+      .then(handleEmployeData)
+  }
+
+  getVacationData(handleVacationData){
+    return getVacationData()
+      .then(handleVacationData);
+  }
+
   render(data, selector){
     const source = document.getElementById(data).innerHTML;
     const template = Handlebars.compile(source);

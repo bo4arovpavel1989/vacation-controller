@@ -1,9 +1,8 @@
 'use strict'
 
-const {getObjectData, compare, PageScript} = require('./helpers');
-const Handlebars = require('./libs/h.min');
+const {PageScript} = require('./helpers');
 
-module.exports = class ObjectManagment  extends PageScript{
+module.exports = class ObjectManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
@@ -11,21 +10,17 @@ module.exports = class ObjectManagment  extends PageScript{
     this.positions=[];
     this.shiftSort = 1;
     this.positionSort = 1;
-    this.getObjectData();
+    this.getObjectData(this.handleObjectData);
 
     this.setListeners();
 
   }
 
-  getObjectData(){
-    getObjectData()
-      .then(reps=>{
-        [this.shifts, this.positions] = reps;
+  handleObjectData(reps){
+    [this.shifts, this.positions] = reps;
 
-        this.sortAndRender('shift', 'shiftsArea');
-        this.sortAndRender('position', 'positionsArea');
-      });
-
+    this.sortAndRender('shift', 'shiftsArea');
+    this.sortAndRender('position', 'positionsArea');
   }
 
   setListeners(){

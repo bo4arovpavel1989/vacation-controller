@@ -1,9 +1,8 @@
 'use strict'
 
-const {getEmployeData, getVacationData, getVacationHandout, compare, PageScript} = require('./helpers');
-const Handlebars = require('./libs/h.min');
+const {getVacationHandout, PageScript} = require('./helpers');
 
-module.exports = class EmployeManagment  extends PageScript{
+module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
@@ -13,20 +12,29 @@ module.exports = class EmployeManagment  extends PageScript{
     this.personSort = 1;
     this.problemsCalendar = [];
 
-    this.getVacationData();
+    this.getVacationData(this.handleVacationData);
 
     this.setListeners();
 
-    getEmployeData()
-      .then(rep=>{
-        this.persons=rep;
-
-        this.sortAndRender('person', 'personsSelect');
-      });
+    this.getEmployeData()
+      .then(this.handleEmployeData);
   }
 
   setListeners(){
-    this.formsHandler.ee.on('refreshRender', ()=>this.getVacationData());
+    this.formsHandler.ee.on('refreshRender', ()=>this.getVacationData(this.handleVacationData));
+  }
+
+  handleEmployeData(rep){
+    this.persons=rep;
+
+    this.sortAndRender('person', 'personsSelect');
+  }
+
+  handleVacationData(rep){
+    this.vacations=rep;
+
+    this.getVacationHandout();
+    this.sortAndRender('vacation', 'vacationsSelect');
   }
 
   getVacationHandout(){
@@ -42,15 +50,4 @@ module.exports = class EmployeManagment  extends PageScript{
       })
       .catch(err=>console.log(err));
   }
-
-  getVacationData(){
-    return getVacationData()
-      .then(rep=>{
-        this.vacations=rep;
-
-        this.getVacationHandout();
-        this.sortAndRender('vacation', 'vacationsSelect');
-      })
-        .catch(err=>console.log(err));
-      }
 }

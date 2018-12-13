@@ -1,7 +1,6 @@
 'use strict'
 
 const {compare,
-  getObjectData,
   getMiddleMonthes,
   prepareCalendar,
   preparePersons,
@@ -10,9 +9,7 @@ const {compare,
   PageScript
 } = require('./helpers');
 
-const Handlebars = require('./libs/h.min');
-
-module.exports = class EmployeManagment  extends PageScript{
+module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
@@ -34,19 +31,21 @@ module.exports = class EmployeManagment  extends PageScript{
     };
     this.graphData=this.defaults;
 
-    getObjectData()
-      .then(reps=>{
-        [this.shifts, this.positions] = reps;
-
-        this.sortAndRender('shift', 'shiftsSelect');
-        this.sortAndRender('position', 'positionsSelect');
-      });
+    this.getObjectData()
+      .then(this.handleObjectData);
 
       this.setListeners();
   }
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', data=>this.prepareGraphData(data));
+  }
+
+  handleObjectData(reps){
+    [this.shifts, this.positions] = reps;
+
+    this.sortAndRender('shift', 'shiftsSelect');
+    this.sortAndRender('position', 'positionsSelect');
   }
 
   clearGraphData(){
