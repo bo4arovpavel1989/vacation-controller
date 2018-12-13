@@ -253,7 +253,7 @@ const refreshShiftsDuties = async function(){
     }
 
     dutyDate = prevDutyDate;
-	
+
     await db.update('Shift', {_id}, {$set:{dutyDate}});
   }
 };
@@ -498,6 +498,8 @@ module.exports.checkVacationCalendar = checkVacationCalendar;
  * @returns {Promise} -array of dates with position problems
  */
 module.exports.getNewProblemsCalendar = async function(){
+  await refreshShiftsDuties();
+
   let positions = await getPositions(),
     dateTo = await getVacationHandoutBounds(),
     vacationCalendar = await getVacationCalendar(dateTo),

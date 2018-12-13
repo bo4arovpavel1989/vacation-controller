@@ -9,16 +9,24 @@ let pageScript;
 
 switch(getPage()) {
   case 'objectManagment':
-    pageScript = new ObjectManagment()
+    pageScript = new ObjectManagment({
+      formsSelector: '.objectManagmentForm'
+    });
     break;
   case 'vacationManagment':
-    pageScript = new VacationManagment()
+    pageScript = new VacationManagment({
+      formsSelector: '.vacationManagmentForm'
+    });
     break;
   case 'infotable':
-    pageScript = new Infotable();
+    pageScript = new Infotable({
+      formsSelector: '.filterManagmentForm'
+    });
     break;
   case 'employeManagment':
-    pageScript = new EmployeManagment();
+    pageScript = new EmployeManagment({
+      formsSelector: '.employeManagmentForm'
+    });
     break;
   default:
     pageScript = null;

@@ -1,20 +1,18 @@
 'use strict'
 
-const {FormsHandler, compare, getObjectData, getEmployeData} = require('./helpers');
+const {compare, getObjectData, getEmployeData, PageScript} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
-module.exports = class EmployeManagment {
-  constructor(){
+module.exports = class EmployeManagment extends PageScript{
+  constructor(selectors){
+    super(selectors);
+
     this.persons=[];
     this.shifts=[];
     this.positions=[];
     this.shiftSort = 1;
     this.positionSort = 1;
     this.personSort = 1;
-
-    this.formsHandler = new FormsHandler({
-      formsSelector: '.employeManagmentForm'
-    });
 
     this.setListeners();
 
@@ -40,20 +38,10 @@ module.exports = class EmployeManagment {
 
   sortAndRender(entry){
     this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
-    this.render(`${entry}s`);
+    this.render(`${entry}s`, `${entry}sSelect`);
   }
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', ()=>this.getEmployeData());
-  }
-
-  render(data){
-    const source = document.getElementById(data).innerHTML;
-    const template = Handlebars.compile(source);
-    const context = this[data];
-    const html = template(context);
-
-    document.getElementById(`${data}Select`).innerHTML = html;
-    this.formsHandler.refreshListeners();
   }
 }

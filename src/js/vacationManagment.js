@@ -1,10 +1,12 @@
 'use strict'
 
-const {FormsHandler, getEmployeData, getVacationData, getVacationHandout, compare} = require('./helpers');
+const {getEmployeData, getVacationData, getVacationHandout, compare, PageScript} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
-module.exports = class EmployeManagment {
-  constructor(){
+module.exports = class EmployeManagment  extends PageScript{
+  constructor(selectors){
+    super(selectors);
+
     this.persons=[];
     this.vacations=[];
     this.vacationSort = 1;
@@ -12,10 +14,6 @@ module.exports = class EmployeManagment {
     this.problemsCalendar = [];
 
     this.getVacationData();
-
-    this.formsHandler = new FormsHandler({
-      formsSelector: '.vacationManagmentForm'
-    });
 
     this.setListeners();
 
@@ -40,7 +38,7 @@ module.exports = class EmployeManagment {
 
         console.log(rep)
 
-        this.render('problemsCalendar');
+        this.render('problemsCalendar', 'problemsCalendarHandout');
       })
       .catch(err=>console.log(err));
   }
@@ -51,23 +49,13 @@ module.exports = class EmployeManagment {
         this.vacations=rep;
 
         this.getVacationHandout();
-        this.sortAndRender('vacation');
+        this.sortAndRender('vacation', 'vacationsSelect');
       })
         .catch(err=>console.log(err));
       }
 
   sortAndRender(entry){
       this[`${entry}s`] = this[`${entry}s`].sort(compare('person', this[`${entry}Sort`]));
-      this.render(`${entry}s`);
-  }
-
-  render(data){
-    const source = document.getElementById(data).innerHTML;
-    const template = Handlebars.compile(source);
-    const context = this[data];
-    const html = template(context);
-
-    document.getElementById(`${data}Select`).innerHTML = html;
-    this.formsHandler.refreshListeners();
+      this.render(`${entry}s`, `${entry}sSelect`);
   }
 }

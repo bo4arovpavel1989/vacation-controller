@@ -401,7 +401,7 @@ module.exports.getVacationHandout = getVacationHandout;
 * Class 'popedUp' must be defined in css for showing popups
 * Class container must be in html to trigger closepopup on click
 */
-module.exports.FormsHandler = class FormsHandler {
+ class FormsHandler {
 
   /**
     * Create listener.
@@ -627,4 +627,22 @@ module.exports.FormsHandler = class FormsHandler {
     this.ee.emit(message, data);
   }
 
+}
+
+
+module.exports.PageScript = class PageScript {
+  constructor(selectors){
+    this.formsHandler = new FormsHandler(selectors);
+  }
+
+
+  render(data, selector){
+    const source = document.getElementById(data).innerHTML;
+    const template = Handlebars.compile(source);
+    const context = this[data];
+    const html = template(context);
+
+    document.getElementById(selector).innerHTML = html;
+    this.formsHandler.refreshListeners();
+  }
 }

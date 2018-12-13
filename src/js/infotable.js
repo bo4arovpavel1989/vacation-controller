@@ -2,18 +2,20 @@
 
 const {compare,
   getObjectData,
-  FormsHandler,
   getMiddleMonthes,
   prepareCalendar,
   preparePersons,
   getFilterData,
-  concatVacations
+  concatVacations,
+  PageScript
 } = require('./helpers');
 
 const Handlebars = require('./libs/h.min');
 
-module.exports = class EmployeManagment {
-  constructor(){
+module.exports = class EmployeManagment  extends PageScript{
+  constructor(selectors){
+    super(selectors);
+
     this.shifts=[];
     this.positions=[];
 
@@ -32,10 +34,6 @@ module.exports = class EmployeManagment {
     };
     this.graphData=this.defaults;
 
-    this.formsHandler = new FormsHandler({
-      formsSelector: '.filterManagmentForm'
-    });
-
     getObjectData()
       .then(reps=>{
         [this.shifts, this.positions] = reps;
@@ -49,7 +47,7 @@ module.exports = class EmployeManagment {
 
   sortAndRender(entry){
     this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
-    this.render(`${entry}s`);
+    this.render(`${entry}s`, `${entry}sSelect`);
   }
 
   setListeners(){
@@ -91,15 +89,6 @@ module.exports = class EmployeManagment {
 
     this.graphData.title = `График отпусков ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
 
-    this.render('graphData');
-  }
-
-  render(data){
-    const source = document.getElementById(data).innerHTML;
-    const template = Handlebars.compile(source);
-    const context = this[data];
-    const html = template(context);
-
-    document.getElementById(`${data}Select`).innerHTML = html;
+    this.render('graphData', 'graphDataField');
   }
 }

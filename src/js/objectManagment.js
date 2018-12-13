@@ -1,19 +1,17 @@
 'use strict'
 
-const {FormsHandler, getObjectData, compare} = require('./helpers');
+const {getObjectData, compare, PageScript} = require('./helpers');
 const Handlebars = require('./libs/h.min');
 
-module.exports = class ObjectManagment {
-  constructor(){
+module.exports = class ObjectManagment  extends PageScript{
+  constructor(selectors){
+    super(selectors);
+
     this.shifts=[];
     this.positions=[];
     this.shiftSort = 1;
     this.positionSort = 1;
     this.getObjectData();
-
-    this.formsHandler = new FormsHandler({
-      formsSelector: '.objectManagmentForm'
-    });
 
     this.setListeners();
 
@@ -24,29 +22,18 @@ module.exports = class ObjectManagment {
       .then(reps=>{
         [this.shifts, this.positions] = reps;
 
-        this.sortAndRender('shift');
-        this.sortAndRender('position');
+        this.sortAndRender('shift', 'shiftArea');
+        this.sortAndRender('position', 'positionArea');
       });
 
   }
 
   sortAndRender(entry){
     this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
-    this.render(`${entry}s`);
+    this.render(`${entry}s`, `${entry}sArea`);
   }
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', ()=>this.getObjectData());
   }
-
-  render(data){
-    const source = document.getElementById(data).innerHTML;
-    const template = Handlebars.compile(source);
-    const context = this[data];
-    const html = template(context);
-
-    document.getElementById(`${data}Area`).innerHTML = html;
-    this.formsHandler.refreshListeners();
-  }
-
 }
