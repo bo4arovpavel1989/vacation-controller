@@ -635,6 +635,10 @@ module.exports.PageScript = class PageScript {
     this.formsHandler = new FormsHandler(selectors);
   }
 
+  sortAndRender(entry, selector){
+    this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
+    this.render(`${entry}s`, selector);
+  }
 
   render(data, selector){
     const source = document.getElementById(data).innerHTML;

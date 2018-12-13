@@ -21,7 +21,7 @@ module.exports = class EmployeManagment  extends PageScript{
       .then(rep=>{
         this.persons=rep;
 
-        this.sortAndRender('person');
+        this.sortAndRender('person', 'personsSelect');
       });
   }
 
@@ -53,9 +53,4 @@ module.exports = class EmployeManagment  extends PageScript{
       })
         .catch(err=>console.log(err));
       }
-
-  sortAndRender(entry){
-      this[`${entry}s`] = this[`${entry}s`].sort(compare('person', this[`${entry}Sort`]));
-      this.render(`${entry}s`, `${entry}sSelect`);
-  }
 }

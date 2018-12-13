@@ -38,16 +38,11 @@ module.exports = class EmployeManagment  extends PageScript{
       .then(reps=>{
         [this.shifts, this.positions] = reps;
 
-        this.sortAndRender('shift');
-        this.sortAndRender('position');
+        this.sortAndRender('shift', 'shiftsSelect');
+        this.sortAndRender('position', 'positionsSelect');
       });
 
       this.setListeners();
-  }
-
-  sortAndRender(entry){
-    this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
-    this.render(`${entry}s`, `${entry}sSelect`);
   }
 
   setListeners(){

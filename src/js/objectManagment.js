@@ -22,15 +22,10 @@ module.exports = class ObjectManagment  extends PageScript{
       .then(reps=>{
         [this.shifts, this.positions] = reps;
 
-        this.sortAndRender('shift', 'shiftArea');
-        this.sortAndRender('position', 'positionArea');
+        this.sortAndRender('shift', 'shiftsArea');
+        this.sortAndRender('position', 'positionsArea');
       });
 
-  }
-
-  sortAndRender(entry){
-    this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
-    this.render(`${entry}s`, `${entry}sArea`);
   }
 
   setListeners(){
