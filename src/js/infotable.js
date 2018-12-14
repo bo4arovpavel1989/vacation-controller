@@ -13,8 +13,8 @@ module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
-    this.shifts=[];
-    this.positions=[];
+    this.shift=[];
+    this.position=[];
 
     this.shiftSort = 1;
     this.positionSort = 1;
@@ -31,7 +31,7 @@ module.exports = class EmployeManagment extends PageScript{
     };
     this.graphData=this.defaults;
 
-    this.getObjectData(rep=>this.handleObjectData(rep));
+    this.getObjectData(this.handleObjectData);
 
     this.setListeners();
   }
@@ -41,7 +41,7 @@ module.exports = class EmployeManagment extends PageScript{
   }
 
   handleObjectData(reps){
-    [this.shifts, this.positions] = reps;
+    [this.shift, this.position] = reps;
 
     this.sortAndRender('shift', 'shiftsSelect');
     this.sortAndRender('position', 'positionsSelect');

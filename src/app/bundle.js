@@ -33,28 +33,28 @@ module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
-    this.persons=[];
-    this.shifts=[];
-    this.positions=[];
+    this.person=[];
+    this.shift=[];
+    this.position=[];
     this.shiftSort = 1;
     this.positionSort = 1;
     this.personSort = 1;
 
     this.setListeners();
 
-    this.getObjectData(rep=>this.handleObjectData(rep))
+    this.getObjectData(this.handleObjectData);
 
-    this.getEmployeData(rep=>this.handleEmployeData(rep));
+    this.getEmployeData(this.handleEmployeData);
   }
 
   handleEmployeData(rep){
-    this.persons=rep;
+    this.person=rep;
 
     this.sortAndRender('person', 'personsSelect');
   }
 
   handleObjectData(reps){
-    [this.shifts, this.positions] = reps;
+    [this.shift, this.position] = reps;
 
     this.sortAndRender('shift', 'shiftsSelect');
     this.sortAndRender('position', 'positionsSelect');
@@ -62,7 +62,7 @@ module.exports = class EmployeManagment extends PageScript{
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', ()=>
-      this.getEmployeData(rep=>this.handleEmployeData(rep))
+      this.getEmployeData(this.handleEmployeData)
     );
   }
 }
@@ -703,11 +703,17 @@ module.exports.getVacationHandout = getVacationHandout;
 module.exports.PageScript = class PageScript {
   constructor(selectors){
     this.formsHandler = new FormsHandler(selectors);
+    this.getObjectData = this.getObjectData.bind(this);
+    this.getEmployeData = this.getEmployeData.bind(this);
+    this.getVacationData = this.getVacationData.bind(this);
+    this.handleObjectData = this.handleObjectData.bind(this);
+    this.handleEmployeData = this.handleEmployeData.bind(this);
+    this.handleVacationData = this.handleVacationData.bind(this);
   }
 
   sortAndRender(entry, selector){
-    this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
-    this.render(`${entry}s`, selector);
+    this[entry] = this[entry].sort(compare(entry, this[`${entry}Sort`]));
+    this.render(entry, selector);
   }
 
   getObjectData(handleObjectData){
@@ -726,6 +732,18 @@ module.exports.PageScript = class PageScript {
     return getVacationData()
       .then(handleVacationData)
       .catch(err=>console.log(err));
+  }
+
+  handleObjectData(){
+    return this;
+  }
+
+  handleEmployeData(){
+    return this;
+  }
+
+  handleVacationData(){
+    return this;
   }
 
   render(data, selector){
@@ -790,8 +808,8 @@ module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
-    this.shifts=[];
-    this.positions=[];
+    this.shift=[];
+    this.position=[];
 
     this.shiftSort = 1;
     this.positionSort = 1;
@@ -808,7 +826,7 @@ module.exports = class EmployeManagment extends PageScript{
     };
     this.graphData=this.defaults;
 
-    this.getObjectData(rep=>this.handleObjectData(rep));
+    this.getObjectData(this.handleObjectData);
 
     this.setListeners();
   }
@@ -818,7 +836,7 @@ module.exports = class EmployeManagment extends PageScript{
   }
 
   handleObjectData(reps){
-    [this.shifts, this.positions] = reps;
+    [this.shift, this.position] = reps;
 
     this.sortAndRender('shift', 'shiftsSelect');
     this.sortAndRender('position', 'positionsSelect');
@@ -879,27 +897,27 @@ module.exports = class ObjectManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
-    this.shifts=[];
-    this.positions=[];
+    this.shift=[];
+    this.position=[];
     this.shiftSort = 1;
     this.positionSort = 1;
-    this.getObjectData(rep=>this.handleObjectData(rep));
+
+    this.getObjectData(this.handleObjectData);
 
     this.setListeners();
 
   }
 
   handleObjectData(reps){
-    [this.shifts, this.positions] = reps;
+    [this.shift, this.position] = reps;
 
-    this.sortAndRender('shift', 'shiftsArea');
-    this.sortAndRender('position', 'positionsArea');
+    this.sortAndRender('shift', 'shiftArea');
+    this.sortAndRender('position', 'positionArea');
   }
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', ()=>
-      this.getObjectData(rep=>this.handleObjectData(rep))
-    );
+      this.getObjectData(this.handleObjectData));
   }
 }
 
@@ -912,36 +930,36 @@ module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
-    this.persons=[];
-    this.vacations=[];
+    this.person=[];
+    this.vacation=[];
     this.vacationSort = 1;
     this.personSort = 1;
     this.problemsCalendar = [];
 
-    this.getVacationData(rep=>this.handleVacationData(rep));
+    this.getVacationData(this.handleVacationData);
 
     this.setListeners();
 
-    this.getEmployeData(rep=>this.handleEmployeData(rep));
+    this.getEmployeData(this.handleEmployeData);
   }
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', ()=>
-      this.getVacationData(rep=>this.handleVacationData(rep))
+      this.getVacationData(this.handleVacationData)
     );
   }
 
   handleEmployeData(rep){
     this.persons=rep;
 
-    this.sortAndRender('person', 'personsSelect');
+    this.sortAndRender('person', 'personSelect');
   }
 
   handleVacationData(rep){
     this.vacations=rep;
 
     this.getVacationHandout();
-    this.sortAndRender('vacation', 'vacationsSelect');
+    this.sortAndRender('vacation', 'vacationSelect');
   }
 
   getVacationHandout(){

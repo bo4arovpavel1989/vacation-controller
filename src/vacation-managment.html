@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <title>Vacation-controller</title>
   <link rel="stylesheet" href="css/main.css">
-  <script id='persons' type="text/x-handlebars-template">
+  <script id='person' type="text/x-handlebars-template">
     {{#each this}}
       <option value='{{this.person}}'>
         '{{this.person}}'
       </option>
     {{/each}}
   </script>
-  <script id='vacations' type="text/x-handlebars-template">
+  <script id='vacation' type="text/x-handlebars-template">
     {{#each this}}
       <div class='vacationName'>
         {{this.person}} -
@@ -68,7 +68,7 @@
         </div>
         <div class='objectInfo'>
           <div><h3>Отпуска</h3></div>
-          <div id='vacationsSelect'>
+          <div id='vacationSelect'>
 
           </div>
         </div>

@@ -6,28 +6,28 @@ module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
-    this.persons=[];
-    this.shifts=[];
-    this.positions=[];
+    this.person=[];
+    this.shift=[];
+    this.position=[];
     this.shiftSort = 1;
     this.positionSort = 1;
     this.personSort = 1;
 
     this.setListeners();
 
-    this.getObjectData(rep=>this.handleObjectData(rep))
+    this.getObjectData(this.handleObjectData);
 
-    this.getEmployeData(rep=>this.handleEmployeData(rep));
+    this.getEmployeData(this.handleEmployeData);
   }
 
   handleEmployeData(rep){
-    this.persons=rep;
+    this.person=rep;
 
     this.sortAndRender('person', 'personsSelect');
   }
 
   handleObjectData(reps){
-    [this.shifts, this.positions] = reps;
+    [this.shift, this.position] = reps;
 
     this.sortAndRender('shift', 'shiftsSelect');
     this.sortAndRender('position', 'positionsSelect');
@@ -35,7 +35,7 @@ module.exports = class EmployeManagment extends PageScript{
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', ()=>
-      this.getEmployeData(rep=>this.handleEmployeData(rep))
+      this.getEmployeData(this.handleEmployeData)
     );
   }
 }

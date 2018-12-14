@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <title>Vacation-controller</title>
   <link rel="stylesheet" href="css/main.css">
-  <script id='shifts' type="text/x-handlebars-template">
+  <script id='shift' type="text/x-handlebars-template">
     {{#each this}}
       <label class='checkBox' for="shift{{this._id}}">{{this.shift}}</label>
       <input type="checkbox" class='checkBox' id="shift{{this._id}}" name="shifts" value='{{this.shift}}'>
     {{/each}}
   </script>
-  <script id='positions' type="text/x-handlebars-template">
+  <script id='position' type="text/x-handlebars-template">
     {{#each this}}
       <label class='checkBox' for="position{{this._id}}">{{this.position}}</label>
       <input type="checkbox" class='checkBox' id="position{{this._id}}" name="positions" value='{{this.position}}'>

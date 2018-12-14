@@ -633,11 +633,17 @@ module.exports.getVacationHandout = getVacationHandout;
 module.exports.PageScript = class PageScript {
   constructor(selectors){
     this.formsHandler = new FormsHandler(selectors);
+    this.getObjectData = this.getObjectData.bind(this);
+    this.getEmployeData = this.getEmployeData.bind(this);
+    this.getVacationData = this.getVacationData.bind(this);
+    this.handleObjectData = this.handleObjectData.bind(this);
+    this.handleEmployeData = this.handleEmployeData.bind(this);
+    this.handleVacationData = this.handleVacationData.bind(this);
   }
 
   sortAndRender(entry, selector){
-    this[`${entry}s`] = this[`${entry}s`].sort(compare(entry, this[`${entry}Sort`]));
-    this.render(`${entry}s`, selector);
+    this[entry] = this[entry].sort(compare(entry, this[`${entry}Sort`]));
+    this.render(entry, selector);
   }
 
   getObjectData(handleObjectData){
@@ -656,6 +662,18 @@ module.exports.PageScript = class PageScript {
     return getVacationData()
       .then(handleVacationData)
       .catch(err=>console.log(err));
+  }
+
+  handleObjectData(){
+    return this;
+  }
+
+  handleEmployeData(){
+    return this;
+  }
+
+  handleVacationData(){
+    return this;
   }
 
   render(data, selector){

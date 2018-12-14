@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Vacation-controller</title>
   <link rel="stylesheet" href="css/main.css">
-  <script id='shifts' type="text/x-handlebars-template">
+  <script id='shift' type="text/x-handlebars-template">
     {{#each this}}
       <div class='shiftname'>
         {{this.shift}}
@@ -17,7 +17,7 @@
       </div>
     {{/each}}
   </script>
-  <script id='positions' type="text/x-handlebars-template">
+  <script id='position' type="text/x-handlebars-template">
     {{#each this}}
       <div class='positionname'>
         {{this.position}}
@@ -51,11 +51,11 @@
         </div>
         <div class='objectInfo'>
           <div><h3>Смены</h3></div>
-          <div id='shiftsArea'>
+          <div id='shiftArea'>
 
           </div>
           <div><h3>Должности</h3></div>
-          <div id='positionsArea'>
+          <div id='positionArea'>
 
           </div>
         </div>

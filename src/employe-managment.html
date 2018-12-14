@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <title>Vacation-controller</title>
   <link rel="stylesheet" href="css/main.css">
-  <script id='shifts' type="text/x-handlebars-template">
+  <script id='shift' type="text/x-handlebars-template">
     {{#each this}}
       <option value='{{this.shift}}'>
         '{{this.shift}}'
       </option>
     {{/each}}
   </script>
-  <script id='positions' type="text/x-handlebars-template">
+  <script id='position' type="text/x-handlebars-template">
     {{#each this}}
       <option value='{{this.position}}'>
         '{{this.position}}'
       </option>
     {{/each}}
   </script>
-  <script id='persons' type="text/x-handlebars-template">
+  <script id='person' type="text/x-handlebars-template">
     {{#each this}}
       <div class='personName'>
         {{this.person}} - &nbsp;
@@ -53,7 +53,7 @@
         </div>
         <div class='objectInfo'>
           <div><h3>Сотрудники</h3></div>
-          <div id='personsSelect'>
+          <div id='personSelect'>
 
           </div>
         </div>

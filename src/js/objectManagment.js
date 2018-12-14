@@ -6,26 +6,26 @@ module.exports = class ObjectManagment extends PageScript{
   constructor(selectors){
     super(selectors);
 
-    this.shifts=[];
-    this.positions=[];
+    this.shift=[];
+    this.position=[];
     this.shiftSort = 1;
     this.positionSort = 1;
-    this.getObjectData(rep=>this.handleObjectData(rep));
+
+    this.getObjectData(this.handleObjectData);
 
     this.setListeners();
 
   }
 
   handleObjectData(reps){
-    [this.shifts, this.positions] = reps;
+    [this.shift, this.position] = reps;
 
-    this.sortAndRender('shift', 'shiftsArea');
-    this.sortAndRender('position', 'positionsArea');
+    this.sortAndRender('shift', 'shiftArea');
+    this.sortAndRender('position', 'positionArea');
   }
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', ()=>
-      this.getObjectData(rep=>this.handleObjectData(rep))
-    );
+      this.getObjectData(this.handleObjectData));
   }
 }
