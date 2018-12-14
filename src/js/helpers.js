@@ -642,17 +642,20 @@ module.exports.PageScript = class PageScript {
 
   getObjectData(handleObjectData){
     return getObjectData()
-      .then(handleObjectData);
+      .then(handleObjectData)
+      .catch(err=>console.log(err));
   }
 
   getEmployeData(handleEmployeData){
     return getEmployeData()
       .then(handleEmployeData)
+      .catch(err=>console.log(err));
   }
 
   getVacationData(handleVacationData){
     return getVacationData()
-      .then(handleVacationData);
+      .then(handleVacationData)
+      .catch(err=>console.log(err));
   }
 
   render(data, selector){

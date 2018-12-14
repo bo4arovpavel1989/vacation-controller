@@ -10,7 +10,7 @@ module.exports = class ObjectManagment extends PageScript{
     this.positions=[];
     this.shiftSort = 1;
     this.positionSort = 1;
-    this.getObjectData(this.handleObjectData);
+    this.getObjectData(rep=>this.handleObjectData(rep));
 
     this.setListeners();
 
@@ -24,6 +24,8 @@ module.exports = class ObjectManagment extends PageScript{
   }
 
   setListeners(){
-    this.formsHandler.ee.on('refreshRender', ()=>this.getObjectData());
+    this.formsHandler.ee.on('refreshRender', ()=>
+      this.getObjectData(rep=>this.handleObjectData(rep))
+    );
   }
 }

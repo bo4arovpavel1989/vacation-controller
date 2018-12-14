@@ -12,16 +12,17 @@ module.exports = class EmployeManagment extends PageScript{
     this.personSort = 1;
     this.problemsCalendar = [];
 
-    this.getVacationData(this.handleVacationData);
+    this.getVacationData(rep=>this.handleVacationData(rep));
 
     this.setListeners();
 
-    this.getEmployeData()
-      .then(this.handleEmployeData);
+    this.getEmployeData(rep=>this.handleEmployeData(rep));
   }
 
   setListeners(){
-    this.formsHandler.ee.on('refreshRender', ()=>this.getVacationData(this.handleVacationData));
+    this.formsHandler.ee.on('refreshRender', ()=>
+      this.getVacationData(rep=>this.handleVacationData(rep))
+    );
   }
 
   handleEmployeData(rep){

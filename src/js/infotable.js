@@ -31,10 +31,9 @@ module.exports = class EmployeManagment extends PageScript{
     };
     this.graphData=this.defaults;
 
-    this.getObjectData()
-      .then(this.handleObjectData);
+    this.getObjectData(rep=>this.handleObjectData(rep));
 
-      this.setListeners();
+    this.setListeners();
   }
 
   setListeners(){

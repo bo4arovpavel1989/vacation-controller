@@ -15,9 +15,9 @@ module.exports = class EmployeManagment extends PageScript{
 
     this.setListeners();
 
-    this.getObjectData(this.handleObjectData)
+    this.getObjectData(rep=>this.handleObjectData(rep))
 
-    this.getEmployeData(this.handleEmployeData);
+    this.getEmployeData(rep=>this.handleEmployeData(rep));
   }
 
   handleEmployeData(rep){
@@ -34,6 +34,8 @@ module.exports = class EmployeManagment extends PageScript{
   }
 
   setListeners(){
-    this.formsHandler.ee.on('refreshRender', ()=>this.getEmployeData(this.handleEmployeData));
+    this.formsHandler.ee.on('refreshRender', ()=>
+      this.getEmployeData(rep=>this.handleEmployeData(rep))
+    );
   }
 }
