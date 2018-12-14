@@ -1,6 +1,7 @@
 'use strict'
 
-const {getVacationHandout, PageScript} = require('./helpers');
+const {getVacationHandout} = require('./helpers');
+const PageScript = require('./PageScript');
 
 module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
@@ -12,27 +13,25 @@ module.exports = class EmployeManagment extends PageScript{
     this.personSort = 1;
     this.problemsCalendar = [];
 
-    this.getVacationData(this.handleVacationData);
+    this.getVacationData();
 
     this.setListeners();
 
-    this.getEmployeData(this.handleEmployeData);
+    this.getEmployeData();
   }
 
   setListeners(){
-    this.formsHandler.ee.on('refreshRender', ()=>
-      this.getVacationData(this.handleVacationData)
-    );
+    this.formsHandler.ee.on('refreshRender', this.getVacationData);
   }
 
   handleEmployeData(rep){
-    this.persons=rep;
+    this.person=rep;
 
     this.sortAndRender('person', 'personSelect');
   }
 
   handleVacationData(rep){
-    this.vacations=rep;
+    this.vacation=rep;
 
     this.getVacationHandout();
     this.sortAndRender('vacation', 'vacationSelect');
@@ -44,8 +43,6 @@ module.exports = class EmployeManagment extends PageScript{
         if (rep.length === 0) rep.push(false);
 
         this.problemsCalendar = rep;
-
-        console.log(rep)
 
         this.render('problemsCalendar', 'problemsCalendarHandout');
       })

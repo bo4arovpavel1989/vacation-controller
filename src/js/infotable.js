@@ -5,9 +5,9 @@ const {compare,
   prepareCalendar,
   preparePersons,
   getFilterData,
-  concatVacations,
-  PageScript
+  concatVacations
 } = require('./helpers');
+const PageScript = require('./PageScript');
 
 module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
@@ -31,7 +31,7 @@ module.exports = class EmployeManagment extends PageScript{
     };
     this.graphData=this.defaults;
 
-    this.getObjectData(this.handleObjectData);
+    this.getObjectData();
 
     this.setListeners();
   }

@@ -1,6 +1,6 @@
 'use strict'
 
-const {PageScript} = require('./helpers');
+const PageScript = require('./PageScript');
 
 module.exports = class EmployeManagment extends PageScript{
   constructor(selectors){
@@ -15,27 +15,25 @@ module.exports = class EmployeManagment extends PageScript{
 
     this.setListeners();
 
-    this.getObjectData(this.handleObjectData);
+    this.getObjectData();
 
-    this.getEmployeData(this.handleEmployeData);
+    this.getEmployeData();
   }
 
   handleEmployeData(rep){
     this.person=rep;
 
-    this.sortAndRender('person', 'personsSelect');
+    this.sortAndRender('person', 'personSelect');
   }
 
   handleObjectData(reps){
     [this.shift, this.position] = reps;
 
-    this.sortAndRender('shift', 'shiftsSelect');
-    this.sortAndRender('position', 'positionsSelect');
+    this.sortAndRender('shift', 'shiftSelect');
+    this.sortAndRender('position', 'positionSelect');
   }
 
   setListeners(){
-    this.formsHandler.ee.on('refreshRender', ()=>
-      this.getEmployeData(this.handleEmployeData)
-    );
+    this.formsHandler.ee.on('refreshRender', this.getEmployeData);
   }
 }

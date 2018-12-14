@@ -646,34 +646,34 @@ module.exports.PageScript = class PageScript {
     this.render(entry, selector);
   }
 
-  getObjectData(handleObjectData){
+  getObjectData(){
     return getObjectData()
-      .then(handleObjectData)
+      .then(this.handleObjectData)
       .catch(err=>console.log(err));
   }
 
-  getEmployeData(handleEmployeData){
+  getEmployeData(){
     return getEmployeData()
-      .then(handleEmployeData)
+      .then(this.handleEmployeData)
       .catch(err=>console.log(err));
   }
 
-  getVacationData(handleVacationData){
+  getVacationData(){
     return getVacationData()
-      .then(handleVacationData)
+      .then(this.handleVacationData)
       .catch(err=>console.log(err));
   }
 
   handleObjectData(){
-    return this;
+    return null;
   }
 
   handleEmployeData(){
-    return this;
+    return null;
   }
 
   handleVacationData(){
-    return this;
+    return null;
   }
 
   render(data, selector){

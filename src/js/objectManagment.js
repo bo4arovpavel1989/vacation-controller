@@ -1,6 +1,6 @@
 'use strict'
 
-const {PageScript} = require('./helpers');
+const PageScript = require('./PageScript');
 
 module.exports = class ObjectManagment extends PageScript{
   constructor(selectors){
@@ -11,7 +11,7 @@ module.exports = class ObjectManagment extends PageScript{
     this.shiftSort = 1;
     this.positionSort = 1;
 
-    this.getObjectData(this.handleObjectData);
+    this.getObjectData();
 
     this.setListeners();
 
@@ -25,7 +25,6 @@ module.exports = class ObjectManagment extends PageScript{
   }
 
   setListeners(){
-    this.formsHandler.ee.on('refreshRender', ()=>
-      this.getObjectData(this.handleObjectData));
+    this.formsHandler.ee.on('refreshRender', this.getObjectData);
   }
 }
