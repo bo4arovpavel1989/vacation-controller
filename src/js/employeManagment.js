@@ -9,9 +9,6 @@ module.exports = class EmployeManagment extends PageScript{
     this.person=[];
     this.shift=[];
     this.position=[];
-    this.shiftSort = 1;
-    this.positionSort = 1;
-    this.personSort = 1;
 
     this.setListeners();
 

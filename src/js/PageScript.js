@@ -20,12 +20,11 @@ module.exports = class PageScript {
     this.handleObjectData = this.handleObjectData.bind(this);
     this.handleEmployeData = this.handleEmployeData.bind(this);
     this.handleVacationData = this.handleVacationData.bind(this);
+    this.sort = 'person';
+    this.sortValue = 1;
   }
 
-  sortAndRender(entry, selector){
-    this[entry] = this[entry].sort(compare(entry, this[`${entry}Sort`]));
-    this.render(entry, selector);
-  }
+  //TODO: add sort button logick
 
   getObjectData(){
     return getObjectData()
@@ -55,6 +54,12 @@ module.exports = class PageScript {
 
   handleVacationData(){
     return null;
+  }
+
+  sortAndRender(entry, selector){
+
+    this[entry] = this[entry].sort(compare(this.sort, this.sortValue));
+    this.render(entry, selector);
   }
 
   render(data, selector){

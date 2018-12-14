@@ -8,8 +8,6 @@ module.exports = class ObjectManagment extends PageScript{
 
     this.shift=[];
     this.position=[];
-    this.shiftSort = 1;
-    this.positionSort = 1;
 
     this.getObjectData();
 

@@ -9,8 +9,6 @@ module.exports = class EmployeManagment extends PageScript{
 
     this.person=[];
     this.vacation=[];
-    this.vacationSort = 1;
-    this.personSort = 1;
     this.problemsCalendar = [];
 
     this.getVacationData();
