@@ -110,10 +110,10 @@ const {postData, deleteData, getForm, getData} = require('./helpers');
   */
   openPopup(e, form){
     const el = document.getElementById(`${form}FormArea`);
-
+    
     this.isPopup = true;
     el.style.left = e.x + 'px';
-    el.style.top = e.y + 'px';
+    el.style.top = e.layerY + 'px';
     setTimeout(()=>el.classList.add('popedUp'), 10);
   }
 
