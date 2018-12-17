@@ -16,7 +16,7 @@
       <div class='vacationName'>
         {{this.person}} -
          {{formatDate this.dateFrom day="numeric" month="long" year="numeric"}} -
-        {{this.long}} - дней
+        {{this.long}} дней
         <span class='editObject popupButton' data-form='edit' data-object='Vacation' data-id='{{this._id}}'>
           &nbsp; &#9998; &nbsp;
         </span>
@@ -68,6 +68,16 @@
         </div>
         <div class='objectInfo'>
           <div><h3>Отпуска</h3></div>
+          <div class='sortMethod' data-entry='vacation' data-area='vacationSelect'>
+            Сортировка:
+            <select id='setSort'>
+              <option value='person'>ФИО</option>
+              <option value='dateFrom'>Дата</option>
+            </select>
+            <span id='sortValue'>
+              &uarr;
+            </span>
+          </div>
           <div id='vacationSelect'>
 
           </div>

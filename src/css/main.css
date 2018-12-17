@@ -172,7 +172,7 @@ body {
 
 .sortMethod {
   border-bottom: 1px solid #a39389;
-  width: 194px; }
+  display: inline-block; }
 
 #sortValue {
   cursor: pointer;

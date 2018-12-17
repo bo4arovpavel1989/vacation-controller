@@ -23,34 +23,39 @@ module.exports = class PageScript {
     this.sort = 'person';
     this.sortValue = 1;
 
-    this.setSortListener();
-    this.setSortValue();
+    this.setSortListeners();
   }
 
-  setSortListener(){
+  setSortListeners(){
     const sortEl = document.getElementById('setSort');
+    const sortValEl = document.getElementById('sortValue');
 
-    sortEl.addEventListener('change', ()=>{
-      this.sort = sortEl.value;
-
-      this.sortAndRender(sortEl.dataset.entry, sortEl.dataset.area);
-    });
+    if(sortEl && sortValEl) {
+      sortEl.addEventListener('change', ()=>this.setSort(sortEl));
+      sortValEl.addEventListener('click', ()=>this.setSortValue(sortValEl));
+    }
   }
 
-  setSortValue(){
-    const sortValEl = document.getElementById('sortValue'),
-      contentMap = {
+  setSort(sortEl){
+      this.sort = sortEl.value;
+      const dataAttr = sortEl.parentElement.dataset;
+
+      this.sortAndRender(dataAttr.entry, dataAttr.area);
+  }
+
+  setSortValue(sortValEl){
+    const contentMap = {
         '1': '&uarr;',
         '-1': '&darr;'
       };
 
-    sortValEl.addEventListener('click', ()=>{
-      this.sortValue *= -1;
-      const stringSortValue = this.sortValue.toString();
+    const dataAttr = sortValEl.parentElement.dataset;
 
-      sortValEl.innerHTML = contentMap[stringSortValue];
-      this.sortAndRender(sortValEl.dataset.entry, sortValEl.dataset.area);
-    });
+    this.sortValue *= -1;
+    const stringSortValue = this.sortValue.toString();
+
+    sortValEl.innerHTML = contentMap[stringSortValue];
+    this.sortAndRender(dataAttr.entry, dataAttr.area);
   }
 
   getObjectData(){
