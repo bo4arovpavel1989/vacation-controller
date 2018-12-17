@@ -266,9 +266,36 @@ module.exports = class PageScript {
     this.handleVacationData = this.handleVacationData.bind(this);
     this.sort = 'person';
     this.sortValue = 1;
+
+    this.setSortListener();
+    this.setSortValue();
   }
 
-  //TODO: add sort button logick
+  setSortListener(){
+    const sortEl = document.getElementById('setSort');
+
+    sortEl.addEventListener('change', ()=>{
+      this.sort = sortEl.value;
+
+      this.sortAndRender(sortEl.dataset.entry, sortEl.dataset.area);
+    });
+  }
+
+  setSortValue(){
+    const sortValEl = document.getElementById('sortValue'),
+      contentMap = {
+        '1': '&uarr;',
+        '-1': '&darr;'
+      };
+
+    sortValEl.addEventListener('click', ()=>{
+      this.sortValue *= -1;
+      const stringSortValue = this.sortValue.toString();
+
+      sortValEl.innerHTML = contentMap[stringSortValue];
+      this.sortAndRender(sortValEl.dataset.entry, sortValEl.dataset.area);
+    });
+  }
 
   getObjectData(){
     return getObjectData()

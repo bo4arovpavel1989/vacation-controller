@@ -21,9 +21,11 @@
   <script id='person' type="text/x-handlebars-template">
     {{#each this}}
       <div class='personName'>
-        {{this.person}} - &nbsp;
-        {{this.shift}} - &nbsp;
-        {{this.position}}
+        <span class='sortedList'>
+          {{this.person}} - &nbsp;
+          {{this.shift}} - &nbsp;
+          {{this.position}}
+        </span>
         <span class='editObject popupButton' data-form='edit' data-object='Person' data-id='{{this._id}}'>
           &nbsp; &#9998; &nbsp;
         </span>
@@ -53,6 +55,17 @@
         </div>
         <div class='objectInfo'>
           <div><h3>Сотрудники</h3></div>
+          <div class='sortMethod'>
+            Сортировка:
+            <select id='setSort' data-entry='person' data-area='personSelect'>
+              <option value='person'>ФИО</option>
+              <option value='shift'>Смена</option>
+              <option value='position'>Должность</option>
+            </select>
+            <span id='sortValue'  data-entry='person' data-area='personSelect'>
+              &uarr;
+            </span>
+          </div>
           <div id='personSelect'>
 
           </div>
