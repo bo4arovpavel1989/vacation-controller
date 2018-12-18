@@ -152,24 +152,32 @@ module.exports.prepareCalendar = prepareCalendar;
  * in the form of object ready for render in table
  * @param {Array} sortedData - array of vacation data sorted by person
  * @param {Array} dates - full array of dates from dateFrom to dateTo
- * @returns {Array} array if vacation data objects {person, daysOff:[...]}
+ * @returns {Array} array of vacation data objects {person, daysOff:[...]}
  */
 const preparePersons = function(sortedData, dates){
-  let persons = [];
+  const persons = [];
 
   sortedData.forEach((datum, i)=>{
     persons.push({person:datum.person, daysOff:[]});
 
+    // If person has any vacation in the period
+    if(datum.dateFrom) {
       dates.forEach(date=>{
-      const currentDate = Date.parse(`${date.year}-${date.month}-${date.date}`);
-      const dateFrom = Date.parse(datum.dateFrom);
-      const dateTo = Date.parse(datum.dateTo);
+        const currentDate = Date.parse(`${date.year}-${date.month}-${date.date}`);
+        const dateFrom = Date.parse(datum.dateFrom);
+        const dateTo = Date.parse(datum.dateTo);
 
-      if(currentDate >= dateFrom && currentDate < dateTo)
-        persons[i].daysOff.push({is:true, _id:datum._id})
-      else
-        persons[i].daysOff.push({is:false})
-    })
+        if(currentDate >= dateFrom && currentDate < dateTo)
+          persons[i].daysOff.push({is:true, _id:datum._id})
+        else
+          persons[i].daysOff.push({is:false})
+      });
+    } else {
+      dates.forEach(date=>{
+          persons[i].daysOff.push({is:false})
+      });
+
+    }
 
   });
 

@@ -202,6 +202,28 @@ module.exports.getDatesQuery = function(dates){
   ]
 }
 
+/**
+ * Function concats all names array with array of vacations
+ * so that we can see all persons of certaion shift and position
+ * when rendering in the infotable
+ * @param {Array} namesArray - array of persons of the certain shift and position
+ * @param {Aray} vacationsArray - array of the persons's vacations of certain time period
+ * @returns {Array} concated array
+ */
+module.exports.concatPersonArrays = function(namesArray, vacationsArray){
+  try{
+    namesArray.forEach(nameObj=>{
+      const {person} = nameObj;
+
+      if(!_.some(vacationsArray, {person})) vacationsArray.push({person})
+    });
+
+    return vacationsArray;
+  } catch(e){
+    throw new Error(e);
+  }
+};
+
 
 /**
  * Function gets all positions from database

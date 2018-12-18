@@ -4,7 +4,8 @@ const {
 		getFullDates,
 		getOrQuery,
 		getNamesQuery,
-		getDatesQuery
+		getDatesQuery,
+		concatPersonArrays
 	} = require('./customfunctions');
 
 module.exports.addObject = function (req, res) {
@@ -28,11 +29,13 @@ module.exports.editObject = function(req, res){
 module.exports.getVacationsByFilter = function(req, res){
 	const dates = getFullDates(req.body);
 	const orQuery = getOrQuery(req.body);
+	let namesQuery = [];
 
 	db.find('Person', {$or: orQuery})
 		.then(rep=>{
-			const namesQuery = getNamesQuery(rep);
 			const datesQuery = getDatesQuery(dates);
+
+			namesQuery = getNamesQuery(rep);
 
 			return db.find('Vacation', {
 					$and: [
@@ -41,6 +44,6 @@ module.exports.getVacationsByFilter = function(req, res){
 					]
 				})
 		})
-	.then(rep=>res.json(rep))
+	.then(vacations=>res.json(concatPersonArrays(namesQuery, vacations)))
 	.catch(err=>res.status(500).json({err:err.message}))
 }
