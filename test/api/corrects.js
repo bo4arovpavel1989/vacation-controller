@@ -61,9 +61,29 @@ module.exports.positions = [
 	{position:'Guard', totalQuantity:6,shiftQuantity:2}
 ]
 
+module.exports.namesQuery = [
+	{person:'Adam1'}, 
+	{person:'Adam2'}, 
+	{person:'Adam3'},
+	{person:'Adam4'} 
+];
+
+// For concatPersonArrays test coz it modifies this array
+module.exports.vacationsArray = [
+	{person:'Adam4', dateFrom:'2019-01-01', dateTo:'2019-01-08', long:7}
+];
+
+// For getVacationCalendar test
 module.exports.vacations = [
 	{person:'Adam4', dateFrom:'2019-01-01', dateTo:'2019-01-08', long:7}
 ];
+
+module.exports.concatedNamesVacationsArray = [
+	{person:'Adam4', dateFrom:'2019-01-01', dateTo:'2019-01-08', long:7},
+	{person:'Adam1'}, 
+	{person:'Adam2'}, 
+	{person:'Adam3'}
+]
 
 module.exports.vacationCalendar = [
 	{

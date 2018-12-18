@@ -113,6 +113,17 @@ describe('getDatesQuery', ()=>{
 	});
 });
 
+describe('concatPersonArrays', ()=>{
+	it('Should return concated array from namesArray and vacationsArray', ()=>{
+		const {namesQuery, vacationsArray, concatedNamesVacationsArray} = corrects,
+			{concatPersonArrays} = customFunctions,
+			result = concatPersonArrays(namesQuery, vacationsArray);
+			
+		expect(result).to.deep.equal(concatedNamesVacationsArray);	
+		
+	});
+});
+
 describe('refreshShiftsDuties', ()=>{
 	before(()=>{
 		spyDateNow = sinon.stub(Date, 'now');
