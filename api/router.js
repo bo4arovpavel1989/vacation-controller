@@ -37,6 +37,12 @@ const postRequests = [
 		url: '/getvacationsbyfilter',
 		middleware:noMiddleware,
 		callback:postRequestsHandlers.getVacationsByFilter
+	},
+	// Because i handle form - its in postrequests
+	{
+		url: '/getshiftcalendar',
+		middleware:noMiddleware,
+		callback:postRequestsHandlers.getShiftCalendar
 	}
 ];
 

@@ -5,6 +5,7 @@ const ObjectManagment = require('./objectManagment');
 const VacationManagment = require('./vacationManagment');
 const Infotable = require('./infotable');
 const EmployeManagment = require('./employeManagment');
+const ShiftCalendar = require('./shiftCalendar');
 let pageScript;
 
 switch(getPage()) {
@@ -26,6 +27,11 @@ switch(getPage()) {
   case 'employeManagment':
     pageScript = new EmployeManagment({
       formsSelector: '.employeManagmentForm'
+    });
+    break;
+  case 'shiftCalendar':
+    pageScript = new ShiftCalendar({
+      formsSelector: '.filterManagmentForm'
     });
     break;
   default:

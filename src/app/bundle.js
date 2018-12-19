@@ -820,6 +820,7 @@ const ObjectManagment = require('./objectManagment');
 const VacationManagment = require('./vacationManagment');
 const Infotable = require('./infotable');
 const EmployeManagment = require('./employeManagment');
+const ShiftCalendar = require('./shiftCalendar');
 let pageScript;
 
 switch(getPage()) {
@@ -843,11 +844,16 @@ switch(getPage()) {
       formsSelector: '.employeManagmentForm'
     });
     break;
+  case 'shiftCalendar':
+    pageScript = new ShiftCalendar({
+      formsSelector: '.filterManagmentForm'
+    });
+    break;
   default:
     pageScript = null;
 }
 
-},{"./config":3,"./employeManagment":4,"./infotable":7,"./objectManagment":11,"./vacationManagment":12}],7:[function(require,module,exports){
+},{"./config":3,"./employeManagment":4,"./infotable":7,"./objectManagment":11,"./shiftCalendar":12,"./vacationManagment":13}],7:[function(require,module,exports){
 'use strict'
 
 const {compare,
@@ -971,6 +977,23 @@ module.exports = class ObjectManagment extends PageScript{
 }
 
 },{"./PageScript":2}],12:[function(require,module,exports){
+'use strict'
+
+const PageScript = require('./PageScript');
+
+module.exports = class ShiftCalendar extends PageScript{
+  constructor(selectors){
+    super(selectors);
+
+
+  }
+
+  setListeners(){
+    this.formsHandler.ee.on('refreshRender', ()=>{});
+  }
+}
+
+},{"./PageScript":2}],13:[function(require,module,exports){
 'use strict'
 
 const {getVacationHandout} = require('./helpers');

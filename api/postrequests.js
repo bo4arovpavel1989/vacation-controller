@@ -47,3 +47,8 @@ module.exports.getVacationsByFilter = function(req, res){
 	.then(vacations=>res.json(concatPersonArrays(namesQuery, vacations)))
 	.catch(err=>res.status(500).json({err:err.message}))
 }
+
+module.exports.getShiftCalendar = function(req, res){
+	const dates = getFullDates(req.body);
+	
+};

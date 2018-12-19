@@ -541,3 +541,23 @@ module.exports.getNewProblemsCalendar = async function(){
 
     return problemsCalendar;
 };
+
+/**
+ * Function gets shifts from db and calculates duty calendar
+ * based on dates array [dateFrom, dateTo]
+ * @param {Array} dates - [dateFrom, dateTo]
+ * @returns {Promise} array of dates with duty shifts
+ */
+module.exports.getDutyCalendar = async function(dates){
+  const [dateFrom, dateTo] = dates,
+    dayLong = 1000 * 60 * 60 * 24;
+
+  dateFrom = Date.parse(dateFrom);
+  dateTo = Date.parse(dateTo);
+
+  let currentDate = dateFrom;
+
+  while(currentDate < dateTo){
+    //TODO make logick of shift calculation
+  }
+};
