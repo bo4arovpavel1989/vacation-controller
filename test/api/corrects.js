@@ -198,3 +198,10 @@ module.exports.problemsCalendar = [
 		totalProblem:[]
 	}
 ];
+
+module.exports.dutyCalendar = [
+	{date: new Date('2019-01-01'), shift:['Суточная 4', 'Оперативная 2']},
+	{date: new Date('2019-01-02'), shift:['Суточная 1', 'Оперативная 2']},
+	{date: new Date('2019-01-03'), shift:['Суточная 2', 'Оперативная 1']},
+	{date: new Date('2019-01-04'), shift:['Суточная 3', 'Оперативная 1']},
+];

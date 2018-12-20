@@ -549,14 +549,12 @@ module.exports.getNewProblemsCalendar = async function(){
  * @returns {Promise} array of dates with duty shifts
  */
 module.exports.getDutyCalendar = async function(dates){
-  console.log(dates)
-
   const calendar = [],
     dayLong = 1000 * 60 * 60 * 24,
     shifts = await db.find('Shift');
-  
+
   let [dateFrom, dateTo] = dates;
-	
+
   dateFrom = Date.parse(dateFrom);
   dateTo = Date.parse(dateTo);
 
@@ -573,20 +571,7 @@ module.exports.getDutyCalendar = async function(dates){
     dutyShifts.forEach(shiftObj=>{
       const {shift} = shiftObj;
 
-      // If there wasn't set duty shift on previous loop
-      if(!_.some(thatDay.shift, shift) && shiftObj.duty === 1){
-        thatDay.shift.push(shift);
-        shiftObj.dutyDate = thatDay.date;
-      } else if (!_.some(thatDay.shift, shift) && shiftObj.duty > 1){
-        thatDay.shift.push(shift);
-        shiftObj.dutyDate = thatDay.date;
-
-        // Setting duty shift for future loops
-        for(let j = 1; j <= shiftObj.duty; j++) {
-          if (calendar[i+j]) calendar[i+j].shift.push(shift)
-          else break;
-        }
-      }
+      thatDay.shift.push(shift);
     });
   });
 

@@ -310,7 +310,7 @@ describe('checkVacationCalendar', ()=>{
 
 describe('getDutyCalendar', ()=>{
 	it('Returns duty calendar for unputed dates', ()=>{
-		const dates = ['2019-01-01', '2019-01-14'],
+		const dates = ['2019-01-01', '2019-01-05'],
 			{shiftsFromDb, dutyCalendar} = corrects,
 			{getDutyCalendar} = customFunctions;
 		
@@ -318,7 +318,7 @@ describe('getDutyCalendar', ()=>{
 			.withArgs('Shift').resolves(shiftsFromDb);
 			
 		return getDutyCalendar(dates).then(result=>{
-			expect(result).to.deep.equal([]);
+			expect(result).to.deep.equal(dutyCalendar);
 		});	
 	});
 });
