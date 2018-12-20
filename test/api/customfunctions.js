@@ -317,7 +317,7 @@ describe('getDutyCalendar', ()=>{
 		spyFind
 			.withArgs('Shift').resolves(shiftsFromDb);
 			
-		return getDutyCalendar(result=>{
+		return getDutyCalendar(dates).then(result=>{
 			expect(result).to.deep.equal([]);
 		});	
 	});

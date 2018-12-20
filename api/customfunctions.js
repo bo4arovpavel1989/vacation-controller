@@ -552,10 +552,11 @@ module.exports.getDutyCalendar = async function(dates){
   console.log(dates)
 
   const calendar = [],
-    [dateFrom, dateTo] = dates,
     dayLong = 1000 * 60 * 60 * 24,
     shifts = await db.find('Shift');
-
+  
+  let [dateFrom, dateTo] = dates;
+	
   dateFrom = Date.parse(dateFrom);
   dateTo = Date.parse(dateTo);
 
@@ -582,7 +583,7 @@ module.exports.getDutyCalendar = async function(dates){
 
         // Setting duty shift for future loops
         for(let j = 1; j <= shiftObj.duty; j++) {
-          if (calendar(i+j)) calendar(i+j).shift.push(shift)
+          if (calendar[i+j]) calendar[i+j].shift.push(shift)
           else break;
         }
       }
