@@ -307,3 +307,18 @@ describe('checkVacationCalendar', ()=>{
 		})
 	});
 });
+
+describe('getDutyCalendar', ()=>{
+	it('Returns duty calendar for unputed dates', ()=>{
+		const dates = ['2019-01-01', '2019-01-14'],
+			{shiftsFromDb, dutyCalendar} = corrects,
+			{getDutyCalendar} = customFunctions;
+		
+		spyFind
+			.withArgs('Shift').resolves(shiftsFromDb);
+			
+		return getDutyCalendar(result=>{
+			expect(result).to.deep.equal([]);
+		});	
+	});
+});
