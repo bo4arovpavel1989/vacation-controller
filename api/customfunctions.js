@@ -252,11 +252,13 @@ module.exports.getVacationHandoutBounds = getVacationHandoutBounds;
 /**
  * Function sets for all shifts their duty dates
  * as close as possible to Date.now()
+ * @param {Boolean} refreshDb - if true - updates data base document
+ * @param {Date} date - date to update to
  * @returns {Promise} representing status of the operation
  */
-const refreshShiftsDuties = async function(){
+const refreshShiftsDuties = async function(refreshDb, date){
   const shifts = await db.find('Shift'),
-    currentDate = Date.now();
+    currentDate = Date.parse(date) || Date.now();
 
   for (let i = 0; i < shifts.length; i++) {
     const shift = shifts[i],
@@ -276,8 +278,12 @@ const refreshShiftsDuties = async function(){
 
     dutyDate = prevDutyDate;
 
-    await db.update('Shift', {_id}, {$set:{dutyDate}});
+    shift.dutyDate = new Date(prevDutyDate);
+
+    if(refreshDb) await db.update('Shift', {_id}, {$set:{dutyDate}});
   }
+
+  return shifts;
 };
 
 module.exports.refreshShiftsDuties = refreshShiftsDuties;
@@ -520,7 +526,7 @@ module.exports.checkVacationCalendar = checkVacationCalendar;
  * @returns {Promise} -array of dates with position problems
  */
 module.exports.getNewProblemsCalendar = async function(){
-  await refreshShiftsDuties();
+  await refreshShiftsDuties(true);
 
   let positions = await getPositions(),
     dateTo = await getVacationHandoutBounds(),
@@ -549,11 +555,10 @@ module.exports.getNewProblemsCalendar = async function(){
  * @returns {Promise} array of dates with duty shifts
  */
 module.exports.getDutyCalendar = async function(dates){
+  let [dateFrom, dateTo] = dates;
   const calendar = [],
     dayLong = 1000 * 60 * 60 * 24,
-    shifts = await db.find('Shift');
-
-  let [dateFrom, dateTo] = dates;
+    shifts = await refreshShiftsDuties(false, dateFrom);
 
   dateFrom = Date.parse(dateFrom);
   dateTo = Date.parse(dateTo);

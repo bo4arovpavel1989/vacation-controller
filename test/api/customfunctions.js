@@ -134,15 +134,15 @@ describe('refreshShiftsDuties', ()=>{
 	});
 	
 	it('Should call update dutyDate queries for shift documents', ()=>{
-		const {shiftsFromDb, refreshedDutyDates} = corrects;
+		const {shiftsFromDbToUpdate, refreshedDutyDates} = corrects;
 		const {refreshShiftsDuties} = customFunctions
 			
 		spyDateNow.returns(Date.parse('2019-01-01'));
-		spyFind.withArgs('Shift').resolves(shiftsFromDb);
+		spyFind.withArgs('Shift').resolves(shiftsFromDbToUpdate);
 		
-		return refreshShiftsDuties().then(()=>{
-			for (let i = 0; i < shiftsFromDb.length; i++){
-				let shift = shiftsFromDb[i];
+		return refreshShiftsDuties(true).then(()=>{
+			for (let i = 0; i < shiftsFromDbToUpdate.length; i++){
+				let shift = shiftsFromDbToUpdate[i];
 				let {_id} = shift,
 					dutyDate = refreshedDutyDates[i];
 				

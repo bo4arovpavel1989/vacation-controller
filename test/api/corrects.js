@@ -13,6 +13,15 @@ module.exports.editReq = {
 	body: {_id: 'id', person: 'personNew'}
 };
 
+module.exports.shiftsFromDbToUpdate = [
+	{shift:'Суточная 1', duty:1, off:3, dutyDate:'2018-11-27', _id:'id1'},
+	{shift:'Суточная 2', duty:1, off:3, dutyDate:'2018-11-28', _id:'id2'},
+	{shift:'Суточная 3', duty:1, off:3, dutyDate:'2018-11-29', _id:'id3'},
+	{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4'},
+	{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5'},
+	{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6'}
+];
+
 module.exports.shiftsFromDb = [
 	{shift:'Суточная 1', duty:1, off:3, dutyDate:'2018-11-27', _id:'id1'},
 	{shift:'Суточная 2', duty:1, off:3, dutyDate:'2018-11-28', _id:'id2'},
