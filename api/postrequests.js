@@ -5,7 +5,8 @@ const {
 		getOrQuery,
 		getNamesQuery,
 		getDatesQuery,
-		concatPersonArrays
+		concatPersonArrays,
+    getDutyCalendar
 	} = require('./customfunctions');
 
 module.exports.addObject = function (req, res) {
@@ -50,5 +51,8 @@ module.exports.getVacationsByFilter = function(req, res){
 
 module.exports.getShiftCalendar = function(req, res){
 	const dates = getFullDates(req.body);
-	
+  
+  getDutyCalendar(dates)
+    .then(calendar=>res.json(calendar))
+		.catch(err=>res.status(500).json({err:err.message}))
 };
