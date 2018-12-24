@@ -1,5 +1,4 @@
-const  {describe, it} = require('mocha'),
-	chai = require('chai'),
+const chai = require('chai'),
 	{expect} = chai,
 	sinon = require("sinon"),
 	sinonChai = require("sinon-chai"),
@@ -118,9 +117,9 @@ describe('concatPersonArrays', ()=>{
 		const {namesQuery, vacationsArray, concatedNamesVacationsArray} = corrects,
 			{concatPersonArrays} = customFunctions,
 			result = concatPersonArrays(namesQuery, vacationsArray);
-			
-		expect(result).to.deep.equal(concatedNamesVacationsArray);	
-		
+
+		expect(result).to.deep.equal(concatedNamesVacationsArray);
+
 	});
 });
 
@@ -132,20 +131,20 @@ describe('refreshShiftsDuties', ()=>{
 	after(()=>{
 		spyDateNow.restore();
 	});
-	
+
 	it('Should call update dutyDate queries for shift documents', ()=>{
 		const {shiftsFromDbToUpdate, refreshedDutyDates} = corrects;
 		const {refreshShiftsDuties} = customFunctions
-			
+
 		spyDateNow.returns(Date.parse('2019-01-01'));
 		spyFind.withArgs('Shift').resolves(shiftsFromDbToUpdate);
-		
+
 		return refreshShiftsDuties(true).then(()=>{
 			for (let i = 0; i < shiftsFromDbToUpdate.length; i++){
 				let shift = shiftsFromDbToUpdate[i];
 				let {_id} = shift,
 					dutyDate = refreshedDutyDates[i];
-				
+
 				expect(spyUpdate).calledWith('Shift', {_id}, {$set:{dutyDate}});
 			}
 		});
@@ -231,7 +230,7 @@ describe('checkIfPersonOnVacation', ()=>{
 			vacationDate = corrects.vacationCalendar[0],
 			{checkIfPersonOnVacation} = customFunctions,
 			result = checkIfPersonOnVacation(person, vacationDate);
-		
+
 		expect(result).to.equal(true);
 	});
 });
@@ -241,7 +240,7 @@ describe('getPersonsByShift', ()=>{
 		const {getPersonsByShift} = customFunctions,
 			{shiftsFromDb} = corrects,
 			{personsByShift} = corrects;
-			
+
 		for (let shift in personsByShift){
 			spyFind.withArgs('Person',{shift}).resolves(personsByShift[shift])
 		}
@@ -286,22 +285,22 @@ describe('checkVacationCalendar', ()=>{
 			{checkVacationCalendar} = customFunctions,
 			{shiftsFromDb} = corrects,
 			{personsByShift} = corrects;
-			
+
 		spyFind
 			.withArgs('Shift').resolves(shiftsFromDb);
 
 		// Stubbing db queries in getPersonsByShift
 		for (let shift in personsByShift){
 			spyFind.withArgs('Person',{shift}).resolves(personsByShift[shift])
-		}	
+		}
 		// Stubbed getPersonsByShift
-		
+
 		// Stubbing db queries in checkTotalPositionsQuantity
 		spyFind
 			.withArgs('Person', {position:'Guard'}).resolves(guardList)
 			.withArgs('Person', {position:'Medic'}).resolves(medicList);
 		// Stubbed checkTotalPositionsQuantity
-			
+
 		return checkVacationCalendar(vacationCalendar, positions).then(result=>{
 			expect(result).to.deep.equal(problemsCalendar);
 		})
@@ -313,12 +312,12 @@ describe('getDutyCalendar', ()=>{
 		const dates = ['2019-01-01', '2019-01-05'],
 			{shiftsFromDb, dutyCalendar} = corrects,
 			{getDutyCalendar} = customFunctions;
-		
+
 		spyFind
 			.withArgs('Shift').resolves(shiftsFromDb);
-			
+
 		return getDutyCalendar(dates).then(result=>{
 			expect(result).to.deep.equal(dutyCalendar);
-		});	
+		});
 	});
 });

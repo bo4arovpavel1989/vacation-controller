@@ -1,14 +1,13 @@
-const  {describe, it} = require('mocha'),
-  {expect} = require('chai'),
+const {expect} = require('chai'),
   helpers = require('../../src/js/helpers'),
   corrects = require('./corrects');
-  
+
 describe('getDayInMonth', ()=>{
   it('Should return quantity of days in month', ()=>{
 		const {getDayInMonth} = helpers,
 			result = getDayInMonth(2018, 04);
-			
-		expect(result).to.eql(30)	
+
+		expect(result).to.eql(30)
   });
 });
 
@@ -16,8 +15,8 @@ describe('getMonthName', ()=>{
   it('Should return string name of month', ()=>{
 		const {getMonthName} = helpers,
 			result = getMonthName(11);
-			
-		expect(result).to.eql('Ноябрь')	
+
+		expect(result).to.eql('Ноябрь')
   });
 });
 
@@ -26,8 +25,8 @@ describe('getMiddleMonthes', ()=>{
 		const {getMiddleMonthes} = helpers,
 			result = getMiddleMonthes(02,2018,06,2018,20),
 			{getMiddleMonthesCorrects} = corrects;
-			
-		expect(result).to.eql(getMiddleMonthesCorrects)	
+
+		expect(result).to.eql(getMiddleMonthesCorrects)
   });
 });
 
@@ -36,8 +35,8 @@ describe('getMiddleMonthes2', ()=>{
 		const {getMiddleMonthes} = helpers,
 			result = getMiddleMonthes(11,2018,02,2019,20),
 			{getMiddleMonthes2Corrects} = corrects;
-			
-		expect(result).to.eql(getMiddleMonthes2Corrects)	
+
+		expect(result).to.eql(getMiddleMonthes2Corrects)
   });
 });
 
@@ -54,15 +53,15 @@ describe('getForm', ()=>{
 		};
 		const {getForm} = helpers,
 			result = getForm(formObject);
-			
+
 		expect(result).to.eql({
 			checkbox:['1','3'],
 			date:'2018-11-08',
 			number:'2',
 			text:'text'
-		})	
+		})
 	});
-}); 
+});
 
  describe('prepareCalendar', ()=>{
 	 it('should return full calendar based on From and To dates', ()=>{
@@ -71,10 +70,10 @@ describe('getForm', ()=>{
 			{prepareCalendarCorrects} = corrects;
 		let yFrom = 2018,
 			result = prepareCalendar(yFrom, monthes);
-		
+
 		expect(result).to.eql(prepareCalendarCorrects);
 	 });
- }); 
+ });
 
 describe('preparePersons', ()=>{
 	it('Should return array of person vacation data for render', ()=>{
@@ -86,7 +85,7 @@ describe('preparePersons', ()=>{
 			{preparePersons} = helpers,
 			{preparePersonsCorrects} = corrects,
 			result = preparePersons(sortedData, preparePersonsParamDates);
-		
+
 		expect(result).to.eql(preparePersonsCorrects)
   });
 });
@@ -99,7 +98,7 @@ describe('concatVacationsOfSinglePerson', ()=>{
 			{concatedVacationsOfPersonCorrects} = corrects,
 			{concatVacationsOfSinglePerson} = helpers,
 			result = concatVacationsOfSinglePerson(indexes,person,personsFromCorrects);
-		
+
 		expect(result).to.eql(concatedVacationsOfPersonCorrects);
 	});
 });
@@ -110,7 +109,7 @@ describe('concatVacations', ()=>{
 			{concatedVacationsOfAllPersonsCorrects} = corrects,
 			{concatVacations} = helpers,
 			result = concatVacations(personsFromCorrects);
-		
+
 		expect(result).to.eql(concatedVacationsOfAllPersonsCorrects);
 	});
 });

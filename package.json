@@ -50,6 +50,7 @@
     "handlebars-intl": "^1.1.2",
     "lodash": "^4.17.11",
     "mongoose": "^5.3.6",
+    "node-sass": "^4.11.0",
     "node-windows": "^0.1.14"
   }
 }
