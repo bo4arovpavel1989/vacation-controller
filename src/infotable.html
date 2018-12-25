@@ -48,7 +48,8 @@
             <td class='namesArea' width="200">{{this.person}}</td>
             {{#each this.daysOff}}
               {{#if this.is}}
-                <td class='blueCell greyBorder' data-id='{{this._id}}' width={{../../dayWidth}}></td>
+                <!-- inline style - for export in EXCEL !!! -->
+                <td class='blueCell greyBorder' style="background-color:blue" data-id='{{this._id}}' width={{../../dayWidth}}></td>
               {{else}}
                 <td class='whiteCell greyBorder' width={{../../dayWidth}}></td>
               {{/if}}
