@@ -71,7 +71,6 @@ module.exports = class EmployeManagment extends PageScript{
 
     const {dates} = this.graphData.calendar;
     const sortedData = data.sort(compare('person', this.sortValue));
-    console.log(sortedData)
     const persons = preparePersons(sortedData, dates);
 
     this.graphData.persons = concatVacations(persons)

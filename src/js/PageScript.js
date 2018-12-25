@@ -20,6 +20,7 @@ module.exports = class PageScript {
     this.handleObjectData = this.handleObjectData.bind(this);
     this.handleEmployeData = this.handleEmployeData.bind(this);
     this.handleVacationData = this.handleVacationData.bind(this);
+    // Default sort
     this.sort = 'person';
     this.sortValue = 1;
 

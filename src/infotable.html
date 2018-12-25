@@ -28,7 +28,7 @@
   <script id='graphData' type="text/x-handlebars-template">
     <caption class='graphTitle'>{{this.title}}</caption>
         <tr class='monthesArea'>
-          <th width="200"></h>
+          <th width="200"></th>
           {{#each calendar.monthes}}
             <th class='monthName' colspan='{{this.dayInMonth}}' width={{this.monthWidth}}>
               {{this.monthName}} {{this.year}}
@@ -48,9 +48,9 @@
             <td class='namesArea' width="200">{{this.person}}</td>
             {{#each this.daysOff}}
               {{#if this.is}}
-                <td class='dayOff greyBorder' data-id='{{this._id}}' width={{../../dayWidth}}></td>
+                <td class='blueCell greyBorder' data-id='{{this._id}}' width={{../../dayWidth}}></td>
               {{else}}
-                <td class='dayDuty greyBorder' width={{../../dayWidth}}></td>
+                <td class='whiteCell greyBorder' width={{../../dayWidth}}></td>
               {{/if}}
             {{/each}}
           </tr>

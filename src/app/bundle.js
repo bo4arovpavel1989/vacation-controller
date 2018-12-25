@@ -264,6 +264,7 @@ module.exports = class PageScript {
     this.handleObjectData = this.handleObjectData.bind(this);
     this.handleEmployeData = this.handleEmployeData.bind(this);
     this.handleVacationData = this.handleVacationData.bind(this);
+    // Default sort
     this.sort = 'person';
     this.sortValue = 1;
 
@@ -927,7 +928,6 @@ module.exports = class EmployeManagment extends PageScript{
 
     const {dates} = this.graphData.calendar;
     const sortedData = data.sort(compare('person', this.sortValue));
-    console.log(sortedData)
     const persons = preparePersons(sortedData, dates);
 
     this.graphData.persons = concatVacations(persons)
@@ -980,6 +980,13 @@ module.exports = class ObjectManagment extends PageScript{
 'use strict'
 
 const PageScript = require('./PageScript');
+const {compare,
+  getMiddleMonthes,
+  prepareCalendar,
+  preparePersons,
+  getFilterData,
+  concatVacations
+} = require('./helpers');
 
 module.exports = class ShiftCalendar extends PageScript{
   constructor(selectors){
@@ -987,6 +994,19 @@ module.exports = class ShiftCalendar extends PageScript{
 
     this.calendar = [];
     this.shift = [];
+
+    this.sort = 'shift';
+
+    this.defaults = {
+      title:'',
+      dayWidth:20,
+      calendar: {
+        monthes:[],
+        dates:[]
+      }
+    };
+
+    this.graphData=this.defaults;
 
     this.setCalendar = this.setCalendar.bind(this);
     this.getObjectData();
@@ -996,13 +1016,35 @@ module.exports = class ShiftCalendar extends PageScript{
   setCalendar(rep){
     this.calendar = rep;
 
-    this.render('calendar', 'calendarArea')
     this.prepareGraphData();
   }
 
+  clearGraphData(){
+    this.graphData=this.defaults;
+  }
+
   prepareGraphData(){
+    this.prepareHeadRow();
     this.prepareShifts();
     this.fillDutyArray();
+
+    this.render('graphData', 'calendarArea');
+    this.render('shift', 'shiftCalendar');
+  }
+
+  prepareHeadRow(){
+    this.clearGraphData();
+
+    const {mFrom, mTo, yFrom, yTo} = getFilterData();
+    const {dayWidth} = this.graphData;
+
+    this.graphData.calendar.monthes = getMiddleMonthes(mFrom, yFrom, mTo, yTo, dayWidth);
+
+    const {monthes} = this.graphData.calendar;
+
+    this.graphData.calendar.dates = prepareCalendar(yFrom, monthes);
+
+    this.graphData.title = `Расписание дежурств ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
   }
 
   prepareShifts(){
@@ -1018,6 +1060,8 @@ module.exports = class ShiftCalendar extends PageScript{
 
         if(date.shift.includes(shift)) shiftObj.dutyArray.push(true);
         else shiftObj.dutyArray.push(false);
+
+        shiftObj.dayWidth = this.graphData.dayWidth;
       });
     });
 
@@ -1033,7 +1077,7 @@ module.exports = class ShiftCalendar extends PageScript{
   }
 }
 
-},{"./PageScript":2}],13:[function(require,module,exports){
+},{"./PageScript":2,"./helpers":5}],13:[function(require,module,exports){
 'use strict'
 
 const {getVacationHandout} = require('./helpers');

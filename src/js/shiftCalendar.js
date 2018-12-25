@@ -1,6 +1,13 @@
 'use strict'
 
 const PageScript = require('./PageScript');
+const {compare,
+  getMiddleMonthes,
+  prepareCalendar,
+  preparePersons,
+  getFilterData,
+  concatVacations
+} = require('./helpers');
 
 module.exports = class ShiftCalendar extends PageScript{
   constructor(selectors){
@@ -8,6 +15,19 @@ module.exports = class ShiftCalendar extends PageScript{
 
     this.calendar = [];
     this.shift = [];
+
+    this.sort = 'shift';
+
+    this.defaults = {
+      title:'',
+      dayWidth:20,
+      calendar: {
+        monthes:[],
+        dates:[]
+      }
+    };
+
+    this.graphData=this.defaults;
 
     this.setCalendar = this.setCalendar.bind(this);
     this.getObjectData();
@@ -17,13 +37,35 @@ module.exports = class ShiftCalendar extends PageScript{
   setCalendar(rep){
     this.calendar = rep;
 
-    this.render('calendar', 'calendarArea')
     this.prepareGraphData();
   }
 
+  clearGraphData(){
+    this.graphData=this.defaults;
+  }
+
   prepareGraphData(){
+    this.prepareHeadRow();
     this.prepareShifts();
     this.fillDutyArray();
+
+    this.render('graphData', 'calendarArea');
+    this.render('shift', 'shiftCalendar');
+  }
+
+  prepareHeadRow(){
+    this.clearGraphData();
+
+    const {mFrom, mTo, yFrom, yTo} = getFilterData();
+    const {dayWidth} = this.graphData;
+
+    this.graphData.calendar.monthes = getMiddleMonthes(mFrom, yFrom, mTo, yTo, dayWidth);
+
+    const {monthes} = this.graphData.calendar;
+
+    this.graphData.calendar.dates = prepareCalendar(yFrom, monthes);
+
+    this.graphData.title = `Расписание дежурств ${mFrom}-${yFrom} - ${mTo}-${yTo}`;
   }
 
   prepareShifts(){
@@ -39,6 +81,8 @@ module.exports = class ShiftCalendar extends PageScript{
 
         if(date.shift.includes(shift)) shiftObj.dutyArray.push(true);
         else shiftObj.dutyArray.push(false);
+
+        shiftObj.dayWidth = this.graphData.dayWidth;
       });
     });
 
