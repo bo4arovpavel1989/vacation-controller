@@ -257,10 +257,10 @@ describe('getDutyPersons', ()=>{
 		const {personsByShift} = corrects,
 			vacationDate = corrects.vacationCalendar[0],
 			{getDutyPersons} = customFunctions,
-			{shiftsFromDb} = corrects,
+			{dutyShifts} = corrects,
 			{positions} = corrects,
 			{dutyPersons} = corrects,
-			result = getDutyPersons(personsByShift, vacationDate, shiftsFromDb, positions);
+			result = getDutyPersons(personsByShift, vacationDate, dutyShifts, positions);
 
 		expect(result).to.deep.equal(dutyPersons);
 	});
@@ -271,8 +271,9 @@ describe('checkShiftPositionQuantity', ()=>{
 		const {dutyPersons} = corrects,
 			{positions} = corrects,
 			{shiftProblem} = corrects,
+			{dutyShifts} = corrects,
 			{checkShiftPositionQuantity} = customFunctions,
-			result = checkShiftPositionQuantity(dutyPersons, positions);
+			result = checkShiftPositionQuantity(dutyPersons, positions, dutyShifts);
 
 		expect(result).to.deep.equal(shiftProblem);
 	});

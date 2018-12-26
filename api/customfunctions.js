@@ -418,14 +418,12 @@ module.exports.getPersonsByShift = getPersonsByShift;
  * Function gets persons that are on duty today
  * @param {Object} personsByShift - list of employes by their shift
  * @param {Object} vacationDate -  - object containing vacation date and array of vacations
- * @param {Array} allShifts - array of all shifts objects from db
+ * @param {Array} shifts - array of duty shifts
  * @param {Array} positions - array of positions to check
  * @returns {Object} - object containing persons on duty that day {position1:Array, position2:Array}
  */
-const getDutyPersons = function(personsByShift, vacationDate, allShifts, positions){
-  let dutyPersons = {},
-    // Shifts that are on duty exactly that day
-    shifts = getShiftOnDuty(vacationDate.date, allShifts);
+const getDutyPersons = function(personsByShift, vacationDate, shifts, positions){
+  let dutyPersons = {};
 
   positions.forEach(position=>{
    dutyPersons[position.position] = [];
@@ -453,27 +451,20 @@ module.exports.getDutyPersons = getDutyPersons;
  * otherwise it pushes this position to problem array
  * @param {Object} dutyPersons - list of employes by their positions
  * @param {Array} positions - array of positions to check
+ * @param {Array} dutyShifts - array of shifts on duty that day
  * @returns {Array} - array of objects [{shift:Array, position:String}]
  * containing positions with not enough persons if any
  */
-const checkShiftPositionQuantity = function(dutyPersons, positions){
+const checkShiftPositionQuantity = function(dutyPersons, positions, dutyShifts){
   let shiftProblem = [];
 
   positions.forEach(positionObject=>{
     let {position} = positionObject;
 
     if(dutyPersons[position].length < positionObject.shiftQuantity){
-      let problem = {position};
+      let problem = {position, shift:[]};
 
-        // Shifts that have problems
-      problem.shift = new Set();
-
-      dutyPersons[position].forEach(person=>{
-          problem.shift.add(person.shift)
-      })
-
-      problem.shift = Array.from(problem.shift);
-
+      dutyShifts.forEach(shiftObj=>problem.shift.push(shiftObj.shift));
       shiftProblem.push(problem);
     }
   });
@@ -502,13 +493,14 @@ module.exports.checkShiftPositionQuantity = checkShiftPositionQuantity;
            shiftProblem:[],
            date:vacationCalendar[i].date
          },
-      dutyPersons = getDutyPersons(personsByShift, vacationCalendar[i], allShifts, positions);
+      dutyShifts = await getShiftOnDuty(vacationCalendar[i].date, allShifts),
+      dutyPersons = getDutyPersons(personsByShift, vacationCalendar[i], dutyShifts, positions);
 
     // Check positions in all shifts
     problem.totalProblem = await checkTotalPositionsQuantity(vacationCalendar[i], positions);
 
     // Check position in shifts in duty that day
-    problem.shiftProblem = checkShiftPositionQuantity(dutyPersons, positions);
+    problem.shiftProblem = checkShiftPositionQuantity(dutyPersons, positions, dutyShifts);
 
     if(problem.totalProblem.length > 0 || problem.shiftProblem.length > 0){
       problemsCalendar.push(problem)

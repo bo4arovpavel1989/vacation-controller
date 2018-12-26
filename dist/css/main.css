@@ -65,7 +65,7 @@
   display: flex;
   height: 18px; }
 
-.dayOff {
+.blueCell {
   background-color: blue; }
 
 .greyBorder {
@@ -98,6 +98,9 @@ body {
   display: -ms-flexbox;
   display: flex;
   white-space: nowrap; }
+
+.controlArea {
+  white-space: normal; }
 
 .controlButton {
   width: 200px;
@@ -169,3 +172,16 @@ body {
 .formControl {
   margin: 15px;
   padding: 10px; }
+
+.sortMethod {
+  border-bottom: 1px solid #a39389;
+  display: inline-block; }
+
+#sortValue {
+  cursor: pointer;
+  background-color: green;
+  -webkit-border-radius: 50%;
+          border-radius: 50%;
+  color: white;
+  margin-left: 10px;
+  font-size: 20px; }

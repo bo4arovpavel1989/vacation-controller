@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Vacation-controller</title><link rel="stylesheet" href="css/main.css"><script id="graphData" type="text/x-handlebars-template"><caption class='graphTitle'>{{this.title}}</caption>
+    <tr class='monthesArea'>
+      <th width="200"></th>
+      {{#each calendar.monthes}}
+        <th class='monthName' colspan='{{this.dayInMonth}}' width={{this.monthWidth}}>
+          {{this.monthName}} {{this.year}}
+        </th>
+      {{/each}}
+    </tr>
+    <tr class='datesArea'>
+      <th width="200"></th>
+      {{#each calendar.dates}}
+        <th class='dateName' width={{../dayWidth}}>
+          {{this.date}}
+        </th>
+      {{/each}}
+    </tr></script><script id="shift" type="text/x-handlebars-template">{{#each this}}
+      <tr class='vacationLine'>
+        <td class='namesArea' width="200">{{this.shift}}</td>
+        {{#each this.dutyArray}}
+          {{#if this}}
+            <!-- inline style - for export in EXCEL !!! -->
+            <td class='blueCell greyBorder'  style="background-color:blue" data-id='{{this._id}}' width={{../dayWidth}}></td>
+          {{else}}
+            <td class='whiteCell greyBorder' width={{../dayWidth}}></td>
+          {{/if}}
+        {{/each}}
+      </tr>
+    {{/each}}</script></head><body><div id="pageId" data-id="shiftCalendar"></div><div class="container"><div class="header"><h1>Календарь дежурных смен</h1></div><div class="filterArea"><form class="filterManagmentForm" data-url="getshiftcalendar"><div class="formControl"><select name="monthFrom"><option value="01">Январь</option><option value="02">Февраль</option><option value="03">Март</option><option value="04">Апрель</option><option value="05">Май</option><option value="06">Июнь</option><option value="07">Июль</option><option value="08">Август</option><option value="09">Сентябрь</option><option value="10">Октябрь</option><option value="11">Ноябрь</option><option value="12">Декабрь</option></select> <select name="yearFrom"><option value="2019">2019</option><option value="2018">2018</option></select> <select name="monthTo"><option value="01">Январь</option><option value="02">Февраль</option><option value="03">Март</option><option value="04">Апрель</option><option value="05">Май</option><option value="06">Июнь</option><option value="07">Июль</option><option value="08">Август</option><option value="09">Сентябрь</option><option value="10">Октябрь</option><option value="11">Ноябрь</option><option value="12">Декабрь</option></select> <select name="yearTo"><option value="2019">2019</option><option value="2018">2018</option></select></div><div class="formControl"><input type="submit" class="submitButton" value="показать"></div></form></div><table id="graphDataField" border="1"><thead id="calendarArea"></thead><tbody id="shiftCalendar"></tbody></table><div></div></div></body><script src="app/bundle.js"></script></html>

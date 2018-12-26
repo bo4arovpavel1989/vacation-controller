@@ -1,16 +1,18 @@
-<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Vacation-controller</title><link rel="stylesheet" href="css/main.css"><script id="shifts" type="text/x-handlebars-template">{{#each this}}
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Vacation-controller</title><link rel="stylesheet" href="css/main.css"><script id="shift" type="text/x-handlebars-template">{{#each this}}
       <option value='{{this.shift}}'>
         '{{this.shift}}'
       </option>
-    {{/each}}</script><script id="positions" type="text/x-handlebars-template">{{#each this}}
+    {{/each}}</script><script id="position" type="text/x-handlebars-template">{{#each this}}
       <option value='{{this.position}}'>
         '{{this.position}}'
       </option>
-    {{/each}}</script><script id="persons" type="text/x-handlebars-template">{{#each this}}
+    {{/each}}</script><script id="person" type="text/x-handlebars-template">{{#each this}}
       <div class='personName'>
-        {{this.person}} - &nbsp;
-        {{this.shift}} - &nbsp;
-        {{this.position}}
+        <span class='sortedList'>
+          {{this.person}} - &nbsp;
+          {{this.shift}} - &nbsp;
+          {{this.position}}
+        </span>
         <span class='editObject popupButton' data-form='edit' data-object='Person' data-id='{{this._id}}'>
           &nbsp; &#9998; &nbsp;
         </span>
@@ -24,4 +26,4 @@
         <input name='{{this.name}}' type='{{this.type}}' value='{{{this.value}}}'>
       {{/each}}
       <input type='submit' class='submitButton' value='сохранить'>
-    </form></script></head><body><div id="pageId" data-id="employeManagment"></div><div id="container"><div class="header"><h1>Управление Персоналом</h1></div><div class="main"><div class="controlArea"><div class="control"><button class="controlButton popupButton" data-form="addPerson">Добавить сотрудника</button></div></div><div class="objectInfo"><div><h3>Сотрудники</h3></div><div id="personsSelect"></div></div></div></div><div class="popupArea"><div id="addPersonFormArea" class="popup"><form class="employeManagmentForm" data-url="addobject/Person"><div class="formControl">ФИО сотрудника <input name="person" type="text" required></div><div class="formControl">Смена <select name="shift" id="shiftsSelect"></select></div><div class="formControl">Должность <select name="position" id="positionsSelect"></select> <input name="type" type="hidden" value="Person"></div><div class="formControl"><input type="submit" class="submitButton" value="сохранить"></div></form></div><div id="editFormArea" class="popup"></div></div></body><script src="app/bundle.js"></script></html>
+    </form></script></head><body><div id="pageId" data-id="employeManagment"></div><div id="container"><div class="header"><h1>Управление Персоналом</h1></div><div class="main"><div class="controlArea"><div class="control"><button class="controlButton popupButton" data-form="addPerson">Добавить сотрудника</button></div></div><div class="objectInfo"><div><h3>Сотрудники</h3></div><div class="sortMethod" data-entry="person" data-area="personSelect">Сортировка: <select id="setSort"><option value="person">ФИО</option><option value="shift">Смена</option><option value="position">Должность</option></select> <span id="sortValue">&uarr;</span></div><div id="personSelect"></div></div></div></div><div class="popupArea"><div id="addPersonFormArea" class="popup"><form class="employeManagmentForm" data-url="addobject/Person"><div class="formControl">ФИО сотрудника <input name="person" type="text" required></div><div class="formControl">Смена <select name="shift" id="shiftSelect"></select></div><div class="formControl">Должность <select name="position" id="positionSelect"></select> <input name="type" type="hidden" value="Person"></div><div class="formControl"><input type="submit" class="submitButton" value="сохранить"></div></form></div><div id="editFormArea" class="popup"></div></div></body><script src="app/bundle.js"></script></html>

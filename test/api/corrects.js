@@ -31,6 +31,11 @@ module.exports.shiftsFromDb = [
 	{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6'}
 ];
 
+module.exports.dutyShifts = [
+			{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4'},
+			{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6'}
+		];
+
 module.exports.refreshedDutyDates = [
 Date.parse('2018-12-29'), 
 Date.parse('2018-12-30'), 
