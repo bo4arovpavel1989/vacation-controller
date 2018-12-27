@@ -43,6 +43,12 @@ const postRequests = [
 		url: '/getshiftcalendar',
 		middleware:noMiddleware,
 		callback:postRequestsHandlers.getShiftCalendar
+	},
+	// Because i handle form - its in postrequests
+	{
+		url: '/getxrayschedule',
+		middleware:noMiddleware,
+		callback:postRequestsHandlers.getXraySchedule
 	}
 ];
 

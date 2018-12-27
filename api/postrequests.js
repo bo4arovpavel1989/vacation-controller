@@ -51,8 +51,12 @@ module.exports.getVacationsByFilter = function(req, res){
 
 module.exports.getShiftCalendar = function(req, res){
 	const dates = getFullDates(req.body);
-  
+
   getDutyCalendar(dates)
     .then(calendar=>res.json(calendar))
 		.catch(err=>res.status(500).json({err:err.message}))
+};
+
+module.exports.getXraySchedule = function(req, res){
+  console.log(req.body)
 };

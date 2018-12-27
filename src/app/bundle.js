@@ -822,6 +822,7 @@ const VacationManagment = require('./vacationManagment');
 const Infotable = require('./infotable');
 const EmployeManagment = require('./employeManagment');
 const ShiftCalendar = require('./shiftCalendar');
+const XraySchedule = require('./xrayschedule');
 let pageScript;
 
 switch(getPage()) {
@@ -850,11 +851,16 @@ switch(getPage()) {
       formsSelector: '.filterManagmentForm'
     });
     break;
+  case 'xraySchedule':
+    pageScript = new XraySchedule({
+      formsSelector: '.setDayHoursForm'
+    });
+    break;
   default:
     pageScript = null;
 }
 
-},{"./config":3,"./employeManagment":4,"./infotable":7,"./objectManagment":11,"./shiftCalendar":12,"./vacationManagment":13}],7:[function(require,module,exports){
+},{"./config":3,"./employeManagment":4,"./infotable":7,"./objectManagment":11,"./shiftCalendar":12,"./vacationManagment":13,"./xrayschedule":14}],7:[function(require,module,exports){
 'use strict'
 
 const {compare,
@@ -1125,6 +1131,25 @@ module.exports = class EmployeManagment extends PageScript{
         this.render('problemsCalendar', 'problemsCalendarHandout');
       })
       .catch(err=>console.log(err));
+  }
+}
+
+},{"./PageScript":2,"./helpers":5}],14:[function(require,module,exports){
+'use strict'
+
+const PageScript = require('./PageScript');
+const {} = require('./helpers');
+
+module.exports = class XraySchedule extends PageScript{
+  constructor(selectors){
+    super(selectors);
+
+    this.setListeners();
+  }
+
+
+  setListeners(){
+    this.formsHandler.ee.on('refreshRender', this.setCalendar);
   }
 }
 

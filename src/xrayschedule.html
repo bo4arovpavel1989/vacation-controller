@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Vacation-controller</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id='pageId' data-id='xraySchedule'></div>
+  <div class='container'>
+      <div class='header'><h1>График работы рентгенологов</h1></div>
+      <div class='filterArea'>
+        <form class='setDayHoursForm' data-url='getxrayschedule'>
+          <div class='formControl'>
+            <h3>Сумма часов за день</h3>
+          </div>
+          <div class='formControl'>
+            <label for='monday'>понедельник</label>
+            <input name='monday' type='number' value='11'/>
+          </div>
+          <div class='formControl'>
+            <label for='thuesday'>вторник</label>
+            <input name='thuesday' type='number' value='20'/>
+          </div>
+          <div class='formControl'>
+            <label for='wednesday'>среда</label>
+            <input name='wednesday' type='number' value='21.5'/>
+          </div>
+          <div class='formControl'>
+            <label for='thursday'>четверг</label>
+            <input name='thursday' type='number' value='20'/>
+          </div>
+          <div class='formControl'>
+            <label for='friday'>пятница</label>
+            <input name='friday' type='number' value='21.5'/>
+          </div>
+          <div class='formControl'>
+            <label for='saturday'>суббота</label>
+            <input name='saturday' type='number' value='18.5'/>
+          </div>
+          <div class='formControl'>
+            <label for='sunday'>суббота</label>
+            <input name='sunday' type='number' value='18.5'/>
+          </div>
+          <div class='formControl'>
+            <input type='submit' class='submitButton' value='рассчитать'/>
+          </div>
+        </form>
+      </div>
+      <table id='graphDataField'  border="1">
+        <thead id='calendarArea'></thead>
+        <tbody id='shiftCalendar'></tbody>
+      </table>
+      <div>
+  </div>
+</body>
+<script src='app/bundle.js'></script>
+</html>

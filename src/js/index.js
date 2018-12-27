@@ -6,6 +6,7 @@ const VacationManagment = require('./vacationManagment');
 const Infotable = require('./infotable');
 const EmployeManagment = require('./employeManagment');
 const ShiftCalendar = require('./shiftCalendar');
+const XraySchedule = require('./xrayschedule');
 let pageScript;
 
 switch(getPage()) {
@@ -32,6 +33,11 @@ switch(getPage()) {
   case 'shiftCalendar':
     pageScript = new ShiftCalendar({
       formsSelector: '.filterManagmentForm'
+    });
+    break;
+  case 'xraySchedule':
+    pageScript = new XraySchedule({
+      formsSelector: '.setDayHoursForm'
     });
     break;
   default:
