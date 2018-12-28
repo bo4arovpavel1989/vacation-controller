@@ -322,3 +322,43 @@ describe('getDutyCalendar', ()=>{
 		});
 	});
 });
+
+
+describe('getMaxShiftPeriod', ()=>{
+	it('Returns max period between shifts of all', ()=>{
+		const shifts = [
+			{duty: 1, off: 2},
+			{duty:2, off: 2},
+			{duty: 1, off: 3},
+			{duty: 5, off: 2}
+		],
+			{getMaxShiftPeriod} = customFunctions,
+			result = getMaxShiftPeriod(shifts);
+			
+		expect(result).to.equal(7);	
+			
+	});
+});
+
+describe('getMutualShifts', ()=>{
+	before(()=>{
+		spyDateNow = sinon.stub(Date, 'now');
+	});
+
+	after(()=>{
+		spyDateNow.restore();
+	});
+	
+	it('Get array of shifts that work same day', ()=>{
+		const day = '2019-01-01',
+			{shiftsFromDbForMutualShifts, mutualShifts} = corrects,
+			{getMutualShifts} = customFunctions;
+			
+		spyDateNow.returns(Date.parse(day));
+		spyFind.resolves(shiftsFromDbForMutualShifts);
+		
+		return getMutualShifts().then(result=>{
+			expect(result).to.deep.equal(mutualShifts);
+		});
+	});
+});

@@ -286,3 +286,10 @@ module.exports.concatedVacationsOfAllPersonsCorrects = [
 	}
 	
 ]
+
+module.exports.mutualShifts = [
+	[],
+	[],
+	[],
+	[]
+];

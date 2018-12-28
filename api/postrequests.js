@@ -6,7 +6,8 @@ const {
 		getNamesQuery,
 		getDatesQuery,
 		concatPersonArrays,
-    getDutyCalendar
+    getDutyCalendar,
+    getXraySchedule
 	} = require('./customfunctions');
 
 module.exports.addObject = function (req, res) {
@@ -58,5 +59,7 @@ module.exports.getShiftCalendar = function(req, res){
 };
 
 module.exports.getXraySchedule = function(req, res){
-  console.log(req.body)
+  getXraySchedule(req.body)
+    .then(schedule=>res.json(schedule))
+		.catch(err=>res.status(500).json({err:err.message}))
 };

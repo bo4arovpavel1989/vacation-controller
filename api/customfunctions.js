@@ -574,3 +574,50 @@ module.exports.getDutyCalendar = async function(dates){
 
   return calendar;
 };
+
+/**
+ * Functin gets max period between duties of all all shifts
+ * @param {Array} shifts - array of all shifts
+ * @returns {Number} - value of max period between duties
+ */
+const getMaxShiftPeriod = function(shifts){
+  const periods = [];
+
+  shifts.forEach(shift=>periods.push(shift.duty + shift.off));
+
+  return periods.reduce((max, current)=>Math.max(max, current), 0);
+};
+
+module.exports.getMaxShiftPeriod = getMaxShiftPeriod;
+
+/**
+ * Function gets shifts that work same day
+ * @returns {Promise} - array of shifts grouped by state of working same day
+ */
+const getMutualShifts = async function(){
+  const shifts = await db.find('Shift'),
+    maxShiftPeriod = getMaxShiftPeriod(shifts),
+    oneDay = 24 * 60 * 60 * 1000,
+    mutualShifts = [];
+  let currentDate = Date.now();
+
+  for (let i = 0; i < maxShiftPeriod; i++){
+    let dutyShifts = getShiftOnDuty(new Date(currentDate), shifts);
+
+    mutualShifts.push(dutyShifts);
+    currentDate += oneDay;
+  }
+
+  return mutualShifts;
+};
+
+module.exports.getMutualShifts = getMutualShifts;
+
+/**
+ * Function gets week shift schedule based on hours quantity each day
+ * @param {Object} week - {monday, thuesday, etc...}
+ * @returns {Promise} week object with certain hours quantity for each shift
+ */
+module.exports.getXraySchedule = async function(week){
+  const mutualShifts = getMutualShifts();
+};
