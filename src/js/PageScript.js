@@ -3,7 +3,7 @@
 const FormsHandler = require('./FormsHandler');
 const Handlebars = require('./libs/h.min');
 const {HandlebarsIntl} = require('./libs/h-intl.min');
-const {compare, getObjectData, getEmployeData, getVacationData} = require('./helpers');
+const {compare, getObjectData, getEmployeData, getVacationData, selectElementContents} = require('./helpers');
 
 HandlebarsIntl.registerWith(Handlebars);
 
@@ -14,49 +14,71 @@ HandlebarsIntl.registerWith(Handlebars);
 module.exports = class PageScript {
   constructor(selectors){
     this.formsHandler = new FormsHandler(selectors);
+
     this.getObjectData = this.getObjectData.bind(this);
     this.getEmployeData = this.getEmployeData.bind(this);
     this.getVacationData = this.getVacationData.bind(this);
     this.handleObjectData = this.handleObjectData.bind(this);
     this.handleEmployeData = this.handleEmployeData.bind(this);
     this.handleVacationData = this.handleVacationData.bind(this);
+    this.copyToClipboard = this.copyToClipboard.bind(this);
+    this.setSort = this.setSort.bind(this);
+    this.setSortValue = this.setSortValue.bind(this);
+    this.copyToClipboard = this.copyToClipboard.bind(this);
+
     // Default sort
     this.sort = 'person';
     this.sortValue = 1;
+    this.sortEl = document.getElementById('setSort');
+    this.sortValEl = document.getElementById('sortValue');
+
+    // Default clipboard copy button settings
+    this.clipBoardButton = document.getElementById('clipboardCopy');
 
     this.setSortListeners();
+    this.setClipboardCopyListener();
   }
 
   setSortListeners(){
-    const sortEl = document.getElementById('setSort');
-    const sortValEl = document.getElementById('sortValue');
-
-    if(sortEl && sortValEl) {
-      sortEl.addEventListener('change', ()=>this.setSort(sortEl));
-      sortValEl.addEventListener('click', ()=>this.setSortValue(sortValEl));
+    if(this.sortEl && this.sortValEl) {
+      this.sortEl.addEventListener('change', this.setSort);
+      this.sortValEl.addEventListener('click', this.setSortValue);
     }
   }
 
-  setSort(sortEl){
-      this.sort = sortEl.value;
-      const dataAttr = sortEl.parentElement.dataset;
+  setSort(){
+      this.sort = this.sortEl.value;
+      const dataAttr = this.sortEl.parentElement.dataset;
 
       this.sortAndRender(dataAttr.entry, dataAttr.area);
   }
 
-  setSortValue(sortValEl){
+  setSortValue(){
     const contentMap = {
         '1': '&uarr;',
         '-1': '&darr;'
       };
 
-    const dataAttr = sortValEl.parentElement.dataset;
+    const dataAttr = this.sortValEl.parentElement.dataset;
 
     this.sortValue *= -1;
     const stringSortValue = this.sortValue.toString();
 
-    sortValEl.innerHTML = contentMap[stringSortValue];
+    this.sortValEl.innerHTML = contentMap[stringSortValue];
     this.sortAndRender(dataAttr.entry, dataAttr.area);
+  }
+
+  setClipboardCopyListener(){
+    if(this.clipBoardButton) {
+      this.clipBoardButton.addEventListener('click', this.copyToClipboard)
+    }
+  }
+
+  copyToClipboard(){
+    const copyArea = this.clipBoardButton.dataset.target;
+
+    selectElementContents(document.getElementById(copyArea));
+    document.execCommand('copy');
   }
 
   getObjectData(){
