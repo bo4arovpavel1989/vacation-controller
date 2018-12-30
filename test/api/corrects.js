@@ -46,11 +46,11 @@ module.exports.dutyShifts = [
 		];
 
 module.exports.refreshedDutyDates = [
-Date.parse('2018-12-29'), 
-Date.parse('2018-12-30'), 
-Date.parse('2018-12-31'), 
-Date.parse('2018-12-28'), 
-Date.parse('2018-12-30'), 
+Date.parse('2018-12-29'),
+Date.parse('2018-12-30'),
+Date.parse('2018-12-31'),
+Date.parse('2018-12-28'),
+Date.parse('2018-12-30'),
 Date.parse('2018-12-28')
 ];
 
@@ -85,10 +85,10 @@ module.exports.positions = [
 ]
 
 module.exports.namesQuery = [
-	{person:'Adam1'}, 
-	{person:'Adam2'}, 
+	{person:'Adam1'},
+	{person:'Adam2'},
 	{person:'Adam3'},
-	{person:'Adam4'} 
+	{person:'Adam4'}
 ];
 
 // For concatPersonArrays test coz it modifies this array
@@ -103,8 +103,8 @@ module.exports.vacations = [
 
 module.exports.concatedNamesVacationsArray = [
 	{person:'Adam4', dateFrom:'2019-01-01', dateTo:'2019-01-08', long:7},
-	{person:'Adam1'}, 
-	{person:'Adam2'}, 
+	{person:'Adam1'},
+	{person:'Adam2'},
 	{person:'Adam3'}
 ]
 
@@ -228,7 +228,7 @@ module.exports.dutyCalendar = [
 	{date: new Date('2019-01-03'), shift:['Суточная 2', 'Оперативная 1']},
 	{date: new Date('2019-01-04'), shift:['Суточная 3', 'Оперативная 1']},
 ];
-	
+
 module.exports.mutualShifts = [
 	[
 		{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4'},
@@ -245,5 +245,62 @@ module.exports.mutualShifts = [
 	[
 		{shift:'Суточная 3', duty:1, off:3, dutyDate:'2018-11-29', _id:'id3'},
 		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5'}
+	]
+];
+
+module.exports.mutualShiftsToCalculatePeriods = [
+[
+	{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4'},
+	{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6'}
+],
+[
+	{shift:'Суточная 1', duty:1, off:3, dutyDate:'2018-11-27', _id:'id1'},
+	{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6'}
+],
+[
+	{shift:'Суточная 2', duty:1, off:3, dutyDate:'2018-11-28', _id:'id2'},
+	{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5'}
+],
+[
+	{shift:'Суточная 3', duty:1, off:3, dutyDate:'2018-11-29', _id:'id3'},
+	{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5'}
+]
+];
+
+module.exports.mutualShiftsToCalculatePeriodsUpdated = [
+	[
+		{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4', periodTimes: 1},
+		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2}
+	],
+	[
+		{shift:'Суточная 1', duty:1, off:3, dutyDate:'2018-11-27', _id:'id1', periodTimes: 1},
+		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2}
+	],
+	[
+		{shift:'Суточная 2', duty:1, off:3, dutyDate:'2018-11-28', _id:'id2', periodTimes: 1},
+		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5', periodTimes: 2}
+	],
+	[
+		{shift:'Суточная 3', duty:1, off:3, dutyDate:'2018-11-29', _id:'id3', periodTimes: 1},
+		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5', periodTimes: 2}
+	]
+];
+
+module.exports.mutualShiftsToCalculatePeriodsUpdated2 = [
+	[
+		{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4', periodTimes: 1, howMany: 2},
+		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2, howMany: 3}
+	],
+	[
+		{shift:'Суточная 1', duty:1, off:3, dutyDate:'2018-11-27', _id:'id1', periodTimes: 1, howMany: 2},
+		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2, howMany: 3}
+	],
+	[
+		{shift:'Суточная 2', duty:1, off:3, dutyDate:'2018-11-28', _id:'id2', periodTimes: 1, howMany: 2},
+		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5', periodTimes: 2, howMany: 4}
+	],
+	[
+		{shift:'Суточная 3', duty:1, off:3, dutyDate:'2018-11-29', _id:'id3', periodTimes: 1, howMany: 2},
+		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5', periodTimes: 2, howMany: 4}
 	]
 ];

@@ -334,9 +334,9 @@ describe('getMaxShiftPeriod', ()=>{
 		],
 			{getMaxShiftPeriod} = customFunctions,
 			result = getMaxShiftPeriod(shifts);
-			
-		expect(result).to.equal(7);	
-			
+
+		expect(result).to.equal(7);
+
 	});
 });
 
@@ -348,17 +348,50 @@ describe('getMutualShifts', ()=>{
 	after(()=>{
 		spyDateNow.restore();
 	});
-	
+
 	it('Get array of shifts that work same day', ()=>{
 		const day = '2019-01-01',
 			{shiftsFromDbForMutualShifts, mutualShifts} = corrects,
 			{getMutualShifts} = customFunctions;
-			
+
 		spyDateNow.returns(Date.parse(day));
 		spyFind.resolves(shiftsFromDbForMutualShifts);
-		
+
 		return getMutualShifts().then(result=>{
 			expect(result).to.deep.equal(mutualShifts);
 		});
 	});
+});
+
+describe('calculateTimesPerPeriod', ()=>{
+	it('Calculates how many times shift occurs in period. mutates unput array', ()=>{
+		const {mutualShiftsToCalculatePeriods, mutualShiftsToCalculatePeriodsUpdated} = corrects;
+		const {calculateTimesPerPeriod} = customFunctions;
+		const result = calculateTimesPerPeriod(mutualShiftsToCalculatePeriods);
+
+		expect(result).to.deep.equal(mutualShiftsToCalculatePeriodsUpdated);
+	});
+});
+
+describe('calculatePeopleOfPosition', ()=>{
+	it('Calculates how many people of position is in shift', ()=>{
+		const position = 'Guard';
+		const {
+			mutualShiftsToCalculatePeriodsUpdated,
+			mutualShiftsToCalculatePeriodsUpdated2
+		} = corrects;
+		const {calculatePeopleOfPosition} = customFunctions;
+
+		spyCount.withArgs('Person', {shift:'Суточная 1', position}).resolves(2);
+		spyCount.withArgs('Person', {shift:'Суточная 2', position}).resolves(2);
+		spyCount.withArgs('Person', {shift:'Суточная 3', position}).resolves(2);
+		spyCount.withArgs('Person', {shift:'Суточная 4', position}).resolves(2);
+		spyCount.withArgs('Person', {shift:'Оперативная 1', position}).resolves(4);
+		spyCount.withArgs('Person', {shift:'Оперативная 2', position}).resolves(3);
+
+		return calculatePeopleOfPosition(mutualShiftsToCalculatePeriodsUpdated, position)
+			.then(result=>{
+				expect(result).to.deep.equal(mutualShiftsToCalculatePeriodsUpdated2);
+			});
+	});		
 });

@@ -375,7 +375,7 @@ module.exports = class PageScript {
 },{"./FormsHandler":1,"./helpers":5,"./libs/h-intl.min":9,"./libs/h.min":10}],3:[function(require,module,exports){
 'use strict'
 
-module.exports.API_URL = 'http://K47_8:9200';
+module.exports.API_URL = 'http://localhost:9200';
 
 module.exports.getPage = function() {
   let idElement = document.getElementById('pageId');

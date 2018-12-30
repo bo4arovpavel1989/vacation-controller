@@ -614,10 +614,71 @@ const getMutualShifts = async function(){
 module.exports.getMutualShifts = getMutualShifts;
 
 /**
+ * Function calculates how many times each shifts work
+ * per period when every shift work at least 1 time
+ * @param {Array} mutualShifts - array of shifts grouped by working same day
+ * @returns {Array} updated input array - added param periodTimes
+ */
+const calculateTimesPerPeriod = function(mutualShifts){
+  mutualShifts.forEach(shiftPairs=>{
+    shiftPairs.forEach(shiftToCheck=>{
+      const {shift} = shiftToCheck;
+
+      shiftToCheck.periodTimes = shiftToCheck.periodTimes || 0;
+
+      mutualShifts.forEach(shifts=>{
+        if(_.some(shifts, {shift})) shiftToCheck.periodTimes += 1;
+      });
+    })
+  });
+
+  return mutualShifts;
+};
+
+module.exports.calculateTimesPerPeriod = calculateTimesPerPeriod;
+
+/**
+ * Function get mutualShifts array and calculate show many people of position
+ * work in every shift
+ * @param {Array} mutualShifts - array to loop through
+ * @param {String} position - position to calculate to
+ * @returns {Promise} array - updated mutualShifts array
+ */
+const calculatePeopleOfPosition = async function(mutualShifts, position){
+  for(let i = 0; i < mutualShifts.length; i++) {
+    const shiftPair = mutualShifts[i];
+
+    for (let j = 0; j < shiftPair.length; j++) {
+      const shiftObj = shiftPair[j]
+
+      if(!shiftObj.howMany) {
+        const {shift} = shiftObj;
+
+        shiftObj.howMany = await db.count('Person', {shift, position});
+      }
+    }
+  }
+
+  return mutualShifts;
+};
+
+module.exports.calculatePeopleOfPosition = calculatePeopleOfPosition;
+
+/**
  * Function gets week shift schedule based on hours quantity each day
  * @param {Object} week - {monday, thuesday, etc...}
  * @returns {Promise} week object with certain hours quantity for each shift
  */
 module.exports.getXraySchedule = async function(week){
-  const mutualShifts = getMutualShifts();
+  const {position} = req.body;
+  const mutualShifts = await getMutualShifts();
+
+  calculateTimesPerPeriod(mutualShifts);
+  await calculatePeopleOfPosition(mutualShifts, position);
+
+  // TODO - calculate relation1 of (howMany) / {periodTime) for each shift
+  // then in each shiftPair of mutualShift array calculate relation2 =  relations of relation1 of each shift
+  // then relation2 must be multiplied by sum of hours for each day and each shift to get result number
+  // number must be floored
+
 };
