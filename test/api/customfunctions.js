@@ -365,11 +365,11 @@ describe('getMutualShifts', ()=>{
 
 describe('calculateTimesPerPeriod', ()=>{
 	it('Calculates how many times shift occurs in period. mutates unput array', ()=>{
-		const {mutualShiftsToCalculatePeriods, mutualShiftsToCalculatePeriodsUpdated} = corrects;
+		const {mutualShiftsPeriods, mutualShiftsPeriodsUpdated} = corrects;
 		const {calculateTimesPerPeriod} = customFunctions;
-		const result = calculateTimesPerPeriod(mutualShiftsToCalculatePeriods);
+		const result = calculateTimesPerPeriod(mutualShiftsPeriods);
 
-		expect(result).to.deep.equal(mutualShiftsToCalculatePeriodsUpdated);
+		expect(result).to.deep.equal(mutualShiftsPeriodsUpdated);
 	});
 });
 
@@ -377,8 +377,8 @@ describe('calculatePeopleOfPosition', ()=>{
 	it('Calculates how many people of position is in shift', ()=>{
 		const position = 'Guard';
 		const {
-			mutualShiftsToCalculatePeriodsUpdated,
-			mutualShiftsToCalculatePeriodsUpdated2
+			mutualShiftsPeriodsUpdated,
+			mutualShiftsPeriodsUpdated2
 		} = corrects;
 		const {calculatePeopleOfPosition} = customFunctions;
 
@@ -389,9 +389,30 @@ describe('calculatePeopleOfPosition', ()=>{
 		spyCount.withArgs('Person', {shift:'Оперативная 1', position}).resolves(4);
 		spyCount.withArgs('Person', {shift:'Оперативная 2', position}).resolves(3);
 
-		return calculatePeopleOfPosition(mutualShiftsToCalculatePeriodsUpdated, position)
+		return calculatePeopleOfPosition(mutualShiftsPeriodsUpdated, position)
 			.then(result=>{
-				expect(result).to.deep.equal(mutualShiftsToCalculatePeriodsUpdated2);
+				expect(result).to.deep.equal(mutualShiftsPeriodsUpdated2);
 			});
-	});		
+	});
+});
+
+describe('calculatePeopleShiftRelation', ()=>{
+	it('Calculates relation of people to periodTimes in each mutual shift', ()=>{
+		const {mutualShiftsPeopleShiftRelation,mutualShiftsPeopleShiftRelationUpdated}=corrects;
+		const {calculatePeopleShiftRelation} = customFunctions;
+		const result = calculatePeopleShiftRelation(mutualShiftsPeopleShiftRelation);
+
+		expect(result).to.deep.equal(mutualShiftsPeopleShiftRelationUpdated);
+
+	});
+});
+
+describe('getShiftPowerRelation', ()=>{
+	it('Calculates potentialMenPower coeff for each shift', ()=>{
+		const {mutualShiftsMenPower, mutualShiftsMenPowerUpdated} = corrects;
+		const {getShiftPowerRelation} = customFunctions;
+		const result = getShiftPowerRelation(mutualShiftsMenPower);
+
+		expect(result).to.deep.equal(mutualShiftsMenPowerUpdated);
+	});
 });

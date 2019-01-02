@@ -597,7 +597,8 @@ const getMutualShifts = async function(){
   for (let i = 0; i < maxShiftPeriod; i++){
     let dutyShifts = getShiftOnDuty(new Date(currentDate), shifts);
 
-    mutualShifts.push(dutyShifts);
+    // To unfreeze mongodoc object
+    mutualShifts.push(JSON.parse(JSON.stringify(dutyShifts)));
     currentDate += oneDay;
   }
 
@@ -625,6 +626,7 @@ const calculateTimesPerPeriod = function(mutualShifts){
     })
   });
 
+  console.log(mutualShifts)
   return mutualShifts;
 };
 
@@ -658,22 +660,77 @@ const calculatePeopleOfPosition = async function(mutualShifts, position){
 module.exports.calculatePeopleOfPosition = calculatePeopleOfPosition;
 
 /**
+ * Function gets mutualShift array and calculates
+ * relation of how many people of position to
+ * how many times shift works per period
+ * @param {Array} mutualShifts - array of shifts
+ * @return {Array} - updated mutualShifts array
+ */
+const calculatePeopleShiftRelation = function(mutualShifts){
+  mutualShifts.forEach(shiftPair=>{
+    shiftPair.forEach(shift=>{
+      if(!shift.peopleShiftRelation)
+        shift.peopleShiftRelation = shift.howMany / shift.periodTimes;
+    });
+  });
+
+  return mutualShifts;
+};
+
+module.exports.calculatePeopleShiftRelation = calculatePeopleShiftRelation;
+
+/**
+ * Function calculates within each group in mutualShifts
+ * relation of potential men power, i.e.
+ * relation of each shift's peopleShiftRelation to sum of peopleShiftRelation
+ * @param {Array} mutualShifts - array -of shifts
+ * @return {Array} - updated mutualShifts array
+ */
+const getShiftPowerRelation = function(mutualShifts){
+  mutualShifts.forEach(shiftPair=>{
+    let sum = 0;
+
+    shiftPair.forEach(shift=>{
+      sum += shift.peopleShiftRelation;
+    });
+
+    shiftPair.forEach(shift=>{
+      shift.potentialMenPower = shift.peopleShiftRelation / sum;
+    });
+  });
+
+  return mutualShifts;
+};
+
+module.exports.getShiftPowerRelation = getShiftPowerRelation;
+
+/**
  * Function gets week shift schedule based on hours quantity each day
  * @param {Object} week - {monday, thuesday, etc...}
  * @returns {Promise} week object with certain hours quantity for each shift
  */
-module.exports.getXraySchedule = async function(week){
-  const {position} = req.body;
-  const mutualShifts = await getMutualShifts();
+module.exports.getXraySchedule = async function(body){
+  const {position} = body;
+  let mutualShifts = await getMutualShifts();
+  const calendar = [
+    body.monday,
+    body.thuesday,
+    body.wednesday,
+    body.thursday,
+    body.friday,
+    body.saturday,
+    body.sunday
+  ];
 
-  calculateTimesPerPeriod(mutualShifts);
-  await calculatePeopleOfPosition(mutualShifts, position);
+  mutualShifts = calculateTimesPerPeriod(mutualShifts);
+  mutualShifts = await calculatePeopleOfPosition(mutualShifts, position);
+  mutualShifts = calculatePeopleShiftRelation(mutualShifts);
+  mutualShifts = getShiftPowerRelation(mutualShifts);
 
   /*
-   * TODO - calculate relation1 of (howMany) / {periodTime) for each shift
-   * then in each shiftPair of mutualShift array calculate relation2 =  relations of relation1 of each shift
-   * then relation2 must be multiplied by sum of hours for each day and each shift to get result number
-   * number must be floored
-   */
+  * TODO
+  * potentialMenPower coefficient must be multiplied by each hour day for each shift
+  */
 
+  return mutualShifts;
 };

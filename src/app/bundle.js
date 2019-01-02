@@ -1183,12 +1183,17 @@ module.exports = class XraySchedule extends PageScript{
   constructor(selectors){
     super(selectors);
 
+    this.setCalendar = this.setCalendar.bind(this);
     this.setListeners();
   }
 
+  setCalendar(rep){
+    console.log(rep)
+  }
 
   setListeners(){
     this.formsHandler.ee.on('refreshRender', this.setCalendar);
   }
 }
+
 },{"./PageScript":2,"./helpers":5}]},{},[6]);
