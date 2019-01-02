@@ -77,7 +77,7 @@ module.exports = class ShiftCalendar extends PageScript{
   fillDutyArray(){
     this.calendar.forEach(date=>{
       this.shift.forEach(shiftObj=>{
-        let {shift} = shiftObj;
+        const {shift} = shiftObj;
 
         if(date.shift.includes(shift)) shiftObj.dutyArray.push(true);
         else shiftObj.dutyArray.push(false);

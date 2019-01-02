@@ -112,8 +112,8 @@ const {postData, deleteData, getForm, getData} = require('./helpers');
     const el = document.getElementById(`${form}FormArea`);
     
     this.isPopup = true;
-    el.style.left = e.x + 'px';
-    el.style.top = e.layerY + 'px';
+    el.style.left = `${e.x}px`;
+    el.style.top = `${e.layerY}px`;
     setTimeout(()=>el.classList.add('popedUp'), 10);
   }
 
@@ -213,7 +213,7 @@ const {postData, deleteData, getForm, getData} = require('./helpers');
       date: 'date'
     }
 
-    for (let i in obj) {
+    for (const i in obj) {
       if(i !== 'type' && i !== '_id' && i !== 'workDays') {
         const input = {name:i};
 
@@ -240,7 +240,6 @@ const {postData, deleteData, getForm, getData} = require('./helpers');
   }
 
 }
-
 },{"./helpers":5,"./libs/events.min":8,"./libs/h.min":10}],2:[function(require,module,exports){
 'use strict'
 
@@ -371,20 +370,19 @@ module.exports = class PageScript {
     this.formsHandler.refreshListeners();
   }
 }
-
 },{"./FormsHandler":1,"./helpers":5,"./libs/h-intl.min":9,"./libs/h.min":10}],3:[function(require,module,exports){
 'use strict'
 
 module.exports.API_URL = 'http://localhost:9200';
 
 module.exports.getPage = function() {
-  let idElement = document.getElementById('pageId');
+  const idElement = document.getElementById('pageId');
 
   return idElement.dataset.id;
 }
 
 module.exports.defaultFetch = function(method='GET', body){
-  let configFetch =  {
+  const configFetch = {
       method,
       mode:'cors',
       headers: {
@@ -397,7 +395,6 @@ module.exports.defaultFetch = function(method='GET', body){
 
   return configFetch;
 }
-
 },{}],4:[function(require,module,exports){
 'use strict'
 
@@ -435,7 +432,6 @@ module.exports = class EmployeManagment extends PageScript{
     this.formsHandler.ee.on('refreshRender', this.getEmployeData);
   }
 }
-
 },{"./PageScript":2}],5:[function(require,module,exports){
 'use strict'
 
@@ -445,7 +441,8 @@ const handleResponse = response=>response.json().then(json=>response.ok ? json :
 
 
 const getAllIndexes = function (arr, val) {
-    let indexes = [], i;
+    let indexes = [], 
+i;
 
     for(i = 0; i < arr.length; i++)
         if (arr[i] === val)
@@ -502,7 +499,7 @@ const getMonthName = function(num){
     'Сентябрь',
     'Октябрь',
     'Ноябрь',
-    'Декабрь',
+    'Декабрь'
   ]
 
   // Minus one - to operate monthes starting from 01
@@ -527,10 +524,10 @@ const getMiddleMonthes = function(m1, y1, m2, y2, dw){
   let year1 = Number(y1);
   const year2 = Number(y2);
 
-  while ((year1 < year2) || (first <= last && year1 === year2)) {
+  while (year1 < year2 || first <= last && year1 === year2) {
     let dayInMonth,
-        monthWidth,
-        month;
+        month,
+        monthWidth;
 
     if(first < 10){
       dayInMonth = getDayInMonth(year1, first)
@@ -566,7 +563,7 @@ module.exports.getMiddleMonthes = getMiddleMonthes;
   */
 const prepareCalendar= function(yFrom, monthes){
   let currentYear = Number(yFrom);
-  let dates = []
+  const dates = []
 
   monthes.forEach(month=>{
     const monthLength = getDayInMonth(currentYear, month.month);
@@ -574,7 +571,7 @@ const prepareCalendar= function(yFrom, monthes){
       for (let i = 1; i <= monthLength; i++) {
         // To make dates like 01, 02, 03 etc
         if(i < 10)
-          i = '0' + i.toString();
+          i = `0${i.toString()}`;
           dates.push({date:i.toString(), month:month.month, year: currentYear})
       }
       if(month.month === '12')
@@ -772,7 +769,7 @@ module.exports.deleteData = deleteData;
 */
 const compare = function (property, sortOrder){
   return function (a,b) {
-      const result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+      const result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
 
       return result * sortOrder;
   }
@@ -860,7 +857,6 @@ const selectElementContents = function(el){
 }
 
 module.exports.selectElementContents = selectElementContents;
-
 },{"./config":3}],6:[function(require,module,exports){
 'use strict';
 
@@ -907,7 +903,6 @@ switch(getPage()) {
   default:
     pageScript = null;
 }
-
 },{"./config":3,"./employeManagment":4,"./infotable":7,"./objectManagment":11,"./shiftCalendar":12,"./vacationManagment":13,"./xrayschedule":14}],7:[function(require,module,exports){
 'use strict'
 
@@ -992,7 +987,6 @@ module.exports = class EmployeManagment extends PageScript{
     this.render('graphData', 'graphDataField');
   }
 }
-
 },{"./PageScript":2,"./helpers":5}],8:[function(require,module,exports){
 "use strict";function ProcessEmitWarning(e){console&&console.warn&&console.warn(e)}function EventEmitter(){EventEmitter.init.call(this)}function $getMaxListeners(e){return void 0===e._maxListeners?EventEmitter.defaultMaxListeners:e._maxListeners}function _addListener(e,t,n,r){var i,o,s;if("function"!=typeof n)throw new TypeError('The "listener" argument must be of type Function. Received type '+typeof n);if(o=e._events,void 0===o?(o=e._events=Object.create(null),e._eventsCount=0):(void 0!==o.newListener&&(e.emit("newListener",t,n.listener?n.listener:n),o=e._events),s=o[t]),void 0===s)s=o[t]=n,++e._eventsCount;else if("function"==typeof s?s=o[t]=r?[n,s]:[s,n]:r?s.unshift(n):s.push(n),(i=$getMaxListeners(e))>0&&s.length>i&&!s.warned){s.warned=!0;var u=new Error("Possible EventEmitter memory leak detected. "+s.length+" "+String(t)+" listeners added. Use emitter.setMaxListeners() to increase limit");u.name="MaxListenersExceededWarning",u.emitter=e,u.type=t,u.count=s.length,ProcessEmitWarning(u)}return e}function onceWrapper(){for(var e=[],t=0;t<arguments.length;t++)e.push(arguments[t]);this.fired||(this.target.removeListener(this.type,this.wrapFn),this.fired=!0,ReflectApply(this.listener,this.target,e))}function _onceWrap(e,t,n){var r={fired:!1,wrapFn:void 0,target:e,type:t,listener:n},i=onceWrapper.bind(r);return i.listener=n,r.wrapFn=i,i}function _listeners(e,t,n){var r=e._events;if(void 0===r)return[];var i=r[t];return void 0===i?[]:"function"==typeof i?n?[i.listener||i]:[i]:n?unwrapListeners(i):arrayClone(i,i.length)}function listenerCount(e){var t=this._events;if(void 0!==t){var n=t[e];if("function"==typeof n)return 1;if(void 0!==n)return n.length}return 0}function arrayClone(e,t){for(var n=new Array(t),r=0;r<t;++r)n[r]=e[r];return n}function spliceOne(e,t){for(;t+1<e.length;t++)e[t]=e[t+1];e.pop()}function unwrapListeners(e){for(var t=new Array(e.length),n=0;n<t.length;++n)t[n]=e[n].listener||e[n];return t}var R="object"==typeof Reflect?Reflect:null,ReflectApply=R&&"function"==typeof R.apply?R.apply:function(e,t,n){return Function.prototype.apply.call(e,t,n)},ReflectOwnKeys;ReflectOwnKeys=R&&"function"==typeof R.ownKeys?R.ownKeys:Object.getOwnPropertySymbols?function(e){return Object.getOwnPropertyNames(e).concat(Object.getOwnPropertySymbols(e))}:function(e){return Object.getOwnPropertyNames(e)};var NumberIsNaN=Number.isNaN||function(e){return e!==e};module.exports=EventEmitter,EventEmitter.EventEmitter=EventEmitter,EventEmitter.prototype._events=void 0,EventEmitter.prototype._eventsCount=0,EventEmitter.prototype._maxListeners=void 0;var defaultMaxListeners=10;Object.defineProperty(EventEmitter,"defaultMaxListeners",{enumerable:!0,get:function(){return defaultMaxListeners},set:function(e){if("number"!=typeof e||e<0||NumberIsNaN(e))throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received '+e+".");defaultMaxListeners=e}}),EventEmitter.init=function(){void 0!==this._events&&this._events!==Object.getPrototypeOf(this)._events||(this._events=Object.create(null),this._eventsCount=0),this._maxListeners=this._maxListeners||void 0},EventEmitter.prototype.setMaxListeners=function(e){if("number"!=typeof e||e<0||NumberIsNaN(e))throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received '+e+".");return this._maxListeners=e,this},EventEmitter.prototype.getMaxListeners=function(){return $getMaxListeners(this)},EventEmitter.prototype.emit=function(e){for(var t=[],n=1;n<arguments.length;n++)t.push(arguments[n]);var r="error"===e,i=this._events;if(void 0!==i)r=r&&void 0===i.error;else if(!r)return!1;if(r){var o;if(t.length>0&&(o=t[0]),o instanceof Error)throw o;var s=new Error("Unhandled error."+(o?" ("+o.message+")":""));throw s.context=o,s}var u=i[e];if(void 0===u)return!1;if("function"==typeof u)ReflectApply(u,this,t);else for(var f=u.length,v=arrayClone(u,f),n=0;n<f;++n)ReflectApply(v[n],this,t);return!0},EventEmitter.prototype.addListener=function(e,t){return _addListener(this,e,t,!1)},EventEmitter.prototype.on=EventEmitter.prototype.addListener,EventEmitter.prototype.prependListener=function(e,t){return _addListener(this,e,t,!0)},EventEmitter.prototype.once=function(e,t){if("function"!=typeof t)throw new TypeError('The "listener" argument must be of type Function. Received type '+typeof t);return this.on(e,_onceWrap(this,e,t)),this},EventEmitter.prototype.prependOnceListener=function(e,t){if("function"!=typeof t)throw new TypeError('The "listener" argument must be of type Function. Received type '+typeof t);return this.prependListener(e,_onceWrap(this,e,t)),this},EventEmitter.prototype.removeListener=function(e,t){var n,r,i,o,s;if("function"!=typeof t)throw new TypeError('The "listener" argument must be of type Function. Received type '+typeof t);if(void 0===(r=this._events))return this;if(void 0===(n=r[e]))return this;if(n===t||n.listener===t)0==--this._eventsCount?this._events=Object.create(null):(delete r[e],r.removeListener&&this.emit("removeListener",e,n.listener||t));else if("function"!=typeof n){for(i=-1,o=n.length-1;o>=0;o--)if(n[o]===t||n[o].listener===t){s=n[o].listener,i=o;break}if(i<0)return this;0===i?n.shift():spliceOne(n,i),1===n.length&&(r[e]=n[0]),void 0!==r.removeListener&&this.emit("removeListener",e,s||t)}return this},EventEmitter.prototype.off=EventEmitter.prototype.removeListener,EventEmitter.prototype.removeAllListeners=function(e){var t,n,r;if(void 0===(n=this._events))return this;if(void 0===n.removeListener)return 0===arguments.length?(this._events=Object.create(null),this._eventsCount=0):void 0!==n[e]&&(0==--this._eventsCount?this._events=Object.create(null):delete n[e]),this;if(0===arguments.length){var i,o=Object.keys(n);for(r=0;r<o.length;++r)"removeListener"!==(i=o[r])&&this.removeAllListeners(i);return this.removeAllListeners("removeListener"),this._events=Object.create(null),this._eventsCount=0,this}if("function"==typeof(t=n[e]))this.removeListener(e,t);else if(void 0!==t)for(r=t.length-1;r>=0;r--)this.removeListener(e,t[r]);return this},EventEmitter.prototype.listeners=function(e){return _listeners(this,e,!0)},EventEmitter.prototype.rawListeners=function(e){return _listeners(this,e,!1)},EventEmitter.listenerCount=function(e,t){return"function"==typeof e.listenerCount?e.listenerCount(t):listenerCount.call(e,t)},EventEmitter.prototype.listenerCount=listenerCount,EventEmitter.prototype.eventNames=function(){return this._eventsCount>0?ReflectOwnKeys(this._events):[]};
 },{}],9:[function(require,module,exports){
@@ -1029,7 +1023,6 @@ module.exports = class ObjectManagment extends PageScript{
     this.formsHandler.ee.on('refreshRender', this.getObjectData);
   }
 }
-
 },{"./PageScript":2}],12:[function(require,module,exports){
 'use strict'
 
@@ -1110,7 +1103,7 @@ module.exports = class ShiftCalendar extends PageScript{
   fillDutyArray(){
     this.calendar.forEach(date=>{
       this.shift.forEach(shiftObj=>{
-        let {shift} = shiftObj;
+        const {shift} = shiftObj;
 
         if(date.shift.includes(shift)) shiftObj.dutyArray.push(true);
         else shiftObj.dutyArray.push(false);
@@ -1130,7 +1123,6 @@ module.exports = class ShiftCalendar extends PageScript{
     this.formsHandler.ee.on('refreshRender', this.setCalendar);
   }
 }
-
 },{"./PageScript":2,"./helpers":5}],13:[function(require,module,exports){
 'use strict'
 
@@ -1181,7 +1173,6 @@ module.exports = class EmployeManagment extends PageScript{
       .catch(err=>console.log(err));
   }
 }
-
 },{"./PageScript":2,"./helpers":5}],14:[function(require,module,exports){
 'use strict'
 
@@ -1200,5 +1191,4 @@ module.exports = class XraySchedule extends PageScript{
     this.formsHandler.ee.on('refreshRender', this.setCalendar);
   }
 }
-
 },{"./PageScript":2,"./helpers":5}]},{},[6]);

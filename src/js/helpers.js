@@ -6,7 +6,8 @@ const handleResponse = response=>response.json().then(json=>response.ok ? json :
 
 
 const getAllIndexes = function (arr, val) {
-    let indexes = [], i;
+    let indexes = [], 
+i;
 
     for(i = 0; i < arr.length; i++)
         if (arr[i] === val)
@@ -63,7 +64,7 @@ const getMonthName = function(num){
     'Сентябрь',
     'Октябрь',
     'Ноябрь',
-    'Декабрь',
+    'Декабрь'
   ]
 
   // Minus one - to operate monthes starting from 01
@@ -88,10 +89,10 @@ const getMiddleMonthes = function(m1, y1, m2, y2, dw){
   let year1 = Number(y1);
   const year2 = Number(y2);
 
-  while ((year1 < year2) || (first <= last && year1 === year2)) {
+  while (year1 < year2 || first <= last && year1 === year2) {
     let dayInMonth,
-        monthWidth,
-        month;
+        month,
+        monthWidth;
 
     if(first < 10){
       dayInMonth = getDayInMonth(year1, first)
@@ -127,7 +128,7 @@ module.exports.getMiddleMonthes = getMiddleMonthes;
   */
 const prepareCalendar= function(yFrom, monthes){
   let currentYear = Number(yFrom);
-  let dates = []
+  const dates = []
 
   monthes.forEach(month=>{
     const monthLength = getDayInMonth(currentYear, month.month);
@@ -135,7 +136,7 @@ const prepareCalendar= function(yFrom, monthes){
       for (let i = 1; i <= monthLength; i++) {
         // To make dates like 01, 02, 03 etc
         if(i < 10)
-          i = '0' + i.toString();
+          i = `0${i.toString()}`;
           dates.push({date:i.toString(), month:month.month, year: currentYear})
       }
       if(month.month === '12')
@@ -333,7 +334,7 @@ module.exports.deleteData = deleteData;
 */
 const compare = function (property, sortOrder){
   return function (a,b) {
-      const result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+      const result = a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
 
       return result * sortOrder;
   }

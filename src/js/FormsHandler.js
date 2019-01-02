@@ -111,8 +111,8 @@ const {postData, deleteData, getForm, getData} = require('./helpers');
     const el = document.getElementById(`${form}FormArea`);
     
     this.isPopup = true;
-    el.style.left = e.x + 'px';
-    el.style.top = e.layerY + 'px';
+    el.style.left = `${e.x}px`;
+    el.style.top = `${e.layerY}px`;
     setTimeout(()=>el.classList.add('popedUp'), 10);
   }
 
@@ -212,7 +212,7 @@ const {postData, deleteData, getForm, getData} = require('./helpers');
       date: 'date'
     }
 
-    for (let i in obj) {
+    for (const i in obj) {
       if(i !== 'type' && i !== '_id' && i !== 'workDays') {
         const input = {name:i};
 

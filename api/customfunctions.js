@@ -10,7 +10,7 @@ const calculateVacationEnd = function(req){
   try {
     const {dateFrom, long} = req.body;
     const dayLong = 1000 * 60 * 60 * 24;
-    const dateTo = Date.parse(dateFrom) + (long * dayLong);
+    const dateTo = Date.parse(dateFrom) + long * dayLong;
 
     req.body.dateTo = dateTo;
 
@@ -80,15 +80,9 @@ module.exports.prehandlePosition = function(){
  */
 module.exports.editAllEmbeddedDocs = function editAllEmbeddedDocs (req){
   const dependencyTree = {
-    Shift: {
-      Person: 'shift'
-    },
-    Position:{
-      Person:'position'
-    },
-    Person:{
-      Vacation:'person'
-    }
+    Shift: {Person: 'shift'},
+    Position:{Person:'position'},
+    Person:{Vacation:'person'}
   };
 
   return new Promise((resolve, reject)=>{
@@ -107,9 +101,7 @@ module.exports.editAllEmbeddedDocs = function editAllEmbeddedDocs (req){
 
     // First of all - find old value of edited doc
     db.findOne(type, {_id})
-      .then(rep=>{
-        return Promise.resolve(rep[propToChange])
-      })
+      .then(rep=>Promise.resolve(rep[propToChange]))
       .then(propOldVal=>{
         let findProp = {},
             setProp = {$set:{}};
@@ -134,7 +126,7 @@ module.exports.editAllEmbeddedDocs = function editAllEmbeddedDocs (req){
  * @returns {Array} - array of first and last dates [first, last]
  */
 module.exports.getFullDates = function(body){
-	let {monthFrom, yearFrom, monthTo, yearTo} = body;
+  let {monthFrom, yearFrom, monthTo, yearTo} = body;
 
   monthTo = Number(monthTo);
   yearTo = Number(yearTo);
@@ -144,7 +136,7 @@ module.exports.getFullDates = function(body){
     monthTo = '01';
     yearTo += 1;
   } else if(monthTo < 10) {
-    monthTo = '0' + monthTo.toString();
+    monthTo = `0${monthTo.toString()}`;
   }
 
   const dateFrom = `${yearFrom}-${monthFrom}-01`;
@@ -267,13 +259,13 @@ const refreshShiftsDuties = async function(refreshDb, date){
 
     dutyDate = Date.parse(dutyDate);
 
-    let dutyDateEnd = dutyDate + (duty * oneDay),
+    let dutyDateEnd = dutyDate + duty * oneDay,
       prevDutyDate = dutyDate;
 
     while(dutyDate < currentDate){
       prevDutyDate = dutyDate;
-      dutyDate = dutyDateEnd + (oneDay * off);
-      dutyDateEnd = dutyDate + (duty * oneDay);
+      dutyDate = dutyDateEnd + oneDay * off;
+      dutyDateEnd = dutyDate + duty * oneDay;
     }
 
     dutyDate = prevDutyDate;
@@ -328,12 +320,12 @@ const getShiftOnDuty = function(day, allShifts){
       currentDate = Date.parse(day),
       oneDay = 24 * 60 * 60 * 1000,
       // Date, when duty ends
-      dutyDateEnd = dutyDate + (duty * oneDay);
+      dutyDateEnd = dutyDate + duty * oneDay;
 
     while (dutyDate <= currentDate) {
       if(dutyDate <= currentDate && dutyDateEnd > currentDate) dutyShifts.push(shift)
           dutyDate = dutyDateEnd + oneDay * off;
-          dutyDateEnd = dutyDate + (duty * oneDay)
+          dutyDateEnd = dutyDate + duty * oneDay
       }
 
     });
@@ -525,7 +517,8 @@ module.exports.getNewProblemsCalendar = async function(){
     vacationCalendar = await getVacationCalendar(dateTo),
     problemsCalendar = await checkVacationCalendar(vacationCalendar, positions);
 
-    db.update('ProblemsCalendar', {}, {
+    db.update(
+'ProblemsCalendar', {}, {
         $set:{
           data: problemsCalendar,
           updated: new Date(),
@@ -676,9 +669,11 @@ module.exports.getXraySchedule = async function(week){
   calculateTimesPerPeriod(mutualShifts);
   await calculatePeopleOfPosition(mutualShifts, position);
 
-  // TODO - calculate relation1 of (howMany) / {periodTime) for each shift
-  // then in each shiftPair of mutualShift array calculate relation2 =  relations of relation1 of each shift
-  // then relation2 must be multiplied by sum of hours for each day and each shift to get result number
-  // number must be floored
+  /*
+   * TODO - calculate relation1 of (howMany) / {periodTime) for each shift
+   * then in each shiftPair of mutualShift array calculate relation2 =  relations of relation1 of each shift
+   * then relation2 must be multiplied by sum of hours for each day and each shift to get result number
+   * number must be floored
+   */
 
 };

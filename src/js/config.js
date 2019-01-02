@@ -3,13 +3,13 @@
 module.exports.API_URL = 'http://localhost:9200';
 
 module.exports.getPage = function() {
-  let idElement = document.getElementById('pageId');
+  const idElement = document.getElementById('pageId');
 
   return idElement.dataset.id;
 }
 
 module.exports.defaultFetch = function(method='GET', body){
-  let configFetch =  {
+  const configFetch = {
       method,
       mode:'cors',
       headers: {

@@ -1,65 +1,65 @@
 const db = require('./dbqueries');
 const {
-		editAllEmbeddedDocs,
-		getFullDates,
-		getOrQuery,
-		getNamesQuery,
-		getDatesQuery,
-		concatPersonArrays,
+    editAllEmbeddedDocs,
+    getFullDates,
+    getOrQuery,
+    getNamesQuery,
+    getDatesQuery,
+    concatPersonArrays,
     getDutyCalendar,
     getXraySchedule
-	} = require('./customfunctions');
+  } = require('./customfunctions');
 
 module.exports.addObject = function (req, res) {
-	const {type} = req.params;
+  const {type} = req.params;
 
-	db.create(type, req.body)
-		.then(()=>res.json({success:true}))
-		.catch(err=>res.status(500).json({err:err.message}))
+  db.create(type, req.body)
+    .then(()=>res.json({success:true}))
+    .catch(err=>res.status(500).json({err:err.message}))
 };
 
 module.exports.editObject = function(req, res){
-	const {type} = req.params,
-				{_id} = req.body;
+  const {type} = req.params,
+        {_id} = req.body;
 
-	editAllEmbeddedDocs(req)
-		.then(()=>db.update(type, {_id}, {$set:req.body}))
-		.then(rep=>res.json({success:true}))
-		.catch(err=>res.status(500).json({err:err.message}))
+  editAllEmbeddedDocs(req)
+    .then(()=>db.update(type, {_id}, {$set:req.body}))
+    .then(rep=>res.json({success:true}))
+    .catch(err=>res.status(500).json({err:err.message}))
 };
 
 module.exports.getVacationsByFilter = function(req, res){
-	const dates = getFullDates(req.body);
-	const orQuery = getOrQuery(req.body);
-	let namesQuery = [];
+  const dates = getFullDates(req.body);
+  const orQuery = getOrQuery(req.body);
+  let namesQuery = [];
 
-	db.find('Person', {$or: orQuery})
-		.then(rep=>{
-			const datesQuery = getDatesQuery(dates);
+  db.find('Person', {$or: orQuery})
+    .then(rep=>{
+      const datesQuery = getDatesQuery(dates);
 
-			namesQuery = getNamesQuery(rep);
+      namesQuery = getNamesQuery(rep);
 
-			return db.find('Vacation', {
-					$and: [
-						{$or:namesQuery},
-						{$or: datesQuery}
-					]
-				})
-		})
-	.then(vacations=>res.json(concatPersonArrays(namesQuery, vacations)))
-	.catch(err=>res.status(500).json({err:err.message}))
+      return db.find('Vacation', {
+          $and: [
+            {$or:namesQuery},
+            {$or: datesQuery}
+          ]
+        })
+    })
+  .then(vacations=>res.json(concatPersonArrays(namesQuery, vacations)))
+  .catch(err=>res.status(500).json({err:err.message}))
 }
 
 module.exports.getShiftCalendar = function(req, res){
-	const dates = getFullDates(req.body);
+  const dates = getFullDates(req.body);
 
   getDutyCalendar(dates)
     .then(calendar=>res.json(calendar))
-		.catch(err=>res.status(500).json({err:err.message}))
+    .catch(err=>res.status(500).json({err:err.message}))
 };
 
 module.exports.getXraySchedule = function(req, res){
   getXraySchedule(req.body)
     .then(schedule=>res.json(schedule))
-		.catch(err=>res.status(500).json({err:err.message}))
+    .catch(err=>res.status(500).json({err:err.message}))
 };
