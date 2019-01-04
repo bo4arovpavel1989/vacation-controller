@@ -248,26 +248,8 @@ module.exports.mutualShifts = [
 	]
 ];
 
-module.exports.mutualShiftsPeriods = [
-[
-	{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4'},
-	{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6'}
-],
-[
-	{shift:'Суточная 1', duty:1, off:3, dutyDate:'2018-11-27', _id:'id1'},
-	{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6'}
-],
-[
-	{shift:'Суточная 2', duty:1, off:3, dutyDate:'2018-11-28', _id:'id2'},
-	{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5'}
-],
-[
-	{shift:'Суточная 3', duty:1, off:3, dutyDate:'2018-11-29', _id:'id3'},
-	{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5'}
-]
-];
 
-module.exports.mutualShiftsPeriodsUpdated = [
+module.exports.mutualShiftsUpdated1 = [
 	[
 		{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4', periodTimes: 1},
 		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2}
@@ -286,7 +268,7 @@ module.exports.mutualShiftsPeriodsUpdated = [
 	]
 ];
 
-module.exports.mutualShiftsPeriodsUpdated2 = [
+module.exports.mutualShiftsUpdated2 = [
 	[
 		{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4', periodTimes: 1, howMany: 2},
 		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2, howMany: 3}
@@ -305,26 +287,8 @@ module.exports.mutualShiftsPeriodsUpdated2 = [
 	]
 ];
 
-module.exports.mutualShiftsPeopleShiftRelation = [
-	[
-		{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4', periodTimes: 1, howMany: 2},
-		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2, howMany: 3}
-	],
-	[
-		{shift:'Суточная 1', duty:1, off:3, dutyDate:'2018-11-27', _id:'id1', periodTimes: 1, howMany: 2},
-		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2, howMany: 3}
-	],
-	[
-		{shift:'Суточная 2', duty:1, off:3, dutyDate:'2018-11-28', _id:'id2', periodTimes: 1, howMany: 2},
-		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5', periodTimes: 2, howMany: 4}
-	],
-	[
-		{shift:'Суточная 3', duty:1, off:3, dutyDate:'2018-11-29', _id:'id3', periodTimes: 1, howMany: 2},
-		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5', periodTimes: 2, howMany: 4}
-	]
-];
 
-module.exports.mutualShiftsPeopleShiftRelationUpdated = [
+module.exports.mutualShiftsUpdated3 = [
 	[
 		{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4', periodTimes: 1, howMany: 2, peopleShiftRelation:2},
 		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2, howMany: 3, peopleShiftRelation:1.5}
@@ -343,26 +307,8 @@ module.exports.mutualShiftsPeopleShiftRelationUpdated = [
 	]
 ];
 
-module.exports.mutualShiftsMenPower = [
-	[
-		{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4', periodTimes: 1, howMany: 2, peopleShiftRelation:2},
-		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2, howMany: 3, peopleShiftRelation:1.5}
-	],
-	[
-		{shift:'Суточная 1', duty:1, off:3, dutyDate:'2018-11-27', _id:'id1', periodTimes: 1, howMany: 2, peopleShiftRelation:2},
-		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2, howMany: 3, peopleShiftRelation:1.5}
-	],
-	[
-		{shift:'Суточная 2', duty:1, off:3, dutyDate:'2018-11-28', _id:'id2', periodTimes: 1, howMany: 2, peopleShiftRelation:2},
-		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5', periodTimes: 2, howMany: 4, peopleShiftRelation:2}
-	],
-	[
-		{shift:'Суточная 3', duty:1, off:3, dutyDate:'2018-11-29', _id:'id3', periodTimes: 1, howMany: 2, peopleShiftRelation:2},
-		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5', periodTimes: 2, howMany: 4, peopleShiftRelation:2}
-	]
-];
 
-module.exports.mutualShiftsMenPowerUpdated = [
+module.exports.mutualShiftsUpdated4 = [
 	[
 		{shift:'Суточная 4', duty:1, off:3, dutyDate:'2018-11-30', _id:'id4', periodTimes: 1, howMany: 2, peopleShiftRelation:2, potentialMenPower:2/3.5},
 		{shift:'Оперативная 2', duty:2, off:2, dutyDate:'2018-11-26', _id:'id6', periodTimes: 2, howMany: 3, peopleShiftRelation:1.5, potentialMenPower:1.5/3.5}
@@ -379,4 +325,16 @@ module.exports.mutualShiftsMenPowerUpdated = [
 		{shift:'Суточная 3', duty:1, off:3, dutyDate:'2018-11-29', _id:'id3', periodTimes: 1, howMany: 2, peopleShiftRelation:2, potentialMenPower:0.5},
 		{shift:'Оперативная 1', duty:2, off:2, dutyDate:'2018-11-28', _id:'id5', periodTimes: 2, howMany: 4, peopleShiftRelation:2, potentialMenPower:0.5}
 	]
+];
+
+module.exports.xrayHours = [10, 10, 20, 10, 20, 10, 10];
+
+module.exports.xraySchedule = [
+	[5.5,4.5, 5.5, 4.5, 5, 5, 5, 5],
+	[5.5,4.5, 5.5, 4.5, 5, 5, 5, 5],
+	[11.5, 8.5, 11.5, 8.5, 10, 10, 10, 10],
+	[5.5,4.5, 5.5, 4.5, 5, 5, 5, 5],
+	[11.5, 8.5, 11.5, 8.5, 10, 10, 10, 10],
+	[5.5,4.5, 5.5, 4.5, 5, 5, 5, 5],
+	[5.5,4.5, 5.5, 4.5, 5, 5, 5, 5],
 ];

@@ -365,11 +365,11 @@ describe('getMutualShifts', ()=>{
 
 describe('calculateTimesPerPeriod', ()=>{
 	it('Calculates how many times shift occurs in period. mutates unput array', ()=>{
-		const {mutualShiftsPeriods, mutualShiftsPeriodsUpdated} = corrects;
+		const {mutualShifts, mutualShiftsUpdated1} = corrects;
 		const {calculateTimesPerPeriod} = customFunctions;
-		const result = calculateTimesPerPeriod(mutualShiftsPeriods);
+		const result = calculateTimesPerPeriod(mutualShifts);
 
-		expect(result).to.deep.equal(mutualShiftsPeriodsUpdated);
+		expect(result).to.deep.equal(mutualShiftsUpdated1);
 	});
 });
 
@@ -377,8 +377,8 @@ describe('calculatePeopleOfPosition', ()=>{
 	it('Calculates how many people of position is in shift', ()=>{
 		const position = 'Guard';
 		const {
-			mutualShiftsPeriodsUpdated,
-			mutualShiftsPeriodsUpdated2
+			mutualShiftsUpdated1,
+			mutualShiftsUpdated2
 		} = corrects;
 		const {calculatePeopleOfPosition} = customFunctions;
 
@@ -389,30 +389,40 @@ describe('calculatePeopleOfPosition', ()=>{
 		spyCount.withArgs('Person', {shift:'Оперативная 1', position}).resolves(4);
 		spyCount.withArgs('Person', {shift:'Оперативная 2', position}).resolves(3);
 
-		return calculatePeopleOfPosition(mutualShiftsPeriodsUpdated, position)
+		return calculatePeopleOfPosition(mutualShiftsUpdated1, position)
 			.then(result=>{
-				expect(result).to.deep.equal(mutualShiftsPeriodsUpdated2);
+				expect(result).to.deep.equal(mutualShiftsUpdated2);
 			});
 	});
 });
 
 describe('calculatePeopleShiftRelation', ()=>{
 	it('Calculates relation of people to periodTimes in each mutual shift', ()=>{
-		const {mutualShiftsPeopleShiftRelation,mutualShiftsPeopleShiftRelationUpdated}=corrects;
+		const {mutualShiftsUpdated2,mutualShiftsUpdated3}=corrects;
 		const {calculatePeopleShiftRelation} = customFunctions;
-		const result = calculatePeopleShiftRelation(mutualShiftsPeopleShiftRelation);
+		const result = calculatePeopleShiftRelation(mutualShiftsUpdated2);
 
-		expect(result).to.deep.equal(mutualShiftsPeopleShiftRelationUpdated);
+		expect(result).to.deep.equal(mutualShiftsUpdated3);
 
 	});
 });
 
 describe('getShiftPowerRelation', ()=>{
 	it('Calculates potentialMenPower coeff for each shift', ()=>{
-		const {mutualShiftsMenPower, mutualShiftsMenPowerUpdated} = corrects;
+		const {mutualShiftsUpdated3, mutualShiftsUpdated4} = corrects;
 		const {getShiftPowerRelation} = customFunctions;
-		const result = getShiftPowerRelation(mutualShiftsMenPower);
+		const result = getShiftPowerRelation(mutualShiftsUpdated3);
 
-		expect(result).to.deep.equal(mutualShiftsMenPowerUpdated);
+		expect(result).to.deep.equal(mutualShiftsUpdated4);
+	});
+});
+
+describe('calculateXrayCalendar', ()=>{
+	it('Calculates sum of hours for each shift every day', ()=>{
+		const {mutualShiftsUpdated4, xraySchedule, xrayHours} = corrects;
+		const {calculateXrayCalendar} = customFunctions;
+		const result = calculateXrayCalendar(xrayHours, mutualShiftsUpdated4);
+		
+		expect(result).to.deep.equal(xraySchedule);
 	});
 });

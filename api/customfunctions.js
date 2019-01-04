@@ -2,6 +2,19 @@ const db = require('./dbqueries');
 const _ = require('lodash');
 
 /**
+ * Function rounds value to set precition
+ * @param {Number} value - to round
+ * @param {Number} step - precision
+ * @returns {Number} rounded number
+ */
+const round = function (value, step){
+    step || (step = 1.0);
+    const inv = 1.0 / step;
+
+    return Math.round(value * inv) / inv;
+};
+
+/**
  * Function calculates end date of Vacation
  * @param {Object} req - API request Object
  * @returns {Boolean} represents if operation successed
@@ -626,7 +639,6 @@ const calculateTimesPerPeriod = function(mutualShifts){
     })
   });
 
-  console.log(mutualShifts)
   return mutualShifts;
 };
 
@@ -705,13 +717,43 @@ const getShiftPowerRelation = function(mutualShifts){
 module.exports.getShiftPowerRelation = getShiftPowerRelation;
 
 /**
+ * Function multiplies potentialMenPower of each mutualShifts array member
+ * to calculate every day quantity of hours
+ * @param {Array} calendar - array of sum hours for all duty shifts
+ * @param {Array} mutualShifts - array of shifts grouped by duties
+ * @returns {Array} array of hours for each shift for each day of week
+ */
+const calculateXrayCalendar = function(calendar, mutualShifts){
+  const xrayCalendar = [];
+
+  calendar.forEach(day=>{
+    const shiftHours = [];
+
+    mutualShifts.forEach(shiftPair=>{
+      shiftPair.forEach(shift=>{
+        let hourForShift = shift.potentialMenPower * Number(day);
+
+        hourForShift = round(hourForShift, 0.5);
+        shiftHours.push(hourForShift);
+      });
+    });
+
+    xrayCalendar.push(shiftHours);
+  });
+
+  return xrayCalendar;
+};
+
+module.exports.calculateXrayCalendar = calculateXrayCalendar;
+
+/**
  * Function gets week shift schedule based on hours quantity each day
- * @param {Object} week - {monday, thuesday, etc...}
+ * @param {Object} body - request body object
  * @returns {Promise} week object with certain hours quantity for each shift
  */
 module.exports.getXraySchedule = async function(body){
   const {position} = body;
-  let mutualShifts = await getMutualShifts();
+  const mutualShifts = await getMutualShifts();
   const calendar = [
     body.monday,
     body.thuesday,
@@ -722,15 +764,12 @@ module.exports.getXraySchedule = async function(body){
     body.sunday
   ];
 
-  mutualShifts = calculateTimesPerPeriod(mutualShifts);
-  mutualShifts = await calculatePeopleOfPosition(mutualShifts, position);
-  mutualShifts = calculatePeopleShiftRelation(mutualShifts);
-  mutualShifts = getShiftPowerRelation(mutualShifts);
+  calculateTimesPerPeriod(mutualShifts);
+  await calculatePeopleOfPosition(mutualShifts, position);
+  calculatePeopleShiftRelation(mutualShifts);
+  getShiftPowerRelation(mutualShifts);
 
-  /*
-  * TODO
-  * potentialMenPower coefficient must be multiplied by each hour day for each shift
-  */
+  const xraySchedule = calculateXrayCalendar(calendar, mutualShifts);
 
-  return mutualShifts;
+  return [xraySchedule, mutualShifts];
 };
