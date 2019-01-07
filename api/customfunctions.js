@@ -581,6 +581,9 @@ module.exports.getDutyCalendar = async function(dates){
   return calendar;
 };
 
+// Functions for getXraySchedule
+
+
 /**
  * Functin gets max period between duties of all all shifts
  * @param {Array} shifts - array of all shifts

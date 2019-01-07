@@ -1,18 +1,34 @@
 'use strict'
 
 const PageScript = require('./PageScript');
-const {} = require('./helpers');
 
 module.exports = class XraySchedule extends PageScript{
   constructor(selectors){
     super(selectors);
+
+    this.shift = [];
+    this.calendar = [];
+    this.week = [
+      'понедельник',
+      'вторник',
+      'среда',
+      'четверг',
+      'пятница',
+      'суббота',
+      'воскресенье'
+    ]
 
     this.setCalendar = this.setCalendar.bind(this);
     this.setListeners();
   }
 
   setCalendar(rep){
-    console.log(rep)
+    [this.calendar, this.shift] = rep;
+
+
+    console.log(rep);
+    this.render('calendar', 'calendarArea');
+    this.render('shift', 'shiftArea');
   }
 
   setListeners(){

@@ -267,7 +267,6 @@ module.exports = class PageScript {
     this.copyToClipboard = this.copyToClipboard.bind(this);
     this.setSort = this.setSort.bind(this);
     this.setSortValue = this.setSortValue.bind(this);
-    this.copyToClipboard = this.copyToClipboard.bind(this);
 
     // Default sort
     this.sort = 'person';
@@ -370,6 +369,7 @@ module.exports = class PageScript {
     this.formsHandler.refreshListeners();
   }
 }
+
 },{"./FormsHandler":1,"./helpers":5,"./libs/h-intl.min":9,"./libs/h.min":10}],3:[function(require,module,exports){
 'use strict'
 
@@ -1177,18 +1177,34 @@ module.exports = class EmployeManagment extends PageScript{
 'use strict'
 
 const PageScript = require('./PageScript');
-const {} = require('./helpers');
 
 module.exports = class XraySchedule extends PageScript{
   constructor(selectors){
     super(selectors);
+
+    this.shift = [];
+    this.calendar = [];
+    this.week = [
+      'понедельник',
+      'вторник',
+      'среда',
+      'четверг',
+      'пятница',
+      'суббота',
+      'воскресенье'
+    ]
 
     this.setCalendar = this.setCalendar.bind(this);
     this.setListeners();
   }
 
   setCalendar(rep){
-    console.log(rep)
+    [this.calendar, this.shift] = rep;
+
+
+    console.log(rep);
+    this.render('calendar', 'calendarArea');
+    this.render('shift', 'shiftArea');
   }
 
   setListeners(){
@@ -1196,4 +1212,4 @@ module.exports = class XraySchedule extends PageScript{
   }
 }
 
-},{"./PageScript":2,"./helpers":5}]},{},[6]);
+},{"./PageScript":2}]},{},[6]);

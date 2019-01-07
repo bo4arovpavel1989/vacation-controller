@@ -24,7 +24,6 @@ module.exports = class PageScript {
     this.copyToClipboard = this.copyToClipboard.bind(this);
     this.setSort = this.setSort.bind(this);
     this.setSortValue = this.setSortValue.bind(this);
-    this.copyToClipboard = this.copyToClipboard.bind(this);
 
     // Default sort
     this.sort = 'person';
