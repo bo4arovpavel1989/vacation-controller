@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports.API_URL = 'http://localhost:9200';
+module.exports.API_URL = 'http://K47_8:9200';
 
 module.exports.getPage = function() {
   const idElement = document.getElementById('pageId');

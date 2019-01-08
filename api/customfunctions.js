@@ -623,6 +623,29 @@ const getMutualShifts = async function(){
 
 module.exports.getMutualShifts = getMutualShifts;
 
+const sortMutualShifts = function(mutualShifts){
+  mutualShifts.forEach(shiftPair=>{
+    shiftPair.sort((a, b)=>{
+      if (a.shift > b.shift)return 1;
+      if (a.shift < b.shift) return -1;
+
+      return 0;
+    });
+  });
+
+  mutualShifts.sort((a, b)=>{
+    let sort = 0;
+
+    for (let i = 0; i < a.length; i++){
+      if (a[i].shift > b[i].shift) sort = 1;
+      if (a[i].shift < b[i].shift) sort = -1;
+    }
+
+    return sort;
+  });
+};
+
+
 /**
  * Function calculates how many times each shifts work
  * per period when every shift work at least 1 time
@@ -728,13 +751,22 @@ module.exports.getShiftPowerRelation = getShiftPowerRelation;
  */
 const calculateXrayCalendar = function(calendar, mutualShifts){
   const xrayCalendar = [];
+  const week = [
+    'понедельник',
+    'вторник',
+    'среда',
+    'четверг',
+    'пятница',
+    'суббота',
+    'воскресенье'
+  ]
 
-  calendar.forEach(day=>{
-    const shiftHours = [];
+  calendar.forEach((dayHours, i)=>{
+    const shiftHours = [week[i]];
 
     mutualShifts.forEach(shiftPair=>{
       shiftPair.forEach(shift=>{
-        let hourForShift = shift.potentialMenPower * Number(day);
+        let hourForShift = shift.potentialMenPower * Number(dayHours);
 
         hourForShift = round(hourForShift, 0.5);
         shiftHours.push(hourForShift);
@@ -767,6 +799,7 @@ module.exports.getXraySchedule = async function(body){
     body.sunday
   ];
 
+  sortMutualShifts(mutualShifts);
   calculateTimesPerPeriod(mutualShifts);
   await calculatePeopleOfPosition(mutualShifts, position);
   calculatePeopleShiftRelation(mutualShifts);
