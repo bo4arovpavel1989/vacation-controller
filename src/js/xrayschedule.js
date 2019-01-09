@@ -25,10 +25,19 @@ module.exports = class XraySchedule extends PageScript{
   setCalendar(rep){
     [this.calendar, this.shift] = rep;
 
-
-    console.log(rep);
+    this.setColSpan('tableCol');
     this.render('calendar', 'calendarArea');
     this.render('shift', 'shiftArea');
+  }
+
+  setColSpan(selector){
+    let spanLength = 0;
+
+    this.shift.forEach(shiftPair=>{
+      spanLength += shiftPair.length;
+    });
+
+    document.getElementById(selector).setAttribute('span', spanLength);
   }
 
   setListeners(){

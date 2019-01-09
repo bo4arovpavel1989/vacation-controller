@@ -771,6 +771,9 @@ const calculateXrayCalendar = function(calendar, mutualShifts){
         hourForShift = round(hourForShift, 0.5);
         shiftHours.push(hourForShift);
       });
+
+      // To mark separator
+      shiftHours.push(false);
     });
 
     xrayCalendar.push(shiftHours);

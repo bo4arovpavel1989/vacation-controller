@@ -190,5 +190,11 @@ table {
   table-layout: fixed;
   border-collapse: collapse; }
 
+thead {
+  border-bottom: 2px solid black; }
+
 .col1 {
   width: 200px; }
+
+.coln {
+  width: 50px; }

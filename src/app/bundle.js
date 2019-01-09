@@ -373,7 +373,7 @@ module.exports = class PageScript {
 },{"./FormsHandler":1,"./helpers":5,"./libs/h-intl.min":9,"./libs/h.min":10}],3:[function(require,module,exports){
 'use strict'
 
-module.exports.API_URL = 'http://localhost:9200';
+module.exports.API_URL = 'http://K47_8:9200';
 
 module.exports.getPage = function() {
   const idElement = document.getElementById('pageId');
@@ -395,6 +395,7 @@ module.exports.defaultFetch = function(method='GET', body){
 
   return configFetch;
 }
+
 },{}],4:[function(require,module,exports){
 'use strict'
 
@@ -1201,10 +1202,19 @@ module.exports = class XraySchedule extends PageScript{
   setCalendar(rep){
     [this.calendar, this.shift] = rep;
 
-
-    console.log(rep);
+    this.setColSpan('tableCol');
     this.render('calendar', 'calendarArea');
     this.render('shift', 'shiftArea');
+  }
+
+  setColSpan(selector){
+    let spanLength = 0;
+
+    this.shift.forEach(shiftPair=>{
+      spanLength += shiftPair.length;
+    });
+
+    document.getElementById(selector).setAttribute('span', spanLength);
   }
 
   setListeners(){

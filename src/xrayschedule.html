@@ -11,6 +11,7 @@
           {{#each this}}
             <th>{{this.shift}}</th>
           {{/each}}
+          <th width=0></th>
       {{/each}}
     </tr>
     <tr>
@@ -19,6 +20,7 @@
           {{#each this}}
             <th>{{this.howMany}}</th>
           {{/each}}
+          <th width=0></th>
       {{/each}}
     </tr>
   </script>
@@ -26,7 +28,11 @@
     {{#each this}}
       <tr>
         {{#each this}}
-            <td align='center'>{{this}}</td>
+            {{#if this}}
+              <td align='center'>{{this}}</td>
+            {{else}}
+              <td width=0></td>
+            {{/if}}
         {{/each}}
       </tr>
     {{/each}}
@@ -81,7 +87,7 @@
       <table id='graphDataField'  border="1">
         <caption class='graphTitle'>Расписание часов работы по сменам</caption>
         <col class="col1">
-        <col span=9 class="coln">
+        <col id='tableCol'>
         <thead id='shiftArea'></thead>
         <tbody id='calendarArea'></tbody>
       </table>
