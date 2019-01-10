@@ -1,1 +1,28 @@
-<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Vacation-controller</title><link rel="stylesheet" href="css/main.css"></head><body><div id="pageId" data-id="xraySchedule"></div><div class="container"><div class="header"><h1>График работы рентгенологов</h1></div><div class="filterArea"><form class="setDayHoursForm" data-url="getxrayschedule"><div class="formControl"><h3>Сумма часов за день</h3></div><div class="formControl"><label for="monday">понедельник</label> <input name="monday" type="number" value="11"></div><div class="formControl"><label for="thuesday">вторник</label> <input name="thuesday" type="number" value="20"></div><div class="formControl"><label for="wednesday">среда</label> <input name="wednesday" type="number" value="21.5"></div><div class="formControl"><label for="thursday">четверг</label> <input name="thursday" type="number" value="20"></div><div class="formControl"><label for="friday">пятница</label> <input name="friday" type="number" value="21.5"></div><div class="formControl"><label for="saturday">суббота</label> <input name="saturday" type="number" value="18.5"></div><div class="formControl"><label for="sunday">суббота</label> <input name="sunday" type="number" value="18.5"></div><div class="formControl"><input type="submit" class="submitButton" value="рассчитать"></div></form></div><table id="graphDataField" border="1"><thead id="calendarArea"></thead><tbody id="shiftCalendar"></tbody></table><div></div></div></body><script src="app/bundle.js"></script></html>
+<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Vacation-controller</title><link rel="stylesheet" href="css/main.css"><script id="shift" type="text/x-handlebars-template"><tr>
+      <th width="200"></th>
+      {{#each this}}
+          {{#each this}}
+            <th>{{this.shift}}</th>
+          {{/each}}
+          <th width=0></th>
+      {{/each}}
+    </tr>
+    <tr>
+      <th>Кол-во сотрудников</th>
+      {{#each this}}
+          {{#each this}}
+            <th>{{this.howMany}}</th>
+          {{/each}}
+          <th width=0></th>
+      {{/each}}
+    </tr></script><script id="calendar" type="text/x-handlebars-template">{{#each this}}
+      <tr>
+        {{#each this}}
+            {{#if this}}
+              <td align='center'>{{this}}</td>
+            {{else}}
+              <td width=0></td>
+            {{/if}}
+        {{/each}}
+      </tr>
+    {{/each}}</script></head><body><div id="pageId" data-id="xraySchedule"></div><div class="container"><div class="header"><h1>График работы рентгенологов</h1></div><div class="filterArea"><form class="setDayHoursForm" data-url="getxrayschedule"><div class="formControl"><h3>Сумма часов за день</h3></div><div class="formControl"><label for="monday">понедельник</label> <input name="monday" type="number" value="11"></div><div class="formControl"><label for="thuesday">вторник</label> <input name="thuesday" type="number" value="20"></div><div class="formControl"><label for="wednesday">среда</label> <input name="wednesday" type="number" value="21.5"></div><div class="formControl"><label for="thursday">четверг</label> <input name="thursday" type="number" value="20"></div><div class="formControl"><label for="friday">пятница</label> <input name="friday" type="number" value="21.5"></div><div class="formControl"><label for="saturday">суббота</label> <input name="saturday" type="number" value="18.5"></div><div class="formControl"><label for="sunday">суббота</label> <input name="sunday" type="number" value="18.5"></div><div class="formControl"><label for="position">Должность</label> <input name="position" type="text" value="Рентгенолог"></div><div class="formControl"><input type="submit" class="submitButton" value="рассчитать"></div></form></div><table id="graphDataField" border="1"><caption class="graphTitle">Расписание часов работы по сменам</caption><colgroup><col class="col1"><col id="tableCol"><thead id="shiftArea"></thead><tbody id="calendarArea"></tbody></colgroup></table><div><button id="clipboardCopy" data-target="graphDataField">Копировать</button></div><div></div></div></body><script src="app/bundle.js"></script></html>
